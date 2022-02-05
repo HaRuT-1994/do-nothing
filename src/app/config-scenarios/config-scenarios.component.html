@@ -1,0 +1,21 @@
+<main>
+  <h2>Configuration Scenarios</h2>
+  <form action="" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+    <div><label for="scenario-name">Scenario Name</label></div>
+    <div><input type="text" id="scenario-name" formControlName="scenarioName"></div>
+    <div>
+      <input type="checkbox" name="" id="validatedOption" formControlName="validatedOption">
+      <label for="validatedOption">Validated Option</label>
+    </div>
+    <div>
+      <input type="checkbox" name="" id="restrictToBudget" formControlName="restrictToBudget">
+      <label for="restrictToBudget">Restrict To Budget</label>
+    </div>
+    <div>
+      <input type="checkbox" name="" id="run" formControlName="run">
+      <label for="run">Run</label>
+    </div>
+
+    <button type="submit">Config Scenarios</button>
+  </form>
+</main>

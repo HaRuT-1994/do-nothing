@@ -1,0 +1,182 @@
+// translate center
+
+.G-translate-center {
+    position  : absolute;
+    top       : 50%;
+    left      : 50%;
+    transform : translate(-50%, -50%);
+}
+
+.G-flex { display : flex; }
+.G-flex1 { flex : 1; }
+.G-flex-wrap { flex-wrap : wrap; }
+
+// row
+.G-flex-row {
+    display        : flex;
+    flex-direction : row;
+}
+
+.G-flex-center-center {
+    display         : flex;
+    align-items     : center;
+    justify-content : center;
+}
+
+.G-flex-center-between {
+    display         : flex;
+    align-items     : center;
+    justify-content : space-between;
+}
+
+.G-flex-center-around {
+    display         : flex;
+    align-items     : center;
+    justify-content : space-around;
+}
+
+.G-flex-center-end {
+    display         : flex;
+    align-items     : center;
+    justify-content : flex-end;
+}
+
+.G-flex-justify-start {
+    display         : flex;
+    justify-content : flex-start;
+}
+
+.G-flex-justify-center {
+    display         : flex;
+    justify-content : center;
+}
+
+.G-flex-justify-around {
+    display         : flex;
+    justify-content : space-around;
+}
+
+.G-flex-justify-between {
+    display         : flex;
+    justify-content : space-between;
+}
+
+.G-flex-justify-end {
+    display         : flex;
+    justify-content : flex-end;
+}
+
+.G-flex-align-start {
+    display     : flex !important;
+    align-items : flex-start !important;
+}
+
+.G-flex-align-center {
+    display     : flex;
+    align-items : center;
+}
+
+.G-flex-align-end {
+    display     : flex;
+    align-items : flex-end;
+}
+
+// column
+.G-column {
+    display        : flex;
+    flex-direction : column;
+}
+
+.G-column-center-center {
+    display         : flex;
+    flex-direction  : column;
+    align-items     : center;
+    justify-content : center;
+}
+
+.G-column-center-between {
+    display         : flex;
+    flex-direction  : column;
+    align-items     : center;
+    justify-content : space-between;
+}
+
+.G-column-center-end {
+    display         : flex;
+    flex-direction  : column;
+    align-items     : center;
+    justify-content : flex-end;
+}
+
+.G-column-justify-start {
+    display         : flex;
+    flex-direction  : column;
+    justify-content : flex-start;
+}
+
+.G-column-justify-center {
+    display         : flex;
+    flex-direction  : column;
+    justify-content : center;
+}
+
+.G-column-justify-between {
+    display         : flex;
+    flex-direction  : column;
+    justify-content : space-between;
+}
+
+.G-row-justify-between {
+    display         : flex;
+    justify-content : space-between;
+}
+
+.G-column-justify-end {
+    display         : flex;
+    flex-direction  : column;
+    justify-content : flex-end;
+}
+
+.G-column-justify-around {
+    display         : flex;
+    flex-direction  : column;
+    justify-content : space-around;
+}
+
+.G-column-align-start {
+    display        : flex;
+    flex-direction : column;
+    align-items    : flex-start;
+}
+
+.G-column-align-center {
+    display        : flex;
+    flex-direction : column;
+    align-items    : center;
+}
+
+.G-column-align-end {
+    display        : flex;
+    flex-direction : column;
+    align-items    : flex-end;
+}
+
+.G-display-inline-block {
+    display: inline-block;
+}
+
+.G-align-self-end {
+    align-self: end;
+}
+
+.G-align-self-start {
+    align-self: start;
+}
+
+.G-align-self-center {
+    align-self: center;
+}
+
+.G-align-self-baseline {
+    align-self: baseline;
+}
