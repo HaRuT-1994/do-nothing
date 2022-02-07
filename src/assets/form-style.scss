@@ -1,0 +1,29 @@
+h2 {
+  text-align: center;
+}
+
+form {
+  width: 700px;
+  margin: auto;
+  padding: 15px;
+  border: 2px solid green;
+  border-radius: 8px;
+
+  div {
+    margin-top: 8px;
+  }
+}
+
+button {
+  width: 95%;
+  margin: 20px;
+  padding: 3px 0;
+  background-color: rgb(126, 228, 100);
+  border-style: none;
+  border-radius: 10px;
+}
+
+label {
+  margin-top: 10px;
+  padding: 10px;
+}

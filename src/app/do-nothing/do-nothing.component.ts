@@ -28,7 +28,7 @@ export class DoNothingComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.formGroup)
+    console.log(this.formGroup.value)
   }
 
 }

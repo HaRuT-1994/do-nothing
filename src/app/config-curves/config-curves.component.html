@@ -1,0 +1,32 @@
+<main>
+  <h2>Config Curves</h2>
+  <form action="" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+
+    <div class="G-flex">
+      <div class="labels">
+        <div><label for="scenarioId">Scenario Id</label></div>
+        <div><label for="cohortId">Cohort Id</label></div>
+        <div><label for="calculation">Calculation</label></div>
+        <div><label for="pofCurve">PoF Curve</label></div>
+        <div><label for="pofNav">PoF Nav</label></div>
+        <div><label for="healthCurve">Health Curve</label></div>
+        <div><label for="healthNav">Health Nav</label></div>
+        <div><label for="pofConstant">PoF Constant</label></div>
+        <div><label for="healthConstant">Health Constant</label></div>
+      </div>
+      <div>
+        <div><input type="text" id="scenarioId" formControlName="scenarioId"></div>
+        <div><input type="text" id="cohortId" formControlName="cohortId"></div>
+        <div><input type="text" id="calculation" formControlName="calculation"></div>
+        <div><input type="text" id="pofCurve" formControlName="pofCurve"></div>
+        <div><input type="text" id="pofNav" formControlName="pofNav"></div>
+        <div><input type="text" id="healthCurve" formControlName="healthCurve"></div>
+        <div><input type="text" id="healthNav" formControlName="healthNav"></div>
+        <div><input type="text" id="pofConstant" formControlName="pofConstant"></div>
+        <div><input type="text" id="healthConstant" formControlName="healthConstant"></div>
+      </div>
+    </div>
+
+    <button type="submit">Config Curves</button>
+  </form>
+</main>

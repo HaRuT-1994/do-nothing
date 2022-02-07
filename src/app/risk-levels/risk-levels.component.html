@@ -1,0 +1,21 @@
+<main>
+  <h2>Config Risk Levels</h2>
+  <form action="" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+    <div class="G-flex">
+      <div class="labels">
+        <div><label for="pof">POF</label></div>
+        <div><label for="cof">COF</label></div>
+        <div><label for="riskScore">Risk Score</label></div>
+        <div><label for="riskRating">Risk Rating</label></div>
+      </div>
+      <div>
+        <div><input type="number" id="pof" formControlName="pof"></div>
+        <div><input type="number" id="cof" formControlName="cof"></div>
+        <div><input type="number" id="riskScore" formControlName="riskScore"></div>
+        <div><input type="text" id="riskRating" formControlName="riskRating"></div>
+      </div>
+    </div>
+
+    <button type="submit">Config Risk Levels</button>
+  </form>
+</main>

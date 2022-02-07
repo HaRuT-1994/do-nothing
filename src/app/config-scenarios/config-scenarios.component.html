@@ -1,8 +1,10 @@
 <main>
   <h2>Configuration Scenarios</h2>
   <form action="" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
-    <div><label for="scenario-name">Scenario Name</label></div>
-    <div><input type="text" id="scenario-name" formControlName="scenarioName"></div>
+    <div class="G-flex">
+      <div><label for="scenario-name">Scenario Name</label></div>
+      <div><input type="text" id="scenario-name" formControlName="scenarioName"></div>
+    </div>
     <div>
       <input type="checkbox" name="" id="validatedOption" formControlName="validatedOption">
       <label for="validatedOption">Validated Option</label>

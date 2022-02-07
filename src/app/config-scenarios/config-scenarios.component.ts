@@ -20,7 +20,7 @@ export class ConfigScenariosComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.formGroup)
+    console.log(this.formGroup.value)
   }
 
 }
