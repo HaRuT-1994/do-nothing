@@ -1,0 +1,28 @@
+<main>
+  <h1>Configuration Scenarios</h1>
+  <form action="" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+    <div class="G-flex-justify-around">
+      <div class="G-column gap">
+        <div class="G-flex-center-between">
+          <label for="scenario-name">Scenario Name</label>
+          <input type="text" id="scenario-name" formControlName="scenario">
+        </div>
+        <div class="G-flex-center-start">
+          <label for="validatedOption">Validated Option</label>
+          <input type="checkbox" name="" id="validatedOption" class="checkbox" formControlName="validatedOption">
+        </div>
+        <div class="G-flex-center-start">
+          <label for="restrictToBudget">Restrict To Budget</label>
+          <input type="checkbox" name="" id="restrictToBudget" class="checkbox" formControlName="restrictToBudget">
+        </div>
+        <div class="G-flex-center-start">
+          <label for="run">Run</label>
+          <input type="checkbox" name="" id="run" class="checkbox" formControlName="run">
+        </div>
+      </div>
+    </div>
+   
+    <button type="submit">Submit</button>
+    <p-message severity="{{severity}}" text="{{ msg }}"></p-message>
+  </form>
+</main>

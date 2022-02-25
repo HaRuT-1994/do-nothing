@@ -41,6 +41,12 @@
     justify-content : flex-end;
 }
 
+.G-flex-center-start {
+    display         : flex;
+    align-items     : center;
+    justify-content : flex-start;
+}
+
 .G-flex-justify-start {
     display         : flex;
     justify-content : flex-start;

@@ -1,29 +1,53 @@
-h2 {
+@import './variables';
+
+h1 {
   text-align: center;
+  font-size: 30px;
+  margin-top: 25px;
 }
 
 form {
-  width: 700px;
+  width: 740px;
   margin: auto;
   padding: 15px;
-  border: 2px solid green;
+  border: 2px solid $border-color;
   border-radius: 8px;
 
-  div {
-    margin-top: 8px;
+  .gap > div {
+      margin: 5px 0;
   }
 }
 
 button {
-  width: 95%;
-  margin: 20px;
+  width: 250px;
+  display: flex;
+  justify-content: center;
+  font-size: large;
+  font-weight: 600;
+  margin: 20px auto;
   padding: 3px 0;
-  background-color: rgb(126, 228, 100);
+  background-color: $button-bg;
   border-style: none;
-  border-radius: 10px;
+  border-radius: 10px !important;
 }
 
 label {
-  margin-top: 10px;
-  padding: 10px;
+  width: 170px;
+}
+
+input, select {
+  width: 200px;
+  height: 25px;
+}
+
+.dropdown {
+  max-height: 43px;
+}
+
+.checkbox{
+    width: 30px;
+}
+
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
+  padding: 0 0.75em !important;
 }

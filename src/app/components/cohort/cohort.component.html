@@ -1,0 +1,20 @@
+<main>
+  <h1>Config Cohorts</h1>
+  <form action="" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+    <div class="G-flex-justify-around">
+      <div class="G-column gap">
+        <div class="G-flex-center-between">
+          <label for="cohort-id">Cohorts</label>
+          <input type="text" id="cohort-id" formControlName="cohorts">
+        </div>
+        <div class="G-flex-center-between">
+          <label for="description">Description</label>
+          <input type="text" id="description" formControlName="description">
+        </div>
+      </div>
+    </div>
+
+    <button type="submit">Submit</button>
+    <p-message severity="{{severity}}" text="{{ msg }}"></p-message>
+  </form>
+</main>

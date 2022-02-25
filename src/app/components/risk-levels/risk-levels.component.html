@@ -1,0 +1,28 @@
+<main>
+  <h1>Config Risk Levels</h1>
+  <form action="" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+    <div class="G-flex-justify-around">
+      <div class="G-column gap">
+        <div class="G-flex-center-between">
+          <label for="pof">POF</label>
+          <input type="number" id="pof" formControlName="pof">
+        </div>
+        <div class="G-flex-center-between">
+          <label for="cof">COF</label>
+          <input type="number" id="cof" formControlName="cof">
+        </div>
+        <div class="G-flex-center-between">
+          <label for="riskScore">Risk Score</label>
+          <input type="number" id="riskScore" formControlName="riskScore">
+        </div>
+        <div class="G-flex-center-between">
+          <label for="riskRating">Risk Rating</label>
+          <input type="text" id="riskRating" formControlName="riskRating">
+        </div>
+      </div>
+    </div>
+
+    <button type="submit">Submit</button>
+    <p-message severity="{{severity}}" text="{{ msg }}"></p-message>
+  </form>
+</main>

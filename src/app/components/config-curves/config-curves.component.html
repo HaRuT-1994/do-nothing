@@ -1,0 +1,58 @@
+<main>
+  <h1>Config Curves</h1>
+  <form action="" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+    <div class="G-flex-justify-around">
+      <div class="G-column gap">
+        <div class="G-flex-center-between">
+          <label for="scenarioId" class="label-for-select">Scenario Id</label>
+          <mat-form-field appearance="fill" class="dropdown">
+            <mat-label>Scenario</mat-label>
+            <mat-select formControlName="scenarioId">
+              <mat-option *ngFor="let scenario of scenarioData" [value]="scenario.id">{{scenario.value}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="G-flex-center-between">
+          <label for="cohortId">Cohort Id</label>
+          <mat-form-field appearance="fill" class="dropdown">
+            <mat-label>Cohort</mat-label>
+            <mat-select formControlName="cohortId">
+              <mat-option *ngFor="let cohort of cohortData" [value]="cohort.id">{{cohort.value}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="G-flex-center-between">
+          <label for="calculation" style="padding-top: 20px;">Calculation</label>
+          <input type="text" id="calculation" formControlName="calculation" class="bottom-of-select">
+        </div>
+        <div class="G-flex-center-between">
+          <label for="pofCurve">PoF Curve</label>
+          <input type="number" id="pofCurve" formControlName="poFCurve">
+        </div>
+        <div class="G-flex-center-between">
+          <label for="pofNav">PoF Nav</label>
+          <input type="number" id="pofNav" formControlName="poFNav">
+        </div>
+        <div class="G-flex-center-between">
+          <label for="healthCurve">Health Curve</label>
+          <input type="number" id="healthCurve" formControlName="healthCurve">
+        </div>
+        <div class="G-flex-center-between">
+          <label for="healthNav">Health Nav</label>
+          <input type="number" id="healthNav" formControlName="healthNav">
+        </div>
+        <div class="G-flex-center-between">
+          <label for="pofConstant">PoF Constant</label>
+          <input type="number" id="pofConstant" formControlName="pofConstant">
+        </div>
+        <div class="G-flex-center-between">
+          <label for="healthConstant">Health Constant</label>
+          <input type="number" id="healthConstant" formControlName="healthConstant">
+        </div>
+      </div>
+    </div>
+
+    <button type="submit">Submit</button>
+    <p-message severity="{{severity}}" text="{{ msg }}"></p-message>
+  </form>
+</main>

@@ -1,0 +1,32 @@
+<main>
+  <h1>Config Fields</h1>
+  <form action="" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+    <div class="G-flex-justify-around">
+      <div class="G-column gap">
+        <div class="G-flex-center-between">
+          <label for="tab">Tab</label>
+          <input type="text" id="tab" formControlName="tab">
+        </div>
+        <div class="G-flex-center-between">
+          <label for="internalFieldRef">Internal Field Reference</label>
+          <input type="text" id="internalFieldRef" formControlName="internalFieldReference">
+        </div>
+        <div class="G-flex-center-between">
+          <label for="fieldNameInSheet">Field Name In Sheet</label>
+          <input type="text" id="fieldNameInSheet" formControlName="fieldNameInSheet">
+        </div>
+        <div class="G-flex-center-between">
+          <label for="column">Column</label>
+          <input type="text" id="column" formControlName="column">
+        </div>
+        <div class="G-flex-center-start">
+          <label for="mandatory">MandatoryForModel</label>
+          <input type="checkbox" id="mandatory" class="checkbox" formControlName="mandatoryForModel">
+        </div>
+      </div>
+    </div>
+    
+    <button type="submit">Submit</button>
+    <p-message severity="{{severity}}" text="{{ msg }}"></p-message>
+  </form>
+</main>

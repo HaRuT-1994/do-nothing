@@ -1,22 +1,25 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CohortComponent } from './cohort/cohort.component';
-import { ConfigCurvesComponent } from './config-curves/config-curves.component';
-import { ConfigFieldsComponent } from './config-fields/config-fields.component';
-import { ConfigScenariosComponent } from './config-scenarios/config-scenarios.component';
-import { DoNothingComponent } from './do-nothing/do-nothing.component';
-import { PofBandsComponent } from './pof-bands/pof-bands.component';
-import { RiskLevelsComponent } from './risk-levels/risk-levels.component';
+import { CohortComponent } from './components/cohort/cohort.component';
+import { ConfigCurvesComponent } from './components/config-curves/config-curves.component';
+import { ConfigFieldsComponent } from './components/config-fields/config-fields.component';
+import { ConfigScenariosComponent } from './components/config-scenarios/config-scenarios.component';
+import { DoNothingComponent } from './components/do-nothing/do-nothing.component';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { PofBandsComponent } from './components/pof-bands/pof-bands.component';
+import { RiskLevelsComponent } from './components/risk-levels/risk-levels.component';
+import { AppConfig } from 'src/app/config/app.config';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/do-nothing', pathMatch: 'full' },
-  { path: "do-nothing", component: DoNothingComponent },
-  { path: "cohort", component: CohortComponent },
-  { path: "config-scenarios", component: ConfigScenariosComponent },
-  { path: "config-fields", component: ConfigFieldsComponent },
-  { path: "config-risk-levels", component: RiskLevelsComponent },
-  { path: "config-curves", component: ConfigCurvesComponent },
-  { path: "pof-bands", component: PofBandsComponent }
+  { path: AppConfig.routes.doNothing, component: DoNothingComponent },
+  { path: AppConfig.routes.cohort, component: CohortComponent },
+  { path: AppConfig.routes.configScenarios, component: ConfigScenariosComponent },
+  { path: AppConfig.routes.configFields, component: ConfigFieldsComponent },
+  { path: AppConfig.routes.configRiskLevels, component: RiskLevelsComponent },
+  { path: AppConfig.routes.configCurves, component: ConfigCurvesComponent },
+  { path: AppConfig.routes.pofBands, component: PofBandsComponent },
+  { path: '', redirectTo: AppConfig.routes.doNothing, pathMatch: 'full' },
+  { path: '**', component: PageNotFoundComponent }
 ];
 
 @NgModule({
