@@ -11,14 +11,16 @@ import { MessageModule } from 'primeng/message';
 import { MatSelectModule } from '@angular/material/select';
 
 import { AppComponent } from './app.component';
-import { DoNothingComponent } from './components/do-nothing/do-nothing.component';
-import { ConfigScenariosComponent } from './components/config-scenarios/config-scenarios.component';
-import { CohortComponent } from './components/cohort/cohort.component';
-import { ConfigCurvesComponent } from './components/config-curves/config-curves.component';
-import { ConfigFieldsComponent } from './components/config-fields/config-fields.component';
-import { PofBandsComponent } from './components/pof-bands/pof-bands.component';
-import { RiskLevelsComponent } from './components/risk-levels/risk-levels.component';
+import { DoNothingComponent } from './components/addEdit/do-nothing/do-nothing.component';
+import { ConfigScenariosComponent } from './components/addEdit/config-scenarios/config-scenarios.component';
+import { CohortComponent } from './components/addEdit/cohort/cohort.component';
+import { ConfigCurvesComponent } from './components/addEdit/config-curves/config-curves.component';
+import { ConfigFieldsComponent } from './components/addEdit/config-fields/config-fields.component';
+import { PofBandsComponent } from './components/addEdit/pof-bands/pof-bands.component';
+import { RiskLevelsComponent } from './components/addEdit/risk-levels/risk-levels.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { CurvesTableComponent } from './components/viewTable/curves-table/curves-table.component';
+import { CohortTableComponent } from './components/viewTable/cohort-table/cohort-table.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +32,9 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
     RiskLevelsComponent,
     ConfigCurvesComponent,
     ConfigFieldsComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    CurvesTableComponent,
+    CohortTableComponent
   ],
   imports: [
     BrowserModule,

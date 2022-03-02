@@ -1,6 +1,6 @@
 <main>
   <h1>Config Cohorts</h1>
-  <form action="" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+  <form action="" [formGroup]="formGroup">
     <div class="G-flex-justify-around">
       <div class="G-column gap">
         <div class="G-flex-center-between">
@@ -14,7 +14,8 @@
       </div>
     </div>
 
-    <button type="submit">Submit</button>
+    <button type="submit" *ngIf="!isOnEdit" (click)="addConfig()">Submit</button>
+    <button type="submit" *ngIf="isOnEdit" (click)="editConfig()">Edit</button>
     <p-message severity="{{severity}}" text="{{ msg }}"></p-message>
   </form>
 </main>

@@ -1,0 +1,25 @@
+table, th, td {
+  border: 1.5px solid;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+table {
+  margin: auto;
+  margin-top: 25px;
+}
+
+caption {
+  font-size: 30px;
+  font-weight: 500;
+  padding-bottom: 15px;
+}
+
+th {
+  padding: 5px;
+  background-color: #dde4e2;
+}
+
+td {
+  padding: 5px;
+}

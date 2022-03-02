@@ -22,14 +22,14 @@ export class DoNothingComponent implements OnInit {
     skipTheseAssetSources: new FormControl(''),
     skipTheseUnitClasses: new FormControl(''),
     scenariosToRun: new FormControl('', Validators.required),
+    conditionRange: new FormControl(''),
     dataModelOutputTemplate: new FormControl(''),
     nrModelColumns: new FormControl(0),
-    unitsAndComponentsSeparated: new FormControl(true),
-    firstPastPostOption: new FormControl(true),
+    // unitsAndComponentsSeparated: new FormControl(true),
+    // firstPastPostOption: new FormControl(true),
     debugMode: new FormControl(true),
     allowOverwriteToExceedBudget: new FormControl(true)
   });
-
   public severity = '';
   public msg = '';
   public skipTheseLifecycles = [];

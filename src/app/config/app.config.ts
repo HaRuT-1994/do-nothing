@@ -6,8 +6,6 @@ interface AppConfig {
     baseUrl: string;
 }
 
-export let APP_CONFIG = new InjectionToken('app.config');
-
 export const AppConfig: AppConfig = {
     endPoints: {
         ConfigCohorts: 'ConfigCohorts/AddConfigCohorts',
@@ -24,13 +22,29 @@ export const AppConfig: AppConfig = {
         lookupConfigCohorts : 'Lookup/LookupConfigCohorts'
     },
     routes: {
-        doNothing: "do-nothing",
-        cohort: "config-cohort",
-        configScenarios: "config-scenarios",
-        configFields: "config-fields",
-        configRiskLevels: "config-risk-levels",
-        configCurves: "config-curves",
-        pofBands: "config-pof-bands"
+        add: {
+            doNothing: "add-do-nothing",
+            cohort: "add-config-cohort",
+            configScenarios: "add-config-scenarios",
+            configFields: "add-config-fields",
+            configRiskLevels: "add-config-risk-levels",
+            configCurves: "add-config-curves",
+            pofBands: "add-config-pof-bands",
+        },
+        edit: {
+            doNothing: "edit-do-nothing",
+            cohort: "edit-config-cohort",
+            configScenarios: "edit-config-scenarios",
+            configFields: "edit-config-fields",
+            configRiskLevels: "edit-config-risk-levels",
+            configCurves: "edit-config-curves",
+            pofBands: "edit-config-pof-bands",
+        },
+        view: {
+            curvesTable: "curves-table",
+            cohortTable: "cohort-table"
+        }
+        
     },
     baseUrl: 'https://localhost:44360/'
 };

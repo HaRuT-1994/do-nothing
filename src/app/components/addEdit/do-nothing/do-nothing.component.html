@@ -16,49 +16,53 @@
           <input type="number" id="years-to-run" value="20" min="1" max="50" formControlName="yearsToRun">
         </div>
         <div class="G-flex-center-between">
-          <label for="lifecycles">Skip these Lifecycles</label>
+          <label>Skip these Lifecycles</label>
           <mat-form-field appearance="fill" class="dropdown">
-            <mat-label>Skip these Lifecycles</mat-label>
+            <mat-label>Lifecycles</mat-label>
             <mat-select formControlName="skipTheseLifecycle" multiple>
               <mat-option *ngFor="let lifecycle of skipTheseLifecycles" [value]="lifecycle.value">{{lifecycle.value}}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
         <div class="G-flex-center-between">
-          <label for="sources">Skip these Asset Sources</label>
+          <label>Skip these Asset Sources</label>
           <mat-form-field appearance="fill" class="dropdown">
-            <mat-label>Skip these Asset Sources</mat-label>
+            <mat-label>Asset Sources</mat-label>
             <mat-select formControlName="skipTheseAssetSources" multiple>
               <mat-option *ngFor="let assetSource of skipTheseAssetSources" [value]="assetSource.value">{{assetSource.value}}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
         <div class="G-flex-center-between">
-          <label for="classes">Skip these Unit Classes</label>
+          <label>Skip these Unit Classes</label>
           <mat-form-field appearance="fill" class="dropdown">
-            <mat-label>Skip these Unit Classes</mat-label>
+            <mat-label>Unit Classes</mat-label>
             <mat-select formControlName="skipTheseUnitClasses" multiple>
               <mat-option *ngFor="let unitClass of skipTheseUnitClasses" [value]="unitClass.value">{{unitClass.value}}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
         <div class="G-flex-center-between">
-          <label for="run-scenarios">Scenarios to Run</label>
+          <label>Scenarios to Run</label>
           <mat-form-field appearance="fill" class="dropdown">
-            <mat-label>Scenarios to Run</mat-label>
+            <mat-label>Run</mat-label>
             <mat-select formControlName="scenariosToRun" multiple>
               <mat-option *ngFor="let scenario of scenarioData" [value]="scenario.id">{{scenario.value}}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
         <div class="G-flex-center-between">
-          <label for="dataModelOutputTemplate">Condition Range</label>
+          <label>Condition Range</label>
           <mat-form-field appearance="fill" class="dropdown">
-            <mat-label>Condition Range</mat-label>
-            <mat-select formControlName="dataModelOutputTemplate">
+            <mat-label>Range</mat-label>
+            <mat-select formControlName="conditionRange">
               <mat-option *ngFor="let range of conditionRanges" [value]="range">{{ range }}</mat-option>
             </mat-select>
           </mat-form-field>
+        </div>
+        <div class="G-flex-center-between">
+          <label for="dataModelOutputTemplate">Data Model Output Templates</label>
+          <input type="number" id="dataModelOutputTemplates" min="0" formControlName="dataModelOutputTemplate">
         </div>
         <div class="G-flex-center-between">
           <label for="nr-columns">NR Model Columns</label>

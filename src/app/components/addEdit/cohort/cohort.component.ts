@@ -4,6 +4,7 @@ import { CohortService } from 'src/app/services/cohort.service';
 import { Severity } from 'src/app/enums/severity.enum';
 import { Message } from 'src/app/enums/message.enum';
 import { CommonService } from 'src/app/services/common.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-cohort',
@@ -18,10 +19,14 @@ export class CohortComponent {
 
   public severity = '';
   public msg = '';
+  public isOnEdit: boolean;
   
-  constructor(private cohortService: CohortService, private commonService: CommonService) {}
+  constructor(private cohortService: CohortService, private commonService: CommonService,private route: ActivatedRoute) {
+    console.log(this.route.snapshot.routeConfig.path.split('-')[0]);
+    
+  }
 
-  onSubmit() {
+  addConfig() {
     this.cohortService.addCohort(this.formGroup.value).subscribe(
       () => {
         this.severity = Severity.SUCCESS;
