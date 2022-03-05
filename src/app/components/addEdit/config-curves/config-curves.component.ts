@@ -7,7 +7,8 @@ import { CommonService } from 'src/app/services/common.service';
 import { CohortService } from 'src/app/services/cohort.service';
 import { ConfigData } from 'src/app/models/configData.interface';
 import { ConfigScenariosService } from 'src/app/services/config-scenarios.service';
-import {map} from "rxjs/operators";
+import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-config-curves',
@@ -26,14 +27,16 @@ export class ConfigCurvesComponent implements OnInit {
     pofConstant: new FormControl(0),
     healthConstant: new FormControl(0),
   });
-  
+  public isOnEdit: boolean;
+  public isLoading: boolean;
   public severity = '';
   public msg = '';
-  cohortData: ConfigData[] = [];
-  scenarioData: ConfigData[] = [];
+  public cohortData: ConfigData[] = [];
+  public scenarioData: ConfigData[] = [];
 
   constructor(private configCurvesService: ConfigCurvesService, private commonService: CommonService,
-    private cohortService: CohortService, private configScenariosService: ConfigScenariosService) { }
+    private cohortService: CohortService, private configScenariosService: ConfigScenariosService, private router: Router,
+    private location: Location) { }
 
   ngOnInit() {
     this.cohortService.getConfigCohort().subscribe(
@@ -47,21 +50,58 @@ export class ConfigCurvesComponent implements OnInit {
         this.scenarioData = res;
       }
     )
+
+    this.isOnEdit = this.configCurvesService.isOnEdit;
+    if(this.location.path().includes('add')) {
+      this.isOnEdit = false;
+    }
+
+    if (this.isOnEdit) {
+      this.commonService.updateForm(this.formGroup, this.configCurvesService.editCurves)  
+    }
+    
+    
   }
 
-  onSubmit() {      
+  addCurve() {
+    this.isLoading = true;
     this.configCurvesService.addConfigCurves(this.formGroup.value).subscribe(
       () => {
+        this.isLoading = false;
         this.severity = Severity.SUCCESS;
-        this.msg = 'Curves Form ' + Message.SUCCESS_MSG;
+        this.msg = 'Curve Form ' +  Message.SUCCESS_MSG;
         this.commonService.deleteMsg(this);
+        this.formGroup.reset();
       },
-      err => { 
-        console.log(err);
+      () => {
+        this.isLoading = false;
         this.severity = Severity.ERROR;
         this.msg = Message.ERROR_MSG;
         this.commonService.deleteMsg(this);
       }
     );
+  }
+
+  editConfig(): void {
+    this.isLoading = true;
+    // this.cohortService.onEditCohort(this.formGroup.value).subscribe(
+    //   () => {
+    //     this.isLoading = false;
+    //     this.severity = Severity.SUCCESS;
+    //     this.msg = 'Cohort Form ' +  Message.EDIT_SUCCESS_MSG;
+    //     this.commonService.deleteMsg(this);
+    //   },
+    //   () => {
+    //     this.isLoading = false;
+    //     this.severity = Severity.ERROR;
+    //     this.msg = Message.ERROR_MSG;
+    //     this.commonService.deleteMsg(this);
+    //   }
+    // );
+  }
+
+  goBack(): void {
+    this.location.back();
+    this.isOnEdit = false;
   }
 }

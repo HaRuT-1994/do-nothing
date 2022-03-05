@@ -8,13 +8,41 @@ interface AppConfig {
 
 export const AppConfig: AppConfig = {
     endPoints: {
-        ConfigCohorts: 'ConfigCohorts/AddConfigCohorts',
-        ConfigCurves: 'ConfigCurves/AddConfigCurves',
-        ConfigFields: 'ConfigFields/AddConfigFields',
-        ConfigPoFBands: 'ConfigPoFBands/AddConfigPoFBands',
-        ConfigRiskLevels: 'ConfigRiskLevels/AddConfigRiskLevels',
-        ConfigScenarios: 'ConfigScenarios/AddConfigScenarios',
-        ModelConfiguration: 'ModelConfiguration/AddModelConfiguration',
+        addCohort: 'ConfigCohorts/AddConfigCohorts',
+        updateCohort: 'ConfigCohorts/UpdateConfigCohorts',
+        getAllCohorts: 'ConfigCohorts/GetAllConfigCohorts',
+        deleteCohort: 'ConfigCohorts/DeleteConfigCohorts',
+
+        configCurve: 'ConfigCurves/AddConfigCurves',
+        getAllCurves: 'ConfigCurves/GetAllConfigCurves',
+        updateCurve: 'ConfigCurves/UpdateConfigCurves',
+        deleteCurve: 'ConfigCurves/DeleteConfigCurves',
+
+        configField: 'ConfigFields/AddConfigFields',
+        getAllFields: 'ConfigFields/GetAllConfigFields',
+        updateField: 'ConfigFields/UpdateConfigFields',
+        deleteField: 'ConfigFields/DeleteConfigFields',
+
+        configPoFBand: 'ConfigPoFBands/AddConfigPoFBands',
+        getAllPoFBands: 'ConfigPoFBands/GetAllConfigPoFBands',
+        updatePoFBand: 'ConfigPoFBands/UpdateConfigPoFBands',
+        deletePoFBand: 'ConfigPoFBands/DeleteConfigPoFBands',
+
+        configRiskLevel: 'ConfigRiskLevels/AddConfigRiskLevels',
+        getAllRiskLevels: 'ConfigRiskLevels/GetAllConfigRiskLevels',
+        updateRiskLevel: 'ConfigRiskLevels/UpdateConfigRiskLevels',
+        deleteRiskLevel: 'ConfigRiskLevels/DeleteConfigRiskLevels',
+
+        configScenario: 'ConfigScenarios/AddConfigScenarios',
+        getAllScenarios: 'ConfigScenarios/GetAllConfigScenarios',
+        updateScenario: 'ConfigScenarios/UpdateConfigScenarios',
+        deleteScenario: 'ConfigScenarios/DeleteConfigScenarios',
+
+        modelConfiguration: 'ModelConfiguration/AddModelConfiguration',
+        getAllConfigurations: 'ModelConfiguration/GetAllModelConfiguration',
+        updateConfiguration: 'ModelConfiguration/UpdateModelConfiguration',
+        deleteConfiguration: 'ModelConfiguration/DeleteModelConfiguration',
+
         lookupSkipTheseLifecycles: 'Lookup/LookupSkipTheseLifecycles',
         lookupSkipTheseAssetSources: 'Lookup/LookupSkipTheseAssetSources',
         lookupSkipTheseUnitClasses: 'Lookup/LookupSkipTheseUnitClasses',
@@ -33,7 +61,7 @@ export const AppConfig: AppConfig = {
         },
         edit: {
             doNothing: "edit-do-nothing",
-            cohort: "edit-config-cohort",
+            configCohort: "edit-config-cohort",
             configScenarios: "edit-config-scenarios",
             configFields: "edit-config-fields",
             configRiskLevels: "edit-config-risk-levels",
@@ -42,7 +70,12 @@ export const AppConfig: AppConfig = {
         },
         view: {
             curvesTable: "curves-table",
-            cohortTable: "cohort-table"
+            cohortTable: "cohort-table",
+            scenariosTable: "scenarios-table",
+            fieldsTable: "fields-table",
+            riskLevelsTable: "risk-levels-table",
+            pofBandsTable: "pof-bands-table",
+            doNothingTable: "do-nothing-table"
         }
         
     },

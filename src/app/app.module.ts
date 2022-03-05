@@ -21,6 +21,14 @@ import { RiskLevelsComponent } from './components/addEdit/risk-levels/risk-level
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { CurvesTableComponent } from './components/viewTable/curves-table/curves-table.component';
 import { CohortTableComponent } from './components/viewTable/cohort-table/cohort-table.component';
+import { ScenariosTableComponent } from './components/viewTable/scenarios-table/scenarios-table.component';
+import { PoFBandsTableComponent } from './components/viewTable/pof-bands-table/pof-bands-table.component';
+import { RiskLevelsTableComponent } from './components/viewTable/risk-levels-table/risk-levels-table.component';
+import { FieldsTableComponent } from './components/viewTable/fields-table/fields-table.component';
+import { DoNothingTableComponent } from './components/viewTable/do-nothing-table/do-nothing-table.component';
+import {PanelMenuModule} from 'primeng/panelmenu';
+import {MenuItem} from 'primeng/api';
+import { LoadingComponent } from './shared/components/loading/loading.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +42,13 @@ import { CohortTableComponent } from './components/viewTable/cohort-table/cohort
     ConfigFieldsComponent,
     PageNotFoundComponent,
     CurvesTableComponent,
-    CohortTableComponent
+    CohortTableComponent,
+    ScenariosTableComponent,
+    PoFBandsTableComponent,
+    RiskLevelsTableComponent,
+    FieldsTableComponent,
+    DoNothingTableComponent,
+    LoadingComponent
   ],
   imports: [
     BrowserModule,
@@ -45,7 +59,8 @@ import { CohortTableComponent } from './components/viewTable/cohort-table/cohort
     HttpClientModule,
     TabMenuModule,
     MessageModule,
-    MatSelectModule
+    MatSelectModule,
+    PanelMenuModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,27 +1,24 @@
 <table>
   <caption>Config - Curves</caption>
   <thead>
-    <th>Scenario</th>
-    <th>Cohort</th>
-    <th>Calculation</th>
-    <th>PoF Curve</th>
-    <th>PoF NAV</th>
-    <th>Health Curve</th>
-    <th>Health NAV</th>
-    <th>PoF Constant</th>
-    <th>Health Constant</th>
+    <tr>
+      <th>Scenario</th>
+      <th>Cohort</th>
+      <th>Calculation</th>
+      <th>PoF Curve</th>
+      <th>PoF NAV</th>
+      <th>Health Curve</th>
+      <th>Health NAV</th>
+      <th>PoF Constant</th>
+      <th>Health Constant</th>
+    </tr>
   </thead>
   <tbody>
-    <td>1</td>
-    <td>2</td>
-    <td>3</td>
-    <td>4</td>
-    <td>5</td>
-    <td>6</td>
-    <td>7</td>
-    <td>8</td>
-    <td>9</td>
-    <td>Edit</td>
-    <td>Delete</td>
+    <tr>
+      <td *ngFor="let curve of curves">{{curve}}</td>
+      <td (click)=onEditRow(curves) class="buttonEffect">Edit</td>
+      <td class="buttonEffect" (click)="onDeleteRow()">Delete</td>
+    </tr>
+    
   </tbody>
 </table>

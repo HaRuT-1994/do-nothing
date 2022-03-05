@@ -29,6 +29,10 @@ button {
   background-color: $button-bg;
   border-style: none;
   border-radius: 10px !important;
+
+  &:hover {
+    background-color: $button-bg-hover;
+  }
 }
 
 label {

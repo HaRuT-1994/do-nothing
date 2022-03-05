@@ -1,13 +1,21 @@
-<table>
+<div class="G-flex-justify-center">
+  <p-message severity="{{severity}}" text="{{ msg }}"></p-message>
+</div>
+<table [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
   <caption>Config - Cohort</caption>
   <thead>
-    <th>Cohorts</th>
-    <th>Description</th>
+    <tr>
+      <th>Cohorts</th>
+      <th>Description</th>
+    </tr>
   </thead>
   <tbody>
-    <td>1</td>
-    <td>2</td>
-    <td>Edit</td>
-    <td>Delete</td>
+    <tr *ngFor="let data of allCohorts; index as i">
+      <td>{{data.cohorts}}</td>
+      <td>{{data.description}}</td>
+      <td class="buttonEffect" (click)=onEditRow(data)>Edit</td>
+      <td class="buttonEffect" (click)="onDeleteRow(data.cohortId)">Delete</td>
+    </tr>
   </tbody>
 </table>
+<app-loading *ngIf="isLoading"></app-loading>

@@ -12,4 +12,10 @@ export class CommonService {
       context.severity = '';
     }, 2500)
   }
+
+  updateForm(formGroup, newData) {
+    return Object.keys(formGroup.controls).forEach( (controlName) => {
+          formGroup.controls[controlName].patchValue(newData[controlName]);
+    })
+  }
 }

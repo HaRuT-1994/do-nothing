@@ -7,11 +7,17 @@ import { AppConfig } from '../config/app.config';
   providedIn: 'root'
 })
 export class ConfigCurvesService {
-
-  private appConfig = AppConfig;
+  editCurves = [];
+  isOnEdit: boolean;
   constructor(private http: HttpClient) { }
 
   addConfigCurves(data: any): Observable<any> {
-    return this.http.post(`${this.appConfig.baseUrl}api/${this.appConfig.endPoints.ConfigCurves}`, data)
+    return this.http.post(`${AppConfig.baseUrl}api/${AppConfig.endPoints.ConfigCurves}`, data)
+  }
+
+  onEditRow(ev) {
+    this.editCurves = ev;
+    this.isOnEdit = true;
+    //edit row api
   }
 }
