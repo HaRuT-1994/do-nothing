@@ -7,6 +7,7 @@ import { CommonService } from 'src/app/services/common.service';
 import { ConfigData } from 'src/app/models/configData.interface';
 import { ConfigScenariosService } from 'src/app/services/config-scenarios.service';
 import { CohortService } from 'src/app/services/cohort.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-pof-bands',
@@ -23,14 +24,18 @@ export class PofBandsComponent {
     _4: new FormControl(0),
     _5: new FormControl(0)
   });
+  public severity: string;
+  public msg: string;
+  public isOnEdit: boolean;
+  public isLoading: boolean;
+  public cohortData: ConfigData[] = [];
+  public scenarioData: ConfigData[] = [];
 
-  public severity = '';
-  public msg = '';
-  cohortData: ConfigData[] = [];
-  scenarioData: ConfigData[] = [];
-
-  constructor(private pofBandsService: PofBandsService, private commonService: CommonService,
-    private cohortService: CohortService, private configScenariosService: ConfigScenariosService) { }
+  constructor(private pofBandsService: PofBandsService,
+              private commonService: CommonService,
+              private cohortService: CohortService,
+              private configScenariosService: ConfigScenariosService,
+              private location: Location) { }
 
   ngOnInit() {
     this.cohortService.getConfigCohort().subscribe(
@@ -44,21 +49,55 @@ export class PofBandsComponent {
         this.scenarioData = res;
       }
     )
+
+    this.isOnEdit = this.pofBandsService.isOnEdit;
+    if(this.location.path().includes('add')) {
+      this.isOnEdit = false;
+    }
+    if (this.isOnEdit) {
+      this.commonService.updateForm(this.formGroup, this.pofBandsService.editPofBand);
+    }
   }
 
-  onSubmit() {
+  addConfig(): void {
+    this.isLoading = true;
     this.pofBandsService.addPofBands(this.formGroup.value).subscribe(
       () => {
         this.severity = Severity.SUCCESS;
         this.msg = 'PoF Bands Form '+ Message.SUCCESS_MSG;
         this.commonService.deleteMsg(this);
+        this.isLoading = false;
       },
       err => { 
         console.log(err);
         this.severity = Severity.ERROR;
         this.msg = Message.ERROR_MSG;
         this.commonService.deleteMsg(this);
+        this.isLoading = false;
       }
     );
+  }
+
+  editConfig(): void {
+    this.isLoading = true;
+    this.pofBandsService.onEditPoFBand(this.formGroup.value).subscribe(
+      () => {
+        this.isLoading = false;
+        this.severity = Severity.SUCCESS;
+        this.msg = 'PoF Bands Form ' +  Message.EDIT_SUCCESS_MSG;
+        this.commonService.deleteMsg(this);
+      },
+      () => {
+        this.isLoading = false;
+        this.severity = Severity.ERROR;
+        this.msg = Message.ERROR_MSG;
+        this.commonService.deleteMsg(this);
+      }
+    );
+  }
+
+  goBack(): void {
+    this.location.back();
+    this.isOnEdit = false;
   }
 }

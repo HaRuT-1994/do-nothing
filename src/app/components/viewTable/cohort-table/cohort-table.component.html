@@ -1,6 +1,7 @@
-<div class="G-flex-justify-center">
+<div class="messgae">
   <p-message severity="{{severity}}" text="{{ msg }}"></p-message>
 </div>
+<app-loading *ngIf="isLoading"></app-loading>
 <table [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
   <caption>Config - Cohort</caption>
   <thead>
@@ -10,7 +11,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let data of allCohorts; index as i">
+    <tr *ngFor="let data of allCohorts">
       <td>{{data.cohorts}}</td>
       <td>{{data.description}}</td>
       <td class="buttonEffect" (click)=onEditRow(data)>Edit</td>
@@ -18,4 +19,3 @@
     </tr>
   </tbody>
 </table>
-<app-loading *ngIf="isLoading"></app-loading>

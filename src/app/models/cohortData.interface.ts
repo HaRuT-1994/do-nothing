@@ -1,5 +1,5 @@
 export interface CohortModel {
-  cohortId: number,
+  cohortId?: number,
   cohorts: string,
   description: string
 }

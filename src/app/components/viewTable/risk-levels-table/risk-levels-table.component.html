@@ -1,15 +1,25 @@
-<table>
-  <caption>Config - Cohort</caption>
+<div class="messgae">
+  <p-message severity="{{severity}}" text="{{ msg }}"></p-message>
+</div>
+<app-loading *ngIf="isLoading"></app-loading>
+<table [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
+  <caption>Config - Risk Levels</caption>
   <thead>
-    <th>POF</th>
-    <th>COF</th>
-    <th>Risk Score</th>
-    <th>Risk Rating</th>
+    <tr>
+      <th>POF</th>
+      <th>COF</th>
+      <th>Risk Score</th>
+      <th>Risk Rating</th>
+    </tr>
   </thead>
   <tbody>
-    <td>1</td>
-    <td>2</td>
-    <td>Edit</td>
-    <td>Delete</td>
+    <tr *ngFor="let data of allRiskLevels">
+      <td>{{data.pof}}</td>
+      <td>{{data.cof}}</td>
+      <td>{{data.riskScore}}</td>
+      <td>{{data.riskRating}}</td>
+      <td class="buttonEffect" (click)=onEditRow(data)>Edit</td>
+      <td class="buttonEffect" (click)="onDeleteRow(data.id)">Delete</td>
+    </tr>
   </tbody>
 </table>

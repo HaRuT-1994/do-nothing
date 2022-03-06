@@ -18,21 +18,21 @@ export class CohortTableComponent implements OnInit {
   public severity: string;
   public msg: string;
 
-  constructor(private cohortService: CohortService, private router: Router,  private commonService: CommonService) { }
+  constructor( private cohortService: CohortService,
+               private router: Router,
+               private commonService: CommonService) { }
 
   ngOnInit(): void {
     this.isLoading = true
-    if (!this.allCohorts.length) {
-      this.cohortService.getAllCohorts().subscribe(
-        (res: CohortModel[]) => {
-          this.allCohorts = res;
-          this.isLoading = false;
-        },
-        err => {
-          console.log(err);
-        }
-      );
-    }
+    this.cohortService.getAllCohorts().subscribe(
+      (res: CohortModel[]) => {
+        this.allCohorts = res;
+        this.isLoading = false;
+      },
+      err => {
+        console.log(err);
+      }
+    );
   }
 
   onEditRow(data: CohortModel): void {    
@@ -41,7 +41,7 @@ export class CohortTableComponent implements OnInit {
   }
 
   onDeleteRow(id: number): void {
-    if(confirm('Are you sure you want to delete this config?')) {
+    if(confirm('Are you sure in delating this config?')) {
       this.isLoading = true;
       this.cohortService.deleteCohort(id).subscribe(
         () => {
@@ -59,8 +59,5 @@ export class CohortTableComponent implements OnInit {
         }
       );
     }
-     
-  
   }
-
 }

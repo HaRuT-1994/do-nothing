@@ -1,6 +1,10 @@
-<main>
+<div class="G-flex-justify-center">
+  <p-message severity="{{severity}}" text="{{ msg }}"></p-message>
+</div>
+<app-loading *ngIf="isLoading"></app-loading>
+<main [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
   <h1>Config Fields</h1>
-  <form action="" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+  <form action="" [formGroup]="formGroup">
     <div class="G-flex-justify-around">
       <div class="G-column gap">
         <div class="G-flex-center-between">
@@ -26,7 +30,8 @@
       </div>
     </div>
     
-    <button type="submit">Submit</button>
-    <p-message severity="{{severity}}" text="{{ msg }}"></p-message>
+    <button type="submit" *ngIf="!isOnEdit" (click)="addConfig()">Submit</button>
+    <button type="submit" *ngIf="isOnEdit" (click)="editConfig()">Edit</button>
+    <button type="button" *ngIf="isOnEdit" (click)="goBack()">Go back</button>
   </form>
 </main>

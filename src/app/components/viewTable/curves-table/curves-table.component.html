@@ -1,4 +1,8 @@
-<table>
+<div class="messgae">
+  <p-message severity="{{severity}}" text="{{ msg }}"></p-message>
+</div>
+<app-loading *ngIf="isLoading"></app-loading>
+<table [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
   <caption>Config - Curves</caption>
   <thead>
     <tr>
@@ -14,11 +18,18 @@
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <td *ngFor="let curve of curves">{{curve}}</td>
-      <td (click)=onEditRow(curves) class="buttonEffect">Edit</td>
-      <td class="buttonEffect" (click)="onDeleteRow()">Delete</td>
+    <tr *ngFor="let data of allCurves">
+      <td>{{data.scenarioId}}</td>
+      <td>{{data.cohortId}}</td>
+      <td>{{data.calculation}}</td>
+      <td>{{data.poFCurve}}</td>
+      <td>{{data.poFNav}}</td>
+      <td>{{data.healthCurve}}</td>
+      <td>{{data.healthNav}}</td>
+      <td>{{data.poFConstant}}</td>
+      <td>{{data.healthConstant}}</td>
+      <td class="buttonEffect" (click)=onEditRow(data)>Edit</td>
+      <td class="buttonEffect" (click)="onDeleteRow(data.id)">Delete</td>
     </tr>
-    
   </tbody>
 </table>

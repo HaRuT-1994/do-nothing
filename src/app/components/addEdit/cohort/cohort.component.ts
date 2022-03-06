@@ -16,8 +16,8 @@ export class CohortComponent implements OnInit {
     cohorts: new FormControl(''),
     description: new FormControl('')
   });
-  public severity = '';
-  public msg = '';
+  public severity: string;
+  public msg: string;
   public isOnEdit: boolean;
   public isLoading: boolean;
   

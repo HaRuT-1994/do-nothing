@@ -7,7 +7,7 @@ export class CommonService {
 
   constructor() { }
 
-  deleteMsg(context) {
+  deleteMsg(context): void {
     setTimeout(() => {
       context.severity = '';
     }, 2500)

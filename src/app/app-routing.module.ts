@@ -21,16 +21,25 @@ const route = AppConfig.routes;
 
 const routes: Routes = [
   { path: route.add.doNothing, component: DoNothingComponent },
+  { path: route.edit.doNothing, component: DoNothingComponent },
+
   { path: route.add.cohort, component: CohortComponent },
   { path: route.edit.configCohort, component: CohortComponent },
+
   { path: route.add.configScenarios, component: ConfigScenariosComponent },
+  { path: route.edit.configScenarios, component: ConfigScenariosComponent },
+
   { path: route.add.configFields, component: ConfigFieldsComponent },
+  { path: route.edit.configFields, component: ConfigFieldsComponent },
+
   { path: route.add.configRiskLevels, component: RiskLevelsComponent },
+  { path: route.edit.configRiskLevels, component: RiskLevelsComponent },
 
   { path: route.add.configCurves, component: ConfigCurvesComponent },
   { path: route.edit.configCurves, component: ConfigCurvesComponent },
 
   { path: route.add.pofBands, component: PofBandsComponent },
+  { path: route.edit.pofBands, component: PofBandsComponent },
 
   { path: route.view.curvesTable, component: CurvesTableComponent },
   { path: route.view.cohortTable, component: CohortTableComponent },

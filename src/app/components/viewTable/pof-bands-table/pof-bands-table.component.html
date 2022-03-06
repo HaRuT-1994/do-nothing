@@ -1,18 +1,31 @@
-<table>
-  <caption>Config - Cohort</caption>
+<div class="messgae">
+  <p-message severity="{{severity}}" text="{{ msg }}"></p-message>
+</div>
+<app-loading *ngIf="isLoading"></app-loading>
+<table [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
+  <caption>Config - PoF Bands</caption>
   <thead>
-    <th>Scenario</th>
-    <th>Cohort </th>
-    <th>[>=1]</th>
-    <th>[>=2]</th>
-    <th>[>=3]</th>
-    <th>[>=4]</th>
-    <th>[>=5]</th>
+    <tr>
+      <th>Scenario</th>
+      <th>Cohort </th>
+      <th>[>=1]</th>
+      <th>[>=2]</th>
+      <th>[>=3]</th>
+      <th>[>=4]</th>
+      <th>[>=5]</th>
+    </tr>
   </thead>
   <tbody>
-    <td>1</td>
-    <td>2</td>
-    <td>Edit</td>
-    <td>Delete</td>
+    <tr *ngFor="let data of allPoFBands">
+      <td>{{data.scenarioId}}</td>
+      <td>{{data.cohortId}}</td>
+      <td>{{data._1}}</td>
+      <td>{{data._2}}</td>
+      <td>{{data._3}}</td>
+      <td>{{data._4}}</td>
+      <td>{{data._5}}</td>
+      <td class="buttonEffect" (click)=onEditRow(data)>Edit</td>
+      <td class="buttonEffect" (click)="onDeleteRow(data.id)">Delete</td>
+    </tr>
   </tbody>
 </table>

@@ -9,8 +9,9 @@ import { ConfigData } from '../models/configData.interface';
   providedIn: 'root'
 })
 export class CohortService {
-  editCohort: CohortModel[] = [];
-  isOnEdit: boolean;
+  public editCohort: CohortModel[] = [];
+  public isOnEdit: boolean;
+  
   constructor(private http: HttpClient) { }
 
   addCohort(data: any): Observable<any> {
@@ -25,18 +26,17 @@ export class CohortService {
     return this.http.get<CohortModel[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.getAllCohorts}`);
   }
   
-  deleteCohort(id): Observable<any> {
+  deleteCohort(id: number): Observable<any> {
     return this.http.delete(`${AppConfig.baseUrl}api/${AppConfig.endPoints.deleteCohort}/${id}`);
   }
    
-  onEditCohort(data: any): Observable<any> {
+  onEditCohort(data: CohortModel): Observable<any> {
     data.cohortId = this.editCohort['cohortId'];
     return this.http.put(`${AppConfig.baseUrl}api/${AppConfig.endPoints.updateCohort}`, data);
   }
 
-  onEditRow(data) {
+  onEditRow(data): void {
     this.editCohort = data;
     this.isOnEdit = true;    
-  } 
-
+  }
 }
