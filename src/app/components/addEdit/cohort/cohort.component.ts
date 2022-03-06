@@ -35,7 +35,7 @@ export class CohortComponent implements OnInit {
     }
   }
 
-  addConfig(): void {    
+  addConfig(): void {
     this.isLoading = true;
     this.cohortService.addCohort(this.formGroup.value).subscribe(
       () => {

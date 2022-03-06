@@ -38,10 +38,10 @@ export const AppConfig: AppConfig = {
         updateScenario: 'ConfigScenarios/UpdateConfigScenarios',
         deleteScenario: 'ConfigScenarios/DeleteConfigScenarios',
 
-        modelConfiguration: 'ModelConfiguration/AddModelConfiguration',
-        getAllConfigurations: 'ModelConfiguration/GetAllModelConfiguration',
-        updateConfiguration: 'ModelConfiguration/UpdateModelConfiguration',
-        deleteConfiguration: 'ModelConfiguration/DeleteModelConfiguration',
+        modelConfig: 'ModelConfiguration/AddModelConfiguration',
+        getAllConfigs: 'ModelConfiguration/GetAllModelConfiguration',
+        updateConfig: 'ModelConfiguration/UpdateModelConfiguration',
+        deleteConfig: 'ModelConfiguration/DeleteModelConfiguration',
 
         lookupSkipTheseLifecycles: 'Lookup/LookupSkipTheseLifecycles',
         lookupSkipTheseAssetSources: 'Lookup/LookupSkipTheseAssetSources',

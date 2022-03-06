@@ -35,9 +35,9 @@ export class CohortTableComponent implements OnInit {
     );
   }
 
-  onEditRow(data: CohortModel): void {    
+  onEditRow(data: CohortModel): void {
     this.cohortService.onEditRow(data);
-    this.router.navigate([AppConfig.routes.edit.configCohort]);    
+    this.router.navigate([AppConfig.routes.edit.configCohort]);
   }
 
   onDeleteRow(id: number): void {

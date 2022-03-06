@@ -60,5 +60,4 @@ export class ScenariosTableComponent implements OnInit {
       );
     }
   }
-
 }
