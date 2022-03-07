@@ -13,10 +13,12 @@ import { DoNothingService } from 'src/app/services/do-nothing.service';
   styleUrls: ['./do-nothing-table.component.scss']
 })
 export class DoNothingTableComponent implements OnInit {
-  public allModels: ModelConfig[] = [];
   public isLoading: boolean;
   public severity: string;
   public msg: string;
+  public allModels: ModelConfig[] = [];
+  public pageN: ModelConfig[] = [];
+  private currentPage = {first: 0, rows: 10};
 
   constructor( private doNothingService: DoNothingService,
                private commonService: CommonService,
@@ -27,6 +29,7 @@ export class DoNothingTableComponent implements OnInit {
     this.doNothingService.getAllModelConfigs().subscribe(
       (res: ModelConfig[]) => {
         this.allModels = res;
+        this.onPageChange(this.currentPage);
         this.isLoading = false;
       },
       err => {
@@ -48,6 +51,7 @@ export class DoNothingTableComponent implements OnInit {
         () => {
           this.isLoading = false;
           this.allModels = this.allModels.filter( (val) => val['id'] !== id);
+          this.onPageChange(this.currentPage);
           this.severity = Severity.SUCCESS;
           this.msg = Message.DELETE_SUCCESS_MSG;
           this.commonService.deleteMsg(this);
@@ -60,5 +64,14 @@ export class DoNothingTableComponent implements OnInit {
         }
       );
     }
+  }
+
+  onPageChange(ev) {
+    this.currentPage = ev;
+    if(!(this.allModels.length % 10) && (ev.first % 10 !== 0)) {
+      ev.first -= 10; 
+    }
+    this.pageN = this.allModels;
+    this.pageN = this.pageN.slice(ev.first, ev.first + ev.rows);
   }
 }

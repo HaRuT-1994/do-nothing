@@ -14,7 +14,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let data of allFields">
+    <tr *ngFor="let data of pageN">
       <td>{{data.tab}}</td>
       <td>{{data.internalFieldReference}}</td>
       <td>{{data.fieldNameInSheet}}</td>
@@ -22,6 +22,12 @@
       <td>{{data.mandatoryForModel}}</td>
       <td class="buttonEffect" (click)=onEditRow(data)>Edit</td>
       <td class="buttonEffect" (click)="onDeleteRow(data.id)">Delete</td>
+    </tr>
+    <tr *ngIf="allFields.length > 10">
+      <td colspan="7">
+        <p-paginator [rows]="10" [totalRecords]="allFields.length" [rowsPerPageOptions]="[10,20,30]"
+        (onPageChange)="onPageChange($event)"></p-paginator>
+      </td>
     </tr>
   </tbody>
 </table>

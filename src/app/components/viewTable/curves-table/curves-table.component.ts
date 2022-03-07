@@ -14,9 +14,11 @@ import { ConfigCurvesService } from 'src/app/services/config-curves.service';
 })
 export class CurvesTableComponent implements OnInit {
   public isLoading: boolean;
-  public allCurves: CurveModel[] = [];
   public severity: string;
   public msg: string;
+  public allCurves: CurveModel[] = [];
+  public pageN: CurveModel[] = [];
+  private currentPage = {first: 0, rows: 10};
 
   constructor( private router: Router,
                private curvesService: ConfigCurvesService, 
@@ -27,6 +29,7 @@ export class CurvesTableComponent implements OnInit {
     this.curvesService.getAllCurves().subscribe(
       (res: CurveModel[]) => {
         this.allCurves = res;
+        this.onPageChange(this.currentPage);
         this.isLoading = false;
       },
       err => {
@@ -47,6 +50,7 @@ export class CurvesTableComponent implements OnInit {
         () => {
           this.isLoading = false;
           this.allCurves = this.allCurves.filter( (val) => val['id'] !== id);
+          this.onPageChange(this.currentPage);
           this.severity = Severity.SUCCESS;
           this.msg = Message.DELETE_SUCCESS_MSG;
           this.commonService.deleteMsg(this);
@@ -59,5 +63,14 @@ export class CurvesTableComponent implements OnInit {
         }
       );
     }
+  }
+
+  onPageChange(ev) {
+    this.currentPage = ev;
+    if(!(this.allCurves.length % 10) && (ev.first % 10 !== 0)) {
+      ev.first -= 10; 
+    }
+    this.pageN = this.allCurves;
+    this.pageN = this.pageN.slice(ev.first, ev.first + ev.rows);
   }
 }

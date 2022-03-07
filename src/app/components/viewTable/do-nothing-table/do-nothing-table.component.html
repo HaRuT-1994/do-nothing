@@ -21,7 +21,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let data of allModels">
+    <tr *ngFor="let data of pageN">
       <td>{{data.modelName}}</td>
       <td>{{data.baseYear}}</td>
       <td>{{data.yearsToRun}}</td>
@@ -36,6 +36,12 @@
       <td>{{data.conditionRange}}</td>
       <td class="buttonEffect" (click)=onEditRow(data)>Edit</td>
       <td class="buttonEffect" (click)="onDeleteRow(data.id)">Delete</td>
+    </tr>
+    <tr *ngIf="allModels.length > 10">
+      <td colspan="14">
+        <p-paginator [rows]="10" [totalRecords]="allModels.length" [rowsPerPageOptions]="[10,20,30]"
+        (onPageChange)="onPageChange($event)"></p-paginator>
+      </td>
     </tr>
   </tbody>
 </table>

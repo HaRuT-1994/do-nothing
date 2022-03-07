@@ -69,7 +69,7 @@ export class ConfigCurvesComponent implements OnInit {
         this.severity = Severity.SUCCESS;
         this.msg = 'Curve Form ' +  Message.SUCCESS_MSG;
         this.commonService.deleteMsg(this);
-        this.formGroup.reset();
+       this.formGroup.reset();
       },
       () => {
         this.isLoading = false;

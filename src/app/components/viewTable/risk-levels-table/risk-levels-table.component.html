@@ -13,13 +13,19 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let data of allRiskLevels">
+    <tr *ngFor="let data of pageN">
       <td>{{data.pof}}</td>
       <td>{{data.cof}}</td>
       <td>{{data.riskScore}}</td>
       <td>{{data.riskRating}}</td>
       <td class="buttonEffect" (click)=onEditRow(data)>Edit</td>
       <td class="buttonEffect" (click)="onDeleteRow(data.id)">Delete</td>
+    </tr>
+    <tr *ngIf="allRiskLevels.length > 10">
+      <td colspan="7">
+        <p-paginator [rows]="10" [totalRecords]="allRiskLevels.length" [rowsPerPageOptions]="[10,20,30]"
+        (onPageChange)="onPageChange($event)"></p-paginator>
+      </td>
     </tr>
   </tbody>
 </table>

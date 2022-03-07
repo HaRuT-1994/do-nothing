@@ -13,10 +13,12 @@ import { RiskLevelsService } from 'src/app/services/risk-levels.service';
   styleUrls: ['./risk-levels-table.component.scss']
 })
 export class RiskLevelsTableComponent implements OnInit {
-  public allRiskLevels: RiskLevelsModel[] = [];
   public isLoading: boolean;
   public severity: string;
   public msg: string;
+  public allRiskLevels: RiskLevelsModel[] = [];
+  public pageN: RiskLevelsModel[] = [];
+  private currentPage = {first: 0, rows: 10};
 
   constructor(private riskLvlService: RiskLevelsService,
               private router: Router,
@@ -27,6 +29,7 @@ export class RiskLevelsTableComponent implements OnInit {
     this.riskLvlService.getAllRiskLevels().subscribe(
       (res: RiskLevelsModel[]) => {
         this.allRiskLevels = res;
+        this.onPageChange(this.currentPage);
         this.isLoading = false;
       },
       err => {
@@ -47,6 +50,7 @@ export class RiskLevelsTableComponent implements OnInit {
         () => {
           this.isLoading = false;
           this.allRiskLevels = this.allRiskLevels.filter( (val) => val['id'] !== id);
+          this.onPageChange(this.currentPage);
           this.severity = Severity.SUCCESS;
           this.msg = Message.DELETE_SUCCESS_MSG;
           this.commonService.deleteMsg(this);
@@ -59,5 +63,15 @@ export class RiskLevelsTableComponent implements OnInit {
         }
       );
     }
+  }
+
+  onPageChange(ev) {
+    //debugger;
+    this.currentPage = ev;
+    if(!(this.allRiskLevels.length % 10) && (ev.first % 10 !== 0)) {
+      ev.first -= 10; 
+    }
+    this.pageN = this.allRiskLevels;
+    this.pageN = this.pageN.slice(ev.first, ev.first + ev.rows);
   }
 }

@@ -18,7 +18,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let data of allCurves">
+    <tr *ngFor="let data of pageN">
       <td>{{data.scenarioId}}</td>
       <td>{{data.cohortId}}</td>
       <td>{{data.calculation}}</td>
@@ -30,6 +30,12 @@
       <td>{{data.healthConstant}}</td>
       <td class="buttonEffect" (click)=onEditRow(data)>Edit</td>
       <td class="buttonEffect" (click)="onDeleteRow(data.id)">Delete</td>
+    </tr>
+    <tr *ngIf="allCurves.length > 10">
+      <td colspan="11">
+        <p-paginator [rows]="10" [totalRecords]="allCurves.length" [rowsPerPageOptions]="[10,20,30]"
+        (onPageChange)="onPageChange($event)"></p-paginator>
+      </td>
     </tr>
   </tbody>
 </table>

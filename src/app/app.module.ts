@@ -27,7 +27,7 @@ import { RiskLevelsTableComponent } from './components/viewTable/risk-levels-tab
 import { FieldsTableComponent } from './components/viewTable/fields-table/fields-table.component';
 import { DoNothingTableComponent } from './components/viewTable/do-nothing-table/do-nothing-table.component';
 import {PanelMenuModule} from 'primeng/panelmenu';
-import {MenuItem} from 'primeng/api';
+import {PaginatorModule} from 'primeng/paginator';
 import { LoadingComponent } from './shared/components/loading/loading.component';
 
 @NgModule({
@@ -60,7 +60,8 @@ import { LoadingComponent } from './shared/components/loading/loading.component'
     TabMenuModule,
     MessageModule,
     MatSelectModule,
-    PanelMenuModule
+    PanelMenuModule,
+    PaginatorModule
   ],
   providers: [],
   bootstrap: [AppComponent]

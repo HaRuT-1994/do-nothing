@@ -13,10 +13,12 @@ import { PofBandsService } from 'src/app/services/pof-bands.service';
   styleUrls: ['./pof-bands-table.component.scss']
 })
 export class PoFBandsTableComponent implements OnInit {
-  public allPoFBands: PoFBandsModel[] = [];
   public isLoading: boolean;
   public severity: string;
   public msg: string;
+  public allPoFBands: PoFBandsModel[] = [];
+  public pageN: PoFBandsModel[] = [];
+  private currentPage = {first: 0, rows: 10};
 
   constructor( private pofBandService: PofBandsService,
                private router: Router,
@@ -27,6 +29,7 @@ export class PoFBandsTableComponent implements OnInit {
     this.pofBandService.getAllPoFBands().subscribe(
       (res: PoFBandsModel[]) => {
         this.allPoFBands = res;
+        this.onPageChange(this.currentPage);
         this.isLoading = false;
       },
       err => {
@@ -47,6 +50,7 @@ export class PoFBandsTableComponent implements OnInit {
         () => {
           this.isLoading = false;
           this.allPoFBands = this.allPoFBands.filter( (val) => val['id'] !== id);
+          this.onPageChange(this.currentPage);
           this.severity = Severity.SUCCESS;
           this.msg = Message.DELETE_SUCCESS_MSG;
           this.commonService.deleteMsg(this);
@@ -59,5 +63,14 @@ export class PoFBandsTableComponent implements OnInit {
         }
       );
     }
+  }
+
+  onPageChange(ev) {
+    this.currentPage = ev;
+    if(!(this.allPoFBands.length % 10) && (ev.first % 10 !== 0)) {
+      ev.first -= 10; 
+    }
+    this.pageN = this.allPoFBands;
+    this.pageN = this.pageN.slice(ev.first, ev.first + ev.rows);
   }
 }

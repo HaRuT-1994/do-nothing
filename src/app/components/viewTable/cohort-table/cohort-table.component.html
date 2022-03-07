@@ -11,11 +11,17 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let data of allCohorts">
+    <tr *ngFor="let data of pageN">
       <td>{{data.cohorts}}</td>
       <td>{{data.description}}</td>
       <td class="buttonEffect" (click)=onEditRow(data)>Edit</td>
       <td class="buttonEffect" (click)="onDeleteRow(data.cohortId)">Delete</td>
+    </tr>
+    <tr *ngIf="allCohorts.length > 10">
+      <td colspan="4">
+        <p-paginator [rows]="10" [totalRecords]="allCohorts.length" [rowsPerPageOptions]="[10,20,30]"
+        (onPageChange)="onPageChange($event)"></p-paginator>
+      </td>
     </tr>
   </tbody>
 </table>
