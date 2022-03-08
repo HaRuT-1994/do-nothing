@@ -66,12 +66,11 @@ export class RiskLevelsTableComponent implements OnInit {
   }
 
   onPageChange(ev) {
-    //debugger;
     this.currentPage = ev;
-    if(!(this.allRiskLevels.length % 10) && (ev.first % 10 !== 0)) {
-      ev.first -= 10; 
+    if(ev.page * ev.rows >= this.allRiskLevels.length) {
+      ev.first -= 10;
     }
-    this.pageN = this.allRiskLevels;
-    this.pageN = this.pageN.slice(ev.first, ev.first + ev.rows);
+
+    this.pageN = this.allRiskLevels.slice(ev.first, ev.first + ev.rows);
   }
 }

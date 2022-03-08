@@ -20,6 +20,7 @@ export class CohortTableComponent implements OnInit {
   public allCohorts: CohortModel[] = [];
   public pageN: CohortModel[] = [];
   private currentPage = {first: 0, rows: 10};
+  private allCohortsWithoutId: CohortModel[] = [];
 
   constructor( private cohortService: CohortService,
                private router: Router,
@@ -34,6 +35,8 @@ export class CohortTableComponent implements OnInit {
         this.allCohorts = res;
         this.onPageChange(this.currentPage);
         this.isLoading = false;
+        this.allCohortsWithoutId = JSON.parse(JSON.stringify(this.allCohorts));
+        this.allCohortsWithoutId.map(el => delete el['cohortId'])
       },
       err => {
         console.log(err);
@@ -70,10 +73,20 @@ export class CohortTableComponent implements OnInit {
 
   onPageChange(ev) {
     this.currentPage = ev;
-    if(!(this.allCohorts.length % 10) && (ev.first % 10 !== 0)) {
-      ev.first -= 10; 
+    if(ev.page * ev.rows >= this.allCohorts.length) {
+      ev.first -= 10;
     }
-    this.pageN = this.allCohorts;
-    this.pageN = this.pageN.slice(ev.first, ev.first + ev.rows);
+
+    this.pageN = this.allCohorts.slice(ev.first, ev.first + ev.rows);
+  }
+
+  filterData(search: string) {
+    if (search.length) {
+      this.pageN = this.allCohortsWithoutId.filter(i => Object.values(i).toString().includes(search) )
+    } else {
+      this.pageN = this.allCohorts;
+      this.onPageChange({first: 0, rows: 10});
+    }
+    
   }
 }

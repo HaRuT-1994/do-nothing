@@ -67,10 +67,10 @@ export class FieldsTableComponent implements OnInit {
 
   onPageChange(ev) {
     this.currentPage = ev;
-    if(!(this.allFields.length % 10) && (ev.first % 10 !== 0)) {
-      ev.first -= 10; 
+    if(ev.page * ev.rows >= this.allFields.length) {
+      ev.first -= 10;
     }
-    this.pageN = this.allFields;
-    this.pageN = this.pageN.slice(ev.first, ev.first + ev.rows);
+
+    this.pageN = this.allFields.slice(ev.first, ev.first + ev.rows);
   }
 }

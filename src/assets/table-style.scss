@@ -7,6 +7,16 @@ table, th, td {
 table {
   margin: auto;
   margin-top: 25px;
+
+  input {
+    width: 160px;
+    padding: 0;
+    margin: 0;
+  }
+
+  th:last-child {
+    padding: 0
+  }
 }
 
 caption {
@@ -37,4 +47,10 @@ td {
   position: fixed;
   top: 20px;
   left: 45%;
+}
+
+::ng-deep p-paginator {
+  button {
+    width: 15px !important;
+  }
 }

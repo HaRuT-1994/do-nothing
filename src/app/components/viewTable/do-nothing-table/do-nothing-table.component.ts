@@ -6,6 +6,7 @@ import { Severity } from 'src/app/enums/severity.enum';
 import { ModelConfig } from 'src/app/models/modelConfig.interface';
 import { CommonService } from 'src/app/services/common.service';
 import { DoNothingService } from 'src/app/services/do-nothing.service';
+import { PrimeNGConfig } from 'primeng/api';
 
 @Component({
   selector: 'app-do-nothing-table',
@@ -22,10 +23,12 @@ export class DoNothingTableComponent implements OnInit {
 
   constructor( private doNothingService: DoNothingService,
                private commonService: CommonService,
-               private router: Router) { }
+               private router: Router,
+               private primengConfig: PrimeNGConfig) { }
 
   ngOnInit(): void {
-    this.isLoading = true
+    this.isLoading = true;
+    this.primengConfig.ripple = true;
     this.doNothingService.getAllModelConfigs().subscribe(
       (res: ModelConfig[]) => {
         this.allModels = res;
@@ -68,10 +71,10 @@ export class DoNothingTableComponent implements OnInit {
 
   onPageChange(ev) {
     this.currentPage = ev;
-    if(!(this.allModels.length % 10) && (ev.first % 10 !== 0)) {
-      ev.first -= 10; 
+    if(ev.page * ev.rows >= this.allModels.length) {
+      ev.first -= 10;
     }
-    this.pageN = this.allModels;
-    this.pageN = this.pageN.slice(ev.first, ev.first + ev.rows);
+
+    this.pageN = this.allModels.slice(ev.first, ev.first + ev.rows);
   }
 }

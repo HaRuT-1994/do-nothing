@@ -8,6 +8,9 @@
     <tr>
       <th>Cohorts</th>
       <th>Description</th>
+      <th colspan="2">
+        <input type="text" placeholder="search" (input)="filterData($event.target.value)">
+      </th>
     </tr>
   </thead>
   <tbody>
