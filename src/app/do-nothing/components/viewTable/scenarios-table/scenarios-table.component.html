@@ -1,0 +1,34 @@
+<div class="messgae">
+  <p-message severity="{{severity}}" text="{{ msg }}"></p-message>
+</div>
+<app-loading *ngIf="isLoading"></app-loading>
+<table [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
+  <caption>Config - Scenarios</caption>
+  <thead>
+    <tr>
+      <th>Scenario Name</th>
+      <th>Validated Option</th>
+      <th>Restrict To Budget</th>
+      <th>Run</th>
+      <th colspan="2">
+        <input type="text" placeholder="search" (input)="filterData($event.target.value)">
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of pageN">
+      <td>{{data.scenario}}</td>
+      <td>{{data.validatedOption}}</td>
+      <td>{{data.restrictToBudget}}</td>
+      <td>{{data.run}}</td>
+      <td class="buttonEffect" (click)=onEditRow(data)>Edit</td>
+      <td class="buttonEffect" (click)="onDeleteRow(data.scenarioId)">Delete</td>
+    </tr>
+    <tr *ngIf="allScenarios.length > 10">
+      <td colspan="7">
+        <p-paginator [rows]="10" [totalRecords]="allScenarios.length" [rowsPerPageOptions]="[10,20,30]"
+        (onPageChange)="onPageChange($event)"></p-paginator>
+      </td>
+    </tr>
+  </tbody>
+</table>

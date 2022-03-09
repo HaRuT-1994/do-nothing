@@ -1,0 +1,40 @@
+<div class="messgae">
+  <p-message severity="{{severity}}" text="{{ msg }}"></p-message>
+</div>
+<app-loading *ngIf="isLoading"></app-loading>
+<table [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
+  <caption>Config - PoF Bands</caption>
+  <thead>
+    <tr>
+      <th>Scenario</th>
+      <th>Cohort </th>
+      <th>[>=1]</th>
+      <th>[>=2]</th>
+      <th>[>=3]</th>
+      <th>[>=4]</th>
+      <th>[>=5]</th>
+      <th colspan="2">
+        <input type="text" placeholder="search" (input)="filterData($event.target.value)">
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of pageN">
+      <td>{{data.scenarioId}}</td>
+      <td>{{data.cohortId}}</td>
+      <td>{{data._1}}</td>
+      <td>{{data._2}}</td>
+      <td>{{data._3}}</td>
+      <td>{{data._4}}</td>
+      <td>{{data._5}}</td>
+      <td class="buttonEffect" (click)=onEditRow(data)>Edit</td>
+      <td class="buttonEffect" (click)="onDeleteRow(data.id)">Delete</td>
+    </tr>
+    <tr *ngIf="allPoFBands.length > 10">
+      <td colspan="11">
+        <p-paginator [rows]="10" [totalRecords]="allPoFBands.length" [rowsPerPageOptions]="[10,20,30]"
+        (onPageChange)="onPageChange($event)"></p-paginator>
+      </td>
+    </tr>
+  </tbody>
+</table>

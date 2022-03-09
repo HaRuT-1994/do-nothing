@@ -1,0 +1,44 @@
+<div class="messgae">
+  <p-message severity="{{severity}}" text="{{ msg }}"></p-message>
+</div>
+<app-loading *ngIf="isLoading"></app-loading>
+<table [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
+  <caption>Config - Curves</caption>
+  <thead>
+    <tr>
+      <th>Scenario</th>
+      <th>Cohort</th>
+      <th>Calculation</th>
+      <th>PoF Curve</th>
+      <th>PoF NAV</th>
+      <th>Health Curve</th>
+      <th>Health NAV</th>
+      <th>PoF Constant</th>
+      <th>Health Constant</th>
+      <th colspan="2">
+        <input type="text" placeholder="search" (input)="filterData($event.target.value)">
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of pageN">
+      <td>{{data.scenarioId}}</td>
+      <td>{{data.cohortId}}</td>
+      <td>{{data.calculation}}</td>
+      <td>{{data.poFCurve}}</td>
+      <td>{{data.poFNav}}</td>
+      <td>{{data.healthCurve}}</td>
+      <td>{{data.healthNav}}</td>
+      <td>{{data.poFConstant}}</td>
+      <td>{{data.healthConstant}}</td>
+      <td class="buttonEffect" (click)=onEditRow(data)>Edit</td>
+      <td class="buttonEffect" (click)="onDeleteRow(data.id)">Delete</td>
+    </tr>
+    <tr *ngIf="allCurves.length > 10">
+      <td colspan="11">
+        <p-paginator [rows]="10" [totalRecords]="allCurves.length" [rowsPerPageOptions]="[10,20,30]"
+        (onPageChange)="onPageChange($event)"></p-paginator>
+      </td>
+    </tr>
+  </tbody>
+</table>

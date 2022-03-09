@@ -1,0 +1,50 @@
+<div class="messgae">
+  <p-message severity="{{severity}}" text="{{ msg }}"></p-message>
+</div>
+<app-loading *ngIf="isLoading"></app-loading>
+<table [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
+  <caption>Model Configuration</caption>
+  <thead>
+    <tr>
+      <th>Model</th>
+      <th>Base year</th>
+      <th>Years to run</th>
+      <th>Skip these Lifecycles</th>
+      <th>Skip these Unit Classes</th>
+      <th>Data Model Output Templates</th>
+      <th>NR Model Columns</th>
+      <th>Debug Mode</th>
+      <th>Scenarios to Run</th>
+      <th>Allow Overwrite To Exceed Budget</th>
+      <th>Skip these Asset Sources</th>
+      <th>Condition Range</th>
+      <th colspan="2">
+        <input type="text" placeholder="search" (input)="filterData($event.target.value)">
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of pageN">
+      <td>{{data.modelName}}</td>
+      <td>{{data.baseYear}}</td>
+      <td>{{data.yearsToRun}}</td>
+      <td>{{data.skipTheseLifecycle}}</td>
+      <td>{{data.skipTheseUnitClasses}}</td>
+      <td>{{data.dataModelOutputTemplate}}</td>
+      <td>{{data.nrModelColumns}}</td>
+      <td>{{data.debugMode}}</td>
+      <td>{{data.scenariosToRun}}</td>
+      <td>{{data.allowOverwriteToExceedBudget}}</td>
+      <td>{{data.skipTheseAssetSources}}</td>
+      <td>{{data.conditionRange}}</td>
+      <td class="buttonEffect" (click)=onEditRow(data)>Edit</td>
+      <td class="buttonEffect" (click)="onDeleteRow(data.id)">Delete</td>
+    </tr>
+    <tr *ngIf="allModels.length > 10">
+      <td colspan="14">
+        <p-paginator [rows]="10" [totalRecords]="allModels.length" [rowsPerPageOptions]="[10,20,30]"
+        (onPageChange)="onPageChange($event)"></p-paginator>
+      </td>
+    </tr>
+  </tbody>
+</table>
