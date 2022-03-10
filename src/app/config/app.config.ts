@@ -58,6 +58,7 @@ export const AppConfig: AppConfig = {
             configRiskLevels: "add-config-risk-levels",
             configCurves: "add-config-curves",
             pofBands: "add-config-pof-bands",
+            configBudget: "add-config-budget"
         },
         edit: {
             doNothing: "edit-do-nothing",

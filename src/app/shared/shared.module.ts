@@ -1,27 +1,79 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LoadingComponent } from './components/loading/loading.component';
-
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+//from lib
 import { TabMenuModule } from 'primeng/tabmenu';
 import { MessageModule } from 'primeng/message';
 import { MatSelectModule } from '@angular/material/select';
-import { PanelMenuModule } from 'primeng/panelmenu';
 import { PaginatorModule } from 'primeng/paginator';
+
+import { LoadingComponent } from './components/loading/loading.component';
+//forms
+import { DoNothingComponent } from './components/addEdit/do-nothing/do-nothing.component';
+import { ConfigScenariosComponent } from './components/addEdit/config-scenarios/config-scenarios.component';
+import { CohortComponent } from './components/addEdit/cohort/cohort.component';
+import { PofBandsComponent } from './components/addEdit/pof-bands/pof-bands.component';
+import { RiskLevelsComponent } from './components/addEdit/risk-levels/risk-levels.component';
+import { ConfigCurvesComponent } from './components/addEdit/config-curves/config-curves.component';
+import { ConfigFieldsComponent } from './components/addEdit/config-fields/config-fields.component';
+//tables
+import { CurvesTableComponent } from './components/viewTable/curves-table/curves-table.component';
+import { CohortTableComponent } from './components/viewTable/cohort-table/cohort-table.component';
+import { ScenariosTableComponent } from './components/viewTable/scenarios-table/scenarios-table.component';
+import { PoFBandsTableComponent } from './components/viewTable/pof-bands-table/pof-bands-table.component';
+import { RiskLevelsTableComponent } from './components/viewTable/risk-levels-table/risk-levels-table.component';
+import { FieldsTableComponent } from './components/viewTable/fields-table/fields-table.component';
+import { DoNothingTableComponent } from './components/viewTable/do-nothing-table/do-nothing-table.component';
 
 @NgModule({
   declarations: [
-    LoadingComponent
+    LoadingComponent,
+    DoNothingComponent,
+    ConfigScenariosComponent,
+    CohortComponent,
+    PofBandsComponent,
+    RiskLevelsComponent,
+    ConfigCurvesComponent,
+    ConfigFieldsComponent,
+    CurvesTableComponent,
+    CohortTableComponent,
+    ScenariosTableComponent,
+    PoFBandsTableComponent,
+    RiskLevelsTableComponent,
+    FieldsTableComponent,
+    DoNothingTableComponent
   ],
   imports: [
     CommonModule,
     TabMenuModule,
     MessageModule,
     MatSelectModule,
-    PanelMenuModule,
     PaginatorModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
- exports: [
-   LoadingComponent
+  exports: [
+    TabMenuModule,
+    MessageModule,
+    MatSelectModule,
+    PaginatorModule,
+    FormsModule,
+    ReactiveFormsModule,
+    LoadingComponent,
+    DoNothingComponent,
+    ConfigScenariosComponent,
+    CohortComponent,
+    PofBandsComponent,
+    RiskLevelsComponent,
+    ConfigCurvesComponent,
+    ConfigFieldsComponent,
+    CurvesTableComponent,
+    CohortTableComponent,
+    ScenariosTableComponent,
+    PoFBandsTableComponent,
+    RiskLevelsTableComponent,
+    FieldsTableComponent,
+    DoNothingTableComponent
  ]
 })
 export class SharedModule { }

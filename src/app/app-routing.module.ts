@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { AppConfig } from 'src/app/config/app.config';
-import { DoNothingComponent } from './do-nothing/components/addEdit/do-nothing/do-nothing.component';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { DoNothingComponent } from './shared/components/addEdit/do-nothing/do-nothing.component';
 
 const route = AppConfig.routes;
 
