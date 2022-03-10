@@ -14,12 +14,12 @@ export class ConfigScenariosService {
 
   constructor(private http: HttpClient) { }
 
-  addConfigScenarios(data: any): Observable<any> {
-    return this.http.post(`${AppConfig.baseUrl}api/${AppConfig.endPoints.configScenario}`, data);
+  addConfigScenarios(data: any): Observable<ConfigData[]> {
+    return this.http.post<ConfigData[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.configScenario}`, data);
   }
 
-  getConfigScenarios(): Observable<any> {
-    return this.http.get<ConfigData>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.lookupConfigScenarios}`)
+  getConfigScenarios(): Observable<ConfigData[]> {
+    return this.http.get<ConfigData[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.lookupConfigScenarios}`)
   }
 
   getAllScenarios(): Observable<any> {

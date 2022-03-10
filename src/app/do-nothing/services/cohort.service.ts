@@ -14,12 +14,12 @@ export class CohortService {
   
   constructor(private http: HttpClient) { }
 
-  addCohort(data: any): Observable<any> {
-    return this.http.post(`${AppConfig.baseUrl}api/${AppConfig.endPoints.addCohort}`, data);
+  addCohort(data: any): Observable<ConfigData[]> {
+    return this.http.post<ConfigData[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.addCohort}`, data);
   }
 
-  getConfigCohort(): Observable<any> {
-    return this.http.get<ConfigData>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.lookupConfigCohorts}`);
+  getConfigCohort(): Observable<ConfigData[]> {
+    return this.http.get<ConfigData[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.lookupConfigCohorts}`);
   }
 
   getAllCohorts(): Observable<any> {

@@ -53,8 +53,6 @@ export class DoNothingComponent implements OnInit {
       this.isOnEdit = false;
     }
     this.editModel = this.doNothingService.editModel;
-    
-    console.log(this.doNothingService.editModel);
     if (this.isOnEdit) {
       this.strToArray(['skipTheseLifecycle', 'skipTheseAssetSources', 'skipTheseUnitClasses', 'scenariosToRun', 'conditionRange']);
     
