@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AppConfig } from '../../config/app.config';
-import { RiskLevelsModel } from '../models/riskLevelData.interface';
+import { AppConfig } from '../config/app.config';
+import { RiskLevelsModel } from '../shared/models/riskLevelData.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -14,10 +14,10 @@ export class RiskLevelsService {
   constructor(private http: HttpClient) { }
 
   addRiskLevels(data: any): Observable<any> {
-    return this.http.post(`${AppConfig.baseUrl}api/${AppConfig.endPoints.configRiskLevel}`, data);
+    return this.http.post(`${AppConfig.baseUrl}api/${AppConfig.endPoints.addConfigRiskLevel}`, data);
   }
 
-  getAllRiskLevels(): Observable<any> {
+  getAllRiskLevels(): Observable<RiskLevelsModel[]> {
     return this.http.get<RiskLevelsModel[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.getAllRiskLevels}`);
   }
   

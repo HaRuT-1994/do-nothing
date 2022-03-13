@@ -2,7 +2,11 @@ import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ConfigBudgetService } from 'src/app/do-something/services/config-budget.service';
+import { Message } from 'src/app/enums/message.enum';
+import { Severity } from 'src/app/enums/severity.enum';
 import { CommonService } from 'src/app/services/common.service';
+import { ConfigData } from 'src/app/models/configData.interface';
+import { ConfigScenariosService } from 'src/app/services/config-scenarios.service';
 
 @Component({
   selector: 'app-config-budget',
@@ -16,6 +20,7 @@ export class ConfigBudgetComponent implements OnInit {
     year: new FormControl(0),
     budget: new FormControl(0)
   });
+  public scenarioData: ConfigData[] = [];
   public severity: string;
   public msg: string;
   public isOnEdit: boolean;
@@ -24,9 +29,17 @@ export class ConfigBudgetComponent implements OnInit {
   constructor( 
                private budgetService: ConfigBudgetService,
                private commonService: CommonService,
+               private scenariosService: ConfigScenariosService,
                private location: Location) { }
 
   ngOnInit(): void {
+
+    this.scenariosService.getConfigScenarios().subscribe(
+      (res: ConfigData[]) => {
+        this.scenarioData = res;
+      }
+    )
+
     this.isOnEdit = this.budgetService.isOnEdit;
     if(this.location.path().includes('add')) {
       this.isOnEdit = false;
@@ -36,24 +49,24 @@ export class ConfigBudgetComponent implements OnInit {
     }
   }
 
-  // addConfig(): void {
-  //   this.isLoading = true;
-  //   this.cohortService.addCohort(this.formGroup.value).subscribe(
-  //     () => {
-  //       this.isLoading = false;
-  //       this.severity = Severity.SUCCESS;
-  //       this.msg = 'Cohort Form ' +  Message.SUCCESS_MSG;
-  //       this.commonService.deleteMsg(this);
-  //       this.formGroup.reset();
-  //     },
-  //     () => {
-  //       this.isLoading = false;
-  //       this.severity = Severity.ERROR;
-  //       this.msg = Message.ERROR_MSG;
-  //       this.commonService.deleteMsg(this);
-  //     }
-  //   );
-  // }
+  addConfig(): void {
+    this.isLoading = true;
+    this.budgetService.addConfigBudget(this.formGroup.value).subscribe(
+      () => {
+        this.isLoading = false;
+        this.severity = Severity.SUCCESS;
+        this.msg = 'Config Budget Form ' +  Message.SUCCESS_MSG;
+        this.commonService.deleteMsg(this);
+        this.formGroup.reset();
+      },
+      () => {
+        this.isLoading = false;
+        this.severity = Severity.ERROR;
+        this.msg = Message.ERROR_MSG;
+        this.commonService.deleteMsg(this);
+      }
+    );
+  }
 
   // editConfig(): void {
   //   this.isLoading = true;

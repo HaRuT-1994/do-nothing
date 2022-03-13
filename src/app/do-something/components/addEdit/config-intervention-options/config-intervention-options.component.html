@@ -1,0 +1,76 @@
+<div class="G-flex-justify-center">
+  <p-message severity="{{severity}}" text="{{ msg }}"></p-message>
+</div>
+<app-loading *ngIf="isLoading"></app-loading>
+<main [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
+  <h1>Config Intervention Options</h1>
+  <form action="" [formGroup]="formGroup">
+    <div class="G-flex-justify-around">
+      <div class="G-column gap">
+        <div class="G-flex-center-between">
+          <label for="scenarioId" class="label-for-select">Scenario Id</label>
+          <mat-form-field appearance="fill" class="dropdown">
+            <mat-label>Scenario</mat-label>
+            <mat-select formControlName="scenarioId">
+              <mat-option *ngFor="let scenario of scenarioData" [value]="scenario.id">{{scenario.value}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="G-flex-center-between">
+          <label for="cohortId">Cohort Id</label>
+          <mat-form-field appearance="fill" class="dropdown">
+            <mat-label>Cohort</mat-label>
+            <mat-select formControlName="cohortId">
+              <mat-option *ngFor="let cohort of cohortData" [value]="cohort.id">{{cohort.value}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="G-flex-center-between">
+          <label for="intervention">Intervention</label>
+          <input type="text" id="intervention" formControlName="intervention">
+        </div>
+        <div class="G-flex-center-start">
+          <label for="available">Available</label>
+          <input type="checkbox" name="" id="available" class="checkbox" formControlName="available">
+        </div>
+        <div class="G-flex-center-between">
+          <label for="reset">Reset</label>
+          <input type="text" id="reset" formControlName="reset">
+        </div>
+        <div class="G-flex-center-between">
+          <label for="applyWhenMlc">Apply When MLC</label>
+          <input type="number" id="applyWhenMlc" formControlName="applyWhenMlc">
+        </div>
+        <div class="G-flex-center-between">
+          <label for="excludeIfCrc">Exclude If CRC</label>
+          <input type="number" id="excludeIfCrc" formControlName="excludeIfCrc">
+        </div>
+        <div class="G-flex-center-start">
+          <label for="forceReplace">Force Replace</label>
+          <input type="checkbox" name="" id="forceReplace" class="checkbox" formControlName="forceReplace">
+        </div>
+        <div class="G-flex-center-between">
+          <label for="whenAlc">When ALC</label>
+          <input type="number" id="whenAlc" formControlName="whenAlc">
+        </div>
+        <div class="G-flex-center-between">
+          <label for="replaceWithCohortId">Replace With CohortId</label>
+          <input type="number" id="replaceWithCohortId" formControlName="replaceWithCohortId">
+        </div>
+        <div class="G-flex-center-between">
+          <label for="replaceWithCohortId">Replace With CohortId</label>
+          <mat-form-field appearance="fill" class="dropdown">
+            <mat-label>Cohort</mat-label>
+            <mat-select formControlName="replaceWithCohortId">
+              <mat-option *ngFor="let cohort of cohortData" [value]="cohort.id">{{cohort.value}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" *ngIf="!isOnEdit" (click)="addConfig()">Submit</button>
+    <button type="submit" *ngIf="isOnEdit" (click)="editConfig()">Edit</button>
+    <button type="button" *ngIf="isOnEdit" (click)="goBack()">Go back</button>
+  </form>
+</main>

@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AppConfig } from '../../config/app.config';
-import { CurveModel } from '../models/curveData.interface';
+import { AppConfig } from '../config/app.config';
+import { CurveModel } from '../shared/models/curveData.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -14,10 +14,10 @@ export class ConfigCurvesService {
   constructor(private http: HttpClient) { }
 
   addConfigCurves(data: any): Observable<any> {
-    return this.http.post(`${AppConfig.baseUrl}api/${AppConfig.endPoints.configCurve}`, data);
+    return this.http.post(`${AppConfig.baseUrl}api/${AppConfig.endPoints.addConfigCurve}`, data);
   }
 
-  getAllCurves(): Observable<any> {
+  getAllCurves(): Observable<CurveModel[]> {
     return this.http.get<CurveModel[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.getAllCurves}`);
   }
   

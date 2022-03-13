@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppConfig } from 'src/app/config/app.config';
-import { Message } from 'src/app/shared/enums/message.enum';
-import { Severity } from 'src/app/shared/enums/severity.enum';
+import { Message } from 'src/app/enums/message.enum';
+import { Severity } from 'src/app/enums/severity.enum';
 import { ScenarioModel } from 'src/app/shared/models/scenarioData.interface';
 import { CommonService } from 'src/app/services/common.service';
-import { ConfigScenariosService } from 'src/app/shared/services/config-scenarios.service';
+import { ConfigScenariosService } from 'src/app/services/config-scenarios.service';
 
 @Component({
   selector: 'app-scenarios-table',
@@ -17,7 +17,7 @@ export class ScenariosTableComponent implements OnInit {
   public severity: string;
   public msg: string;
   public allScenarios: ScenarioModel[] = [];
-  public pageN: ScenarioModel[] = [];
+  public shownAllScenarios: ScenarioModel[] = [];
   private currentPage = {first: 0, rows: 10};
 
   constructor( private scenarioService: ConfigScenariosService,
@@ -71,13 +71,13 @@ export class ScenariosTableComponent implements OnInit {
       ev.first -= 10;
     }
 
-    this.pageN = this.allScenarios.slice(ev.first, ev.first + ev.rows);
+    this.shownAllScenarios = this.allScenarios.slice(ev.first, ev.first + ev.rows);
   }
 
   filterData(search: string): void {
     if (search.length) {
       
-      this.pageN = this.allScenarios.filter(item => {
+      this.shownAllScenarios = this.allScenarios.filter(item => {
         for(let key in item) {
           if(key !== 'scenarioId' && item[key] !== null && item[key].toString().includes(search)) {
             return item;
@@ -85,7 +85,7 @@ export class ScenariosTableComponent implements OnInit {
         }
       })
     } else {
-      this.pageN = this.allScenarios;
+      this.shownAllScenarios = this.allScenarios;
       this.onPageChange({first: 0, rows: 10});
     }
   }

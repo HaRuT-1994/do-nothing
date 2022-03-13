@@ -21,7 +21,7 @@ import { ScenariosTableComponent } from '../shared/components/viewTable/scenario
 const route = AppConfig.routes;
 
 const routes: Routes = [
-  { path: '', component: DoNothingComponent },
+  { path: route.add.doNothing, component: DoNothingComponent },
   { path: route.edit.doNothing, component: DoNothingComponent },
 
   { path: route.add.cohort, component: CohortComponent },

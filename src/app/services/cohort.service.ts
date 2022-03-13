@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AppConfig } from '../../config/app.config';
-import { CohortModel } from '../models/cohortData.interface';
+import { AppConfig } from '../config/app.config';
+import { CohortModel } from '../shared/models/cohortData.interface';
 import { ConfigData } from '../models/configData.interface';
 
 @Injectable({
@@ -15,7 +15,7 @@ export class CohortService {
   constructor(private http: HttpClient) { }
 
   addCohort(data: any): Observable<ConfigData[]> {
-    return this.http.post<ConfigData[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.addCohort}`, data);
+    return this.http.post<ConfigData[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.addConfigCohort}`, data);
   }
 
   getConfigCohort(): Observable<ConfigData[]> {

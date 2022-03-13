@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AppConfig } from '../../config/app.config';
+import { AppConfig } from '../config/app.config';
 import { ConfigData } from '../models/configData.interface';
-import { ScenarioModel } from '../models/scenarioData.interface';
+import { ScenarioModel } from '../shared/models/scenarioData.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -15,14 +15,14 @@ export class ConfigScenariosService {
   constructor(private http: HttpClient) { }
 
   addConfigScenarios(data: any): Observable<ConfigData[]> {
-    return this.http.post<ConfigData[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.configScenario}`, data);
+    return this.http.post<ConfigData[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.addConfigScenario}`, data);
   }
 
   getConfigScenarios(): Observable<ConfigData[]> {
     return this.http.get<ConfigData[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.lookupConfigScenarios}`)
   }
 
-  getAllScenarios(): Observable<any> {
+  getAllScenarios(): Observable<ScenarioModel[]> {
     return this.http.get<ScenarioModel[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.getAllScenarios}`);
   }
   

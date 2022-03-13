@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppConfig } from 'src/app/config/app.config';
-import { CohortService } from 'src/app/shared/services/cohort.service';
-import { Severity } from 'src/app/shared/enums/severity.enum';
-import { Message } from 'src/app/shared/enums/message.enum';
+import { CohortService } from 'src/app/services/cohort.service';
+import { Severity } from 'src/app/enums/severity.enum';
+import { Message } from 'src/app/enums/message.enum';
 import { CommonService } from 'src/app/services/common.service';
 import { CohortModel } from 'src/app/shared/models/cohortData.interface';
 import { PrimeNGConfig } from 'primeng/api';
@@ -18,7 +18,7 @@ export class CohortTableComponent implements OnInit {
   public severity: string;
   public msg: string;
   public allCohorts: CohortModel[] = [];
-  public pageN: CohortModel[] = [];
+  public shownAllCohorts: CohortModel[] = [];
   private currentPage = {first: 0, rows: 10};
 
   constructor( private cohortService: CohortService,
@@ -72,12 +72,12 @@ export class CohortTableComponent implements OnInit {
       ev.first -= 10;
     }
 
-    this.pageN = this.allCohorts.slice(ev.first, ev.first + ev.rows);
+    this.shownAllCohorts = this.allCohorts.slice(ev.first, ev.first + ev.rows);
   }
 
   filterData(search: string): void {
     if (search.length) {
-      this.pageN = this.allCohorts.filter(item => {
+      this.shownAllCohorts = this.allCohorts.filter(item => {
         for(let key in item) {
           if(key !== 'cohortId' && item[key] !== null && item[key].toString().includes(search)) {
             return item;
@@ -85,7 +85,7 @@ export class CohortTableComponent implements OnInit {
         }
       })
     } else {
-      this.pageN = this.allCohorts;
+      this.shownAllCohorts = this.allCohorts;
       this.onPageChange({first: 0, rows: 10});
     }
   }

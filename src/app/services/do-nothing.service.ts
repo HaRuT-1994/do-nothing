@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AppConfig } from '../../config/app.config';
-import { ModelConfig } from '../models/modelConfig.interface';
+import { AppConfig } from '../config/app.config';
+import { ModelConfig } from '../shared/models/modelConfig.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ export class DoNothingService {
   constructor(private http: HttpClient) { }
 
   addDoNothing(data: any): Observable<any> {
-    return this.http.post(`${AppConfig.baseUrl}api/${AppConfig.endPoints.modelConfig}`, data);
+    return this.http.post(`${AppConfig.baseUrl}api/${AppConfig.endPoints.addModelConfig}`, data);
   }
 
   getSkipTheseLifecycles(): Observable<any> {
@@ -28,7 +28,7 @@ export class DoNothingService {
     return this.http.get(`${AppConfig.baseUrl}api/${AppConfig.endPoints.lookupSkipTheseUnitClasses}`);
   }
 
-  getAllModelConfigs(): Observable<any> {
+  getAllModelConfigs(): Observable<ModelConfig[]> {
     return this.http.get<ModelConfig[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.getAllConfigs}`);
   }
   

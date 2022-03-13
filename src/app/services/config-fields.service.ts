@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AppConfig } from '../../config/app.config';
+import { AppConfig } from '../config/app.config';
 import { ConfigData } from '../models/configData.interface';
-import { FieldModel } from '../models/fieldData.interface';
+import { FieldModel } from '../shared/models/fieldData.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -14,10 +14,10 @@ export class ConfigFieldsService {
   constructor(private http: HttpClient) { }
 
   addConfigFields(data: any): Observable<any> {
-    return this.http.post(`${AppConfig.baseUrl}api/${AppConfig.endPoints.configField}`, data);
+    return this.http.post(`${AppConfig.baseUrl}api/${AppConfig.endPoints.addConfigField}`, data);
   }
 
-  getAllFields(): Observable<any> {
+  getAllFields(): Observable<FieldModel[]> {
     return this.http.get<FieldModel[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.getAllFields}`);
   }
   

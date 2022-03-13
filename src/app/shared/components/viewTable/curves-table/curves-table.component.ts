@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppConfig } from 'src/app/config/app.config';
-import { Message } from 'src/app/shared/enums/message.enum';
-import { Severity } from 'src/app/shared/enums/severity.enum';
+import { Message } from 'src/app/enums/message.enum';
+import { Severity } from 'src/app/enums/severity.enum';
 import { CurveModel } from 'src/app/shared/models/curveData.interface';
 import { CommonService } from 'src/app/services/common.service';
-import { ConfigCurvesService } from 'src/app/shared/services/config-curves.service';
+import { ConfigCurvesService } from 'src/app/services/config-curves.service';
 
 @Component({
   selector: 'app-curves-table',
@@ -17,7 +17,7 @@ export class CurvesTableComponent implements OnInit {
   public severity: string;
   public msg: string;
   public allCurves: CurveModel[] = [];
-  public pageN: CurveModel[] = [];
+  public shownAllCurves: CurveModel[] = [];
   private currentPage = {first: 0, rows: 10};
 
   constructor( private router: Router,
@@ -71,12 +71,12 @@ export class CurvesTableComponent implements OnInit {
       ev.first -= 10;
     }
 
-    this.pageN = this.allCurves.slice(ev.first, ev.first + ev.rows);
+    this.shownAllCurves = this.allCurves.slice(ev.first, ev.first + ev.rows);
   }
 
   filterData(search: string): void {
     if (search.length) {
-      this.pageN = this.allCurves.filter(item => {
+      this.shownAllCurves = this.allCurves.filter(item => {
         for(let key in item) {
           if(key !== 'id' && item[key] !== null && item[key].toString().includes(search)) {
             return item;
@@ -84,7 +84,7 @@ export class CurvesTableComponent implements OnInit {
         }
       })
     } else {
-      this.pageN = this.allCurves;
+      this.shownAllCurves = this.allCurves;
       this.onPageChange({first: 0, rows: 10});
     }
   }

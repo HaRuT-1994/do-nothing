@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppConfig } from 'src/app/config/app.config';
-import { Message } from 'src/app/shared/enums/message.enum';
-import { Severity } from 'src/app/shared/enums/severity.enum';
+import { Message } from 'src/app/enums/message.enum';
+import { Severity } from 'src/app/enums/severity.enum';
 import { RiskLevelsModel } from 'src/app/shared/models/riskLevelData.interface';
 import { CommonService } from 'src/app/services/common.service';
-import { RiskLevelsService } from 'src/app/shared/services/risk-levels.service';
+import { RiskLevelsService } from 'src/app/services/risk-levels.service';
 
 @Component({
   selector: 'app-risk-levels-table',
@@ -17,7 +17,7 @@ export class RiskLevelsTableComponent implements OnInit {
   public severity: string;
   public msg: string;
   public allRiskLevels: RiskLevelsModel[] = [];
-  public pageN: RiskLevelsModel[] = [];
+  public shownAllRiskLevels: RiskLevelsModel[] = [];
   private currentPage = {first: 0, rows: 10};
 
   constructor(private riskLvlService: RiskLevelsService,
@@ -71,12 +71,12 @@ export class RiskLevelsTableComponent implements OnInit {
       ev.first -= 10;
     }
 
-    this.pageN = this.allRiskLevels.slice(ev.first, ev.first + ev.rows);
+    this.shownAllRiskLevels = this.allRiskLevels.slice(ev.first, ev.first + ev.rows);
   }
 
   filterData(search: string): void {
     if (search.length) {
-      this.pageN = this.allRiskLevels.filter(item => {
+      this.shownAllRiskLevels = this.allRiskLevels.filter(item => {
         for(let key in item) {
           if(key !== 'id' && item[key] !== null && item[key].toString().includes(search)) {
             return item;
@@ -84,7 +84,7 @@ export class RiskLevelsTableComponent implements OnInit {
         }
       })
     } else {
-      this.pageN = this.allRiskLevels;
+      this.shownAllRiskLevels = this.allRiskLevels;
       this.onPageChange({first: 0, rows: 10});
     }
   }

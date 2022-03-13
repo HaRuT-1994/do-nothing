@@ -1,0 +1,28 @@
+<div class="messgae">
+  <p-message severity="{{severity}}" text="{{ msg }}"></p-message>
+</div>
+<app-loading *ngIf="isLoading"></app-loading>
+<table [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
+  <caption>Config - Lists</caption>
+  <thead>
+    <tr>
+      <th>List Name</th>
+      <th colspan="2">
+        <input type="text" placeholder="search" (input)="filterData($event.target.value)">
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of shownAllListss">
+      <td>{{data.listName}}</td>
+      <td class="buttonEffect" (click)=onEditRow(data)>Edit</td>
+      <td class="buttonEffect" (click)="onDeleteRow(data.listId)">Delete</td>
+    </tr>
+    <tr *ngIf="allLists.length > 10">
+      <td colspan="3">
+        <p-paginator [rows]="10" [totalRecords]="allLists.length" [rowsPerPageOptions]="[10,20,30]"
+        (onPageChange)="onPageChange($event)"></p-paginator>
+      </td>
+    </tr>
+  </tbody>
+</table>

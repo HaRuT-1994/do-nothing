@@ -1,0 +1,46 @@
+<div class="messgae">
+  <p-message severity="{{severity}}" text="{{ msg }}"></p-message>
+</div>
+<app-loading *ngIf="isLoading"></app-loading>
+<table [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
+  <caption>Config - Intervention Options</caption>
+  <thead>
+    <tr>
+      <th>Scenario</th>
+      <th>Cohort</th>
+      <th>Intervention</th>
+      <th>Available</th>
+      <th>Reset</th>
+      <th>Apply When Mlc</th>
+      <th>Exclude If Crc</th>
+      <th>forceReplace</th>
+      <th>whenAlc</th>
+      <th>replaceWithCohortId</th>
+      <th colspan="2">
+        <input type="text" placeholder="search" (input)="filterData($event.target.value)">
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of shownAllInterventionOptions">
+      <td>{{data.scenarioId}}</td>
+      <td>{{data.cohortId}}</td>
+      <td>{{data.intervention}}</td>
+      <td>{{data.available}}</td>
+      <td>{{data.reset}}</td>
+      <td>{{data.applyWhenMlc}}</td>
+      <td>{{data.excludeIfCrc}}</td>
+      <td>{{data.forceReplace}}</td>
+      <td>{{data.whenAlc}}</td>
+      <td>{{data.replaceWithCohortId}}</td>
+      <td class="buttonEffect" (click)=onEditRow(data)>Edit</td>
+      <td class="buttonEffect" (click)="onDeleteRow(data.interventionId)">Delete</td>
+    </tr>
+    <tr *ngIf="allInterventionOptions.length > 10">
+      <td colspan="12">
+        <p-paginator [rows]="10" [totalRecords]="allInterventionOptions.length" [rowsPerPageOptions]="[10,20,30]"
+        (onPageChange)="onPageChange($event)"></p-paginator>
+      </td>
+    </tr>
+  </tbody>
+</table>

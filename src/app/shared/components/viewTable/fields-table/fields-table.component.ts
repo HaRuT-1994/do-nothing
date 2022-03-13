@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppConfig } from 'src/app/config/app.config';
-import { Message } from 'src/app/shared/enums/message.enum';
-import { Severity } from 'src/app/shared/enums/severity.enum';
+import { Message } from 'src/app/enums/message.enum';
+import { Severity } from 'src/app/enums/severity.enum';
 import { FieldModel } from 'src/app/shared/models/fieldData.interface';
 import { CommonService } from 'src/app/services/common.service';
-import { ConfigFieldsService } from 'src/app/shared/services/config-fields.service';
+import { ConfigFieldsService } from 'src/app/services/config-fields.service';
 
 @Component({
   selector: 'app-fields-table',
@@ -17,7 +17,7 @@ export class FieldsTableComponent implements OnInit {
   public severity: string;
   public msg: string;
   public allFields: FieldModel[] = [];
-  public pageN: FieldModel[] = [];
+  public shownAllFields: FieldModel[] = [];
   private currentPage = {first: 0, rows: 10};
 
   constructor( private fieldService: ConfigFieldsService,
@@ -71,12 +71,12 @@ export class FieldsTableComponent implements OnInit {
       ev.first -= 10;
     }
 
-    this.pageN = this.allFields.slice(ev.first, ev.first + ev.rows);
+    this.shownAllFields = this.allFields.slice(ev.first, ev.first + ev.rows);
   }
 
   filterData(search: string): void {
     if (search.length) {
-      this.pageN = this.allFields.filter(item => {
+      this.shownAllFields = this.allFields.filter(item => {
         for(let key in item) {
           if(key !== 'id' && item[key] !== null && item[key].toString().includes(search)) {
             return item;
@@ -84,7 +84,7 @@ export class FieldsTableComponent implements OnInit {
         }
       })
     } else {
-      this.pageN = this.allFields;
+      this.shownAllFields = this.allFields;
       this.onPageChange({first: 0, rows: 10});
     }
   }

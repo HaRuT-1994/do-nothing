@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AppConfig } from '../../config/app.config';
-import { PoFBandsModel } from '../models/pofBandData.interface';
+import { AppConfig } from '../config/app.config';
+import { PoFBandsModel } from '../shared/models/pofBandData.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -14,10 +14,10 @@ export class PofBandsService {
   constructor(private http: HttpClient) { }
 
   addPofBands(data: any): Observable<any> {
-    return this.http.post(`${AppConfig.baseUrl}api/${AppConfig.endPoints.configPoFBand}`, data);
+    return this.http.post(`${AppConfig.baseUrl}api/${AppConfig.endPoints.addConfigPoFBand}`, data);
   }
 
-  getAllPoFBands(): Observable<any> {
+  getAllPoFBands(): Observable<PoFBandsModel[]> {
     return this.http.get<PoFBandsModel[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.getAllPoFBands}`);
   }
   

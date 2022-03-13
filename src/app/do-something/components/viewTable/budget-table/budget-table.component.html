@@ -1,0 +1,34 @@
+<div class="messgae">
+  <p-message severity="{{severity}}" text="{{ msg }}"></p-message>
+</div>
+<app-loading *ngIf="isLoading"></app-loading>
+<table [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
+  <caption>Config - Budget</caption>
+  <thead>
+    <tr>
+      <th>Scenario</th>
+      <th>Exp Limit</th>
+      <th>Year</th>
+      <th>Budget</th>
+      <th colspan="2">
+        <input type="text" placeholder="search" (input)="filterData($event.target.value)">
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of shownAllBudgets">
+      <td>{{data.scenarioId}}</td>
+      <td>{{data.expLimit}}</td>
+      <td>{{data.year}}</td>
+      <td>{{data.budget}}</td>
+      <td class="buttonEffect" (click)=onEditRow(data)>Edit</td>
+      <td class="buttonEffect" (click)="onDeleteRow(data.budgetId)">Delete</td>
+    </tr>
+    <tr *ngIf="allBudgets.length > 10">
+      <td colspan="6">
+        <p-paginator [rows]="10" [totalRecords]="allBudgets.length" [rowsPerPageOptions]="[10,20,30]"
+        (onPageChange)="onPageChange($event)"></p-paginator>
+      </td>
+    </tr>
+  </tbody>
+</table>

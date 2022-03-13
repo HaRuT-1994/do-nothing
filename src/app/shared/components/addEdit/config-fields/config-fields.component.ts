@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Severity } from 'src/app/shared/enums/severity.enum';
-import { Message } from 'src/app/shared/enums/message.enum';
-import { ConfigFieldsService } from 'src/app/shared/services/config-fields.service';
+import { Severity } from 'src/app/enums/severity.enum';
+import { Message } from 'src/app/enums/message.enum';
+import { ConfigFieldsService } from 'src/app/services/config-fields.service';
 import { CommonService } from 'src/app/services/common.service';
 import { Location } from '@angular/common';
 

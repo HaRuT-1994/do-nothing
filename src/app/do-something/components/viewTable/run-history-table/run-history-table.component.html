@@ -1,0 +1,36 @@
+<div class="messgae">
+  <p-message severity="{{severity}}" text="{{ msg }}"></p-message>
+</div>
+<app-loading *ngIf="isLoading"></app-loading>
+<table [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
+  <caption>Run History</caption>
+  <thead>
+    <tr>
+      <th>Run Date</th>
+      <th>Scenario</th>
+      <th>Rows Ran</th>
+      <th>Status</th>
+      <th>Comments</th>
+      <!-- <th colspan="2">
+        <input type="text" placeholder="search" (input)="filterData($event.target.value)">
+      </th> -->
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of shownAllRunHistory">
+      <td>{{data.runDate}}</td>
+      <td>{{data.scenarioId}}</td>
+      <td>{{data.rowsRan}}</td>
+      <td>{{data.status}}</td>
+      <td>{{data.comments}}</td>
+      <!-- <td class="buttonEffect" (click)=onEditRow(data)>Edit</td>
+      <td class="buttonEffect" (click)="onDeleteRow(data.decisionId)">Delete</td> -->
+    </tr>
+    <tr *ngIf="allRunHistory.length > 10">
+      <td colspan="5">
+        <p-paginator [rows]="10" [totalRecords]="allRunHistory.length" [rowsPerPageOptions]="[10,20,30]"
+        (onPageChange)="onPageChange($event)"></p-paginator>
+      </td>
+    </tr>
+  </tbody>
+</table>

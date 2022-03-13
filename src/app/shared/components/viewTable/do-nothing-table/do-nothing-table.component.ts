@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppConfig } from 'src/app/config/app.config';
-import { Message } from 'src/app/shared/enums/message.enum';
-import { Severity } from 'src/app/shared/enums/severity.enum';
+import { Message } from 'src/app/enums/message.enum';
+import { Severity } from 'src/app/enums/severity.enum';
 import { ModelConfig } from 'src/app/shared/models/modelConfig.interface';
 import { CommonService } from 'src/app/services/common.service';
-import { DoNothingService } from 'src/app/shared/services/do-nothing.service';
+import { DoNothingService } from 'src/app/services/do-nothing.service';
 import { PrimeNGConfig } from 'primeng/api';
 
 @Component({
@@ -18,7 +18,7 @@ export class DoNothingTableComponent implements OnInit {
   public severity: string;
   public msg: string;
   public allModels: ModelConfig[] = [];
-  public pageN: ModelConfig[] = [];
+  public shownAllModels: ModelConfig[] = [];
   private currentPage = {first: 0, rows: 10};
 
   constructor( private doNothingService: DoNothingService,
@@ -75,12 +75,12 @@ export class DoNothingTableComponent implements OnInit {
       ev.first -= 10;
     }
 
-    this.pageN = this.allModels.slice(ev.first, ev.first + ev.rows);
+    this.shownAllModels = this.allModels.slice(ev.first, ev.first + ev.rows);
   }
 
   filterData(search: string): void {
     if (search.length) {
-      this.pageN = this.allModels.filter(item => {
+      this.shownAllModels = this.allModels.filter(item => {
         for(let key in item) {
           if(key !== 'id' && item[key] !== null && item[key].toString().includes(search)) {
             return item;
@@ -88,7 +88,7 @@ export class DoNothingTableComponent implements OnInit {
         }
       })
     } else {
-      this.pageN = this.allModels;
+      this.shownAllModels = this.allModels;
       this.onPageChange({first: 0, rows: 10});
     }
   }

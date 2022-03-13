@@ -1,0 +1,42 @@
+<div class="messgae">
+  <p-message severity="{{severity}}" text="{{ msg }}"></p-message>
+</div>
+<app-loading *ngIf="isLoading"></app-loading>
+<table [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
+  <caption>Config - Risk Based Decisions</caption>
+  <thead>
+    <tr>
+      <th>Scenario</th>
+      <th>Cohort</th>
+      <th>PoF</th>
+      <th>CoF</th>
+      <th>Risk</th>
+      <th>Band</th>
+      <th>Intervention</th>
+      <th>Frequency</th>
+      <th colspan="2">
+        <input type="text" placeholder="search" (input)="filterData($event.target.value)">
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of shownAllRiskBasedDecisions">
+      <td>{{data.scenarioId}}</td>
+      <td>{{data.cohortId}}</td>
+      <td>{{data.poF}}</td>
+      <td>{{data.coF}}</td>
+      <td>{{data.risk}}</td>
+      <td>{{data.band}}</td>
+      <td>{{data.intervention}}</td>
+      <td>{{data.frequency}}</td>
+      <td class="buttonEffect" (click)=onEditRow(data)>Edit</td>
+      <td class="buttonEffect" (click)="onDeleteRow(data.decisionId)">Delete</td>
+    </tr>
+    <tr *ngIf="allRiskBasedDecisions.length > 10">
+      <td colspan="10">
+        <p-paginator [rows]="10" [totalRecords]="allRiskBasedDecisions.length" [rowsPerPageOptions]="[10,20,30]"
+        (onPageChange)="onPageChange($event)"></p-paginator>
+      </td>
+    </tr>
+  </tbody>
+</table>

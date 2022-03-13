@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { ConfigScenariosService } from 'src/app/shared/services/config-scenarios.service';
-import { Severity } from 'src/app/shared/enums/severity.enum';
-import { Message } from 'src/app/shared/enums/message.enum';
+import { ConfigScenariosService } from 'src/app/services/config-scenarios.service';
+import { Severity } from 'src/app/enums/severity.enum';
+import { Message } from 'src/app/enums/message.enum';
 import { CommonService } from 'src/app/services/common.service';
-import { ConfigData } from 'src/app/shared/models/configData.interface';
+import { ConfigData } from 'src/app/models/configData.interface';
 import { Location } from '@angular/common';
 
 @Component({

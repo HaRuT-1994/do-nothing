@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ConfigCurvesService } from 'src/app/shared/services/config-curves.service';
-import { Severity } from 'src/app/shared/enums/severity.enum';
-import { Message } from 'src/app/shared/enums/message.enum';
+import { ConfigCurvesService } from 'src/app/services/config-curves.service';
+import { Severity } from 'src/app/enums/severity.enum';
+import { Message } from 'src/app/enums/message.enum';
 import { CommonService } from 'src/app/services/common.service';
-import { CohortService } from 'src/app/shared/services/cohort.service';
-import { ConfigData } from 'src/app/shared/models/configData.interface';
-import { ConfigScenariosService } from 'src/app/shared/services/config-scenarios.service';
+import { CohortService } from 'src/app/services/cohort.service';
+import { ConfigData } from 'src/app/models/configData.interface';
+import { ConfigScenariosService } from 'src/app/services/config-scenarios.service';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 

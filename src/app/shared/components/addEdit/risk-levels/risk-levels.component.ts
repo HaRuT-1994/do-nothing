@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { RiskLevelsService } from 'src/app/shared/services/risk-levels.service';
-import { Severity } from 'src/app/shared/enums/severity.enum';
-import { Message } from 'src/app/shared/enums/message.enum';
+import { FormControl, FormGroup } from '@angular/forms';
+import { RiskLevelsService } from 'src/app/services/risk-levels.service';
+import { Severity } from 'src/app/enums/severity.enum';
+import { Message } from 'src/app/enums/message.enum';
 import { CommonService } from 'src/app/services/common.service';
 import { Location } from '@angular/common';
 
