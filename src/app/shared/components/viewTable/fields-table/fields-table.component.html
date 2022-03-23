@@ -12,7 +12,7 @@
       <th>Column</th>
       <th>Mandatory For Model</th>
       <th colspan="2">
-        <input type="text" placeholder="search" (input)="filterData($event.target.value)">
+        <input type="text" placeholder="Search" (input)="filterData($event.target.value)">
       </th>
     </tr>
   </thead>
@@ -23,8 +23,12 @@
       <td>{{data.fieldNameInSheet}}</td>
       <td>{{data.column}}</td>
       <td>{{data.mandatoryForModel}}</td>
-      <td class="buttonEffect" (click)=onEditRow(data)>Edit</td>
-      <td class="buttonEffect" (click)="onDeleteRow(data.id)">Delete</td>
+      <td class="buttonEffect" (click)=onEditRow(data)>
+        <span class="edit">Edit</span>
+      </td>
+      <td class="buttonEffect" (click)="onDeleteRow(data.id)">
+        <span class="delete">Delete</span>
+      </td>
     </tr>
     <tr *ngIf="allFields.length > 10">
       <td colspan="7">

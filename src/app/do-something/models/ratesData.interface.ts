@@ -1,7 +1,9 @@
 export interface RatesModel {
   ratesId?: number,
   scenarioId: number,
-  cohortId: string,
+  scenarioName: string,
+  cohortId: number,
+  cohortName: string,
   intervention: string,
   geography: string,
   budgetSource: string,

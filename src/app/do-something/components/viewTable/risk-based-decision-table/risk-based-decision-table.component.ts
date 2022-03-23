@@ -78,14 +78,14 @@ export class RiskBasedDecisionTableComponent implements OnInit {
     if (search.length) {
       this.shownAllRiskBasedDecisions = this.allRiskBasedDecisions.filter(item => {
         for(let key in item) {
-          if(key !== 'decisionId' && item[key] !== null && item[key].toString().includes(search)) {
+          if(item[key] && key !== 'decisionId' && item[key].toString().toLowerCase().includes(search.toLowerCase())) {
             return item;
           }
         }
       })
     } else {
       this.shownAllRiskBasedDecisions = this.allRiskBasedDecisions;
-      this.onPageChange({first: 0, rows: 10});
+      this.onPageChange(this.currentPage);
     }
   }
 }

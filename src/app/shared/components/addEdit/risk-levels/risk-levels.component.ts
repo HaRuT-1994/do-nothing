@@ -38,14 +38,18 @@ export class RiskLevelsComponent implements OnInit {
   }
 
   addConfig(): void {
+    this.isLoading = true;
     this.riskLvlService.addRiskLevels(this.formGroup.value).subscribe(
       () => {
+        this.isLoading = false;
         this.severity = Severity.SUCCESS;
         this.msg = 'Risk Levels Form ' + Message.SUCCESS_MSG;
         this.commonService.deleteMsg(this);
+        this.formGroup.reset();
       },
-      err => { 
+      err => {
         console.log(err);
+        this.isLoading = false;
         this.severity = Severity.ERROR;
         this.msg = Message.ERROR_MSG;
         this.commonService.deleteMsg(this);
@@ -63,7 +67,8 @@ export class RiskLevelsComponent implements OnInit {
         this.commonService.deleteMsg(this);
       },
       () => {
-        this.isLoading = false;
+        this.isLoading = false;4
+        
         this.severity = Severity.ERROR;
         this.msg = Message.ERROR_MSG;
         this.commonService.deleteMsg(this);

@@ -78,14 +78,15 @@ export class CurvesTableComponent implements OnInit {
     if (search.length) {
       this.shownAllCurves = this.allCurves.filter(item => {
         for(let key in item) {
-          if(key !== 'id' && item[key] !== null && item[key].toString().includes(search)) {
+          if( item[key] && key !== 'id' && key !== 'cohortId' && key !== 'ScenarioId'
+          && item[key].toString().toLowerCase().includes(search.toLowerCase())) {
             return item;
           }
         }
       })
     } else {
       this.shownAllCurves = this.allCurves;
-      this.onPageChange({first: 0, rows: 10});
+      this.onPageChange(this.currentPage);
     }
   }
 }

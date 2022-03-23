@@ -55,6 +55,7 @@ export class PofBandsComponent {
       this.isOnEdit = false;
     }
     if (this.isOnEdit) {
+      
       this.commonService.updateForm(this.formGroup, this.pofBandsService.editPofBand);
     }
   }
@@ -63,10 +64,11 @@ export class PofBandsComponent {
     this.isLoading = true;
     this.pofBandsService.addPofBands(this.formGroup.value).subscribe(
       () => {
+        this.isLoading = false;
         this.severity = Severity.SUCCESS;
         this.msg = 'PoF Bands Form '+ Message.SUCCESS_MSG;
         this.commonService.deleteMsg(this);
-        this.isLoading = false;
+        this.formGroup.reset();
       },
       err => { 
         console.log(err);

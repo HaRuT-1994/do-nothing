@@ -11,7 +11,7 @@
       <th>Restrict To Budget</th>
       <th>Run</th>
       <th colspan="2">
-        <input type="text" placeholder="search" (input)="filterData($event.target.value)">
+        <input type="text" placeholder="Search" (input)="filterData($event.target.value)">
       </th>
     </tr>
   </thead>
@@ -21,8 +21,12 @@
       <td>{{data.validatedOption}}</td>
       <td>{{data.restrictToBudget}}</td>
       <td>{{data.run}}</td>
-      <td class="buttonEffect" (click)=onEditRow(data)>Edit</td>
-      <td class="buttonEffect" (click)="onDeleteRow(data.scenarioId)">Delete</td>
+      <td class="buttonEffect" (click)=onEditRow(data)>
+        <span class="edit">Edit</span>
+      </td>
+      <td class="buttonEffect" (click)="onDeleteRow(data.scenarioId)">
+        <span class="delete">Delete</span>
+      </td>
     </tr>
     <tr *ngIf="allScenarios.length > 10">
       <td colspan="7">

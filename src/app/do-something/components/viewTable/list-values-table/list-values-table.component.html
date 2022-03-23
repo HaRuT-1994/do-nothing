@@ -10,7 +10,7 @@
       <th>List Lookup</th>
       <th>List Value</th>
       <th colspan="2">
-        <input type="text" placeholder="search" (input)="filterData($event.target.value)">
+        <input type="text" placeholder="Search" (input)="filterData($event.target.value)">
       </th>
     </tr>
   </thead>
@@ -19,8 +19,12 @@
       <td>{{data.listId}}</td>
       <td>{{data.listLookup}}</td>
       <td>{{data.listValue}}</td>
-      <td class="buttonEffect" (click)=onEditRow(data)>Edit</td>
-      <td class="buttonEffect" (click)="onDeleteRow(data.itemId)">Delete</td>
+      <td class="buttonEffect" (click)=onEditRow(data)>
+        <span class="edit">Edit</span>
+      </td>
+      <td class="buttonEffect" (click)="onDeleteRow(data.itemId)">
+        <span class="delete">Delete</span>
+      </td>
     </tr>
     <tr *ngIf="allListValues.length > 10">
       <td colspan="5">

@@ -78,14 +78,14 @@ export class InterventionOptionsTableComponent implements OnInit {
     if (search.length) {
       this.shownAllInterventionOptions = this.allInterventionOptions.filter(item => {
         for(let key in item) {
-          if(key !== 'interventionId' && item[key] !== null && item[key].toString().includes(search)) {
+          if(item[key] && key !== 'interventionId' && item[key].toString().toLowerCase().includes(search.toLowerCase())) {
             return item;
           }
         }
       })
     } else {
       this.shownAllInterventionOptions = this.allInterventionOptions;
-      this.onPageChange({first: 0, rows: 10});
+      this.onPageChange(this.currentPage);
     }
   }
 }

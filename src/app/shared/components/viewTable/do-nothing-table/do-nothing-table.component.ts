@@ -82,14 +82,14 @@ export class DoNothingTableComponent implements OnInit {
     if (search.length) {
       this.shownAllModels = this.allModels.filter(item => {
         for(let key in item) {
-          if(key !== 'id' && item[key] !== null && item[key].toString().includes(search)) {
+          if( item[key] && key !== 'id' && item[key].toString().toLowerCase().includes(search.toLowerCase())) {
             return item;
           }
         }
       })
     } else {
       this.shownAllModels = this.allModels;
-      this.onPageChange({first: 0, rows: 10});
+      this.onPageChange(this.currentPage);
     }
   }
 }

@@ -14,12 +14,12 @@
       <th>Data Model Output Templates</th>
       <th>NR Model Columns</th>
       <th>Debug Mode</th>
-      <th>Scenarios to Run</th>
+      <th>Scenario Name</th>
       <th>Allow Overwrite To Exceed Budget</th>
       <th>Skip these Asset Sources</th>
       <th>Condition Range</th>
       <th colspan="2">
-        <input type="text" placeholder="search" (input)="filterData($event.target.value)">
+        <input type="text" placeholder="Search" (input)="filterData($event.target.value)">
       </th>
     </tr>
   </thead>
@@ -33,12 +33,16 @@
       <td>{{data.dataModelOutputTemplate}}</td>
       <td>{{data.nrModelColumns}}</td>
       <td>{{data.debugMode}}</td>
-      <td>{{data.scenariosToRun}}</td>
+      <td>{{data.scenarioName}}</td>
       <td>{{data.allowOverwriteToExceedBudget}}</td>
       <td>{{data.skipTheseAssetSources}}</td>
       <td>{{data.conditionRange}}</td>
-      <td class="buttonEffect" (click)=onEditRow(data)>Edit</td>
-      <td class="buttonEffect" (click)="onDeleteRow(data.id)">Delete</td>
+      <td *ngIf="!runDate" class="buttonEffect" (click)="onEditRow(data)">
+        <span class="edit">Edit</span>
+      </td>
+      <td class="buttonEffect" (click)="onDeleteRow(data.id)">
+        <span class="delete">Delete</span>
+      </td>
     </tr>
     <tr *ngIf="allModels.length > 10">
       <td colspan="14">

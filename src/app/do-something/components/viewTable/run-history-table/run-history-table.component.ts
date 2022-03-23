@@ -44,19 +44,4 @@ export class RunHistoryTableComponent implements OnInit {
 
     this.shownAllRunHistory = this.allRunHistory.slice(ev.first, ev.first + ev.rows);
   }
-
-  // filterData(search: string): void {
-  //   if (search.length) {
-  //     this.shownAllRiskBasedDecisions = this.allRiskBasedDecisions.filter(item => {
-  //       for(let key in item) {
-  //         if(key !== 'decisionId' && item[key] !== null && item[key].toString().includes(search)) {
-  //           return item;
-  //         }
-  //       }
-  //     })
-  //   } else {
-  //     this.shownAllRiskBasedDecisions = this.allRiskBasedDecisions;
-  //     this.onPageChange({first: 0, rows: 10});
-  //   }
-  // }
 }

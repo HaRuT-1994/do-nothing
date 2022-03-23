@@ -10,6 +10,7 @@ import { ModelConfig } from '../shared/models/modelConfig.interface';
 export class DoNothingService {
   public editModel: ModelConfig[] = [];
   public isOnEdit: boolean;
+  
   constructor(private http: HttpClient) { }
 
   addDoNothing(data: any): Observable<any> {

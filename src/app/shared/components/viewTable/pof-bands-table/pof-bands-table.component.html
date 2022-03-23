@@ -14,7 +14,7 @@
       <th>[>=4]</th>
       <th>[>=5]</th>
       <th colspan="2">
-        <input type="text" placeholder="search" (input)="filterData($event.target.value)">
+        <input type="text" placeholder="Search" (input)="filterData($event.target.value)">
       </th>
     </tr>
   </thead>
@@ -27,8 +27,12 @@
       <td>{{data._3}}</td>
       <td>{{data._4}}</td>
       <td>{{data._5}}</td>
-      <td class="buttonEffect" (click)=onEditRow(data)>Edit</td>
-      <td class="buttonEffect" (click)="onDeleteRow(data.id)">Delete</td>
+      <td class="buttonEffect" (click)=onEditRow(data)>
+        <span class="edit">Edit</span>
+      </td>
+      <td class="buttonEffect" (click)="onDeleteRow(data.id)">
+        <span class="delete">Delete</span>
+      </td>
     </tr>
     <tr *ngIf="allPoFBands.length > 10">
       <td colspan="11">

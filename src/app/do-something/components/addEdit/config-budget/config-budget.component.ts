@@ -45,7 +45,7 @@ export class ConfigBudgetComponent implements OnInit {
       this.isOnEdit = false;
     }
     if (this.isOnEdit) {
-      //this.commonService.updateForm(this.formGroup, this.budgetService.editCohort);
+      this.commonService.updateForm(this.formGroup, this.budgetService.editBudget);
     }
   }
 
@@ -68,26 +68,26 @@ export class ConfigBudgetComponent implements OnInit {
     );
   }
 
-  // editConfig(): void {
-  //   this.isLoading = true;
-  //   this.cohortService.onEditCohort(this.formGroup.value).subscribe(
-  //     () => {
-  //       this.isLoading = false;
-  //       this.severity = Severity.SUCCESS;
-  //       this.msg = 'Cohort Form ' +  Message.EDIT_SUCCESS_MSG;
-  //       this.commonService.deleteMsg(this);
-  //     },
-  //     () => {
-  //       this.isLoading = false;
-  //       this.severity = Severity.ERROR;
-  //       this.msg = Message.ERROR_MSG;
-  //       this.commonService.deleteMsg(this);
-  //     }
-  //   );
-  // }
+  editConfig(): void {
+    this.isLoading = true;
+    this.budgetService.onEditBudget(this.formGroup.value).subscribe(
+      () => {
+        this.isLoading = false;
+        this.severity = Severity.SUCCESS;
+        this.msg = 'Budget Form ' +  Message.EDIT_SUCCESS_MSG;
+        this.commonService.deleteMsg(this);
+      },
+      () => {
+        this.isLoading = false;
+        this.severity = Severity.ERROR;
+        this.msg = Message.ERROR_MSG;
+        this.commonService.deleteMsg(this);
+      }
+    );
+  }
 
-  // goBack(): void {
-  //   this.location.back();
-  //   this.isOnEdit = false;
-  // }
+  goBack(): void {
+    this.location.back();
+    this.isOnEdit = false;
+  }
 }

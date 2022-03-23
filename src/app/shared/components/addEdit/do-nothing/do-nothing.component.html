@@ -1,5 +1,5 @@
 <div class="G-flex-justify-center">
-  <p-message severity="{{severity}}" text="{{ msg }}"></p-message>
+  <p-message severity="{{ severity }}" text="{{ msg }}"></p-message>
 </div>
 <app-loading *ngIf="isLoading"></app-loading>
 <main [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
@@ -51,7 +51,7 @@
           <mat-form-field appearance="fill" class="dropdown">
             <mat-label>Run</mat-label>
             <mat-select formControlName="scenariosToRun" multiple>
-              <mat-option *ngFor="let scenario of scenarioData" [value]="scenario.id">{{scenario.value}}</mat-option>
+              <mat-option *ngFor="let scenario of scenariosToRun" [value]="scenario.value">{{ scenario.value }}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
@@ -66,7 +66,7 @@
         </div>
         <div class="G-flex-center-between">
           <label for="dataModelOutputTemplate">Data Model Output Templates</label>
-          <input type="number" id="dataModelOutputTemplates" min="0" formControlName="dataModelOutputTemplate">
+          <input type="text" id="dataModelOutputTemplates" min="0" formControlName="dataModelOutputTemplate">
         </div>
         <div class="G-flex-center-between">
           <label for="nr-columns">NR Model Columns</label>
@@ -90,12 +90,16 @@
           <input type="checkbox" name="" id="checkbox4" class="checkbox" formControlName="allowOverwriteToExceedBudget">
           <label for="checkbox4">Allow Overwrite To Exceed Budget?</label>
         </div>
+        <div class="G-flex-center-between">
+          <input type="checkbox" name="" id="checkbox5" class="checkbox" formControlName="allowSurplusBudgetRollover">
+          <label for="checkbox5">Allow Surplus Budget Rollover?</label>
+        </div>
       </div>
     </div>
     </div>
     
     <button type="submit" *ngIf="!isOnEdit" (click)="addConfig()">Submit</button>
-    <button type="submit" *ngIf="isOnEdit" (click)="editConfig()">Edit</button>
+    <button type="submit" *ngIf="isOnEdit" (click)="editConfig()">Submit</button>
     <button type="button" *ngIf="isOnEdit" (click)="goBack()">Go back</button>
   </form>
 </main>

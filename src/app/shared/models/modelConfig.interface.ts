@@ -6,10 +6,13 @@ export interface ModelConfig {
   skipTheseLifecycle: string,
   skipTheseUnitClasses: string,
   dataModelOutputTemplate: string,
+  runDate: Date,
   nrModelColumns: number,
   debugMode: boolean,
   scenariosToRun: string,
+  scenarioName: string,
   allowOverwriteToExceedBudget: boolean,
   skipTheseAssetSources: string,
-  conditionRange: string
+  conditionRange: string,
+  allowSurplusBudgetRollover: boolean
 }

@@ -46,7 +46,7 @@ export class BudgetTableComponent implements OnInit {
   onDeleteRow(id: number): void {
     if(confirm('Are you sure in delating this config?')) {
       this.isLoading = true;
-      this.budgetService.deleteCohort(id).subscribe(
+      this.budgetService.deleteBudget(id).subscribe(
         () => {
           this.isLoading = false;
           this.allBudgets = this.allBudgets.filter( (val) => val['budgetId'] !== id);
@@ -78,14 +78,14 @@ export class BudgetTableComponent implements OnInit {
     if (search.length) {
       this.shownAllBudgets = this.allBudgets.filter(item => {
         for(let key in item) {
-          if(key !== 'budgetId' && item[key] !== null && item[key].toString().includes(search)) {
+          if(item[key] && key !== 'budgetId' && item[key].toString().toLowerCase().includes(search.toLowerCase())) {
             return item;
           }
         }
       })
     } else {
       this.shownAllBudgets = this.allBudgets;
-      this.onPageChange({first: 0, rows: 10});
+      this.onPageChange(this.currentPage);
     }
   }
 }

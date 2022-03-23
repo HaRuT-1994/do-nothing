@@ -11,7 +11,7 @@
       <th>Year</th>
       <th>Budget</th>
       <th colspan="2">
-        <input type="text" placeholder="search" (input)="filterData($event.target.value)">
+        <input type="text" placeholder="Search" (input)="filterData($event.target.value)">
       </th>
     </tr>
   </thead>
@@ -21,8 +21,12 @@
       <td>{{data.expLimit}}</td>
       <td>{{data.year}}</td>
       <td>{{data.budget}}</td>
-      <td class="buttonEffect" (click)=onEditRow(data)>Edit</td>
-      <td class="buttonEffect" (click)="onDeleteRow(data.budgetId)">Delete</td>
+      <td class="buttonEffect" (click)=onEditRow(data)>
+        <span class="edit">Edit</span>
+      </td>
+      <td class="buttonEffect" (click)="onDeleteRow(data.budgetId)">
+        <span class="delete">Delete</span>
+      </td>
     </tr>
     <tr *ngIf="allBudgets.length > 10">
       <td colspan="6">

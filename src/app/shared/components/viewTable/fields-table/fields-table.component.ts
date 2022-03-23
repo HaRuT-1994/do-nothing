@@ -75,17 +75,19 @@ export class FieldsTableComponent implements OnInit {
   }
 
   filterData(search: string): void {
+    console.log();
+    
     if (search.length) {
       this.shownAllFields = this.allFields.filter(item => {
         for(let key in item) {
-          if(key !== 'id' && item[key] !== null && item[key].toString().includes(search)) {
+          if( item[key] && key !== 'id' && item[key].toString().toLowerCase().includes(search.toLowerCase())) {
             return item;
           }
         }
       })
     } else {
       this.shownAllFields = this.allFields;
-      this.onPageChange({first: 0, rows: 10});
+      this.onPageChange(this.currentPage);
     }
   }
 }

@@ -44,9 +44,10 @@ export class ConfigScenariosComponent implements OnInit {
     this.sccenariosService.addConfigScenarios(this.formGroup.value).subscribe(
       () => {
         this.severity = Severity.SUCCESS;
+        this.isLoading = false;
         this.msg = 'Scenarios Form ' + Message.SUCCESS_MSG;
         this.commonService.deleteMsg(this);
-        this.isLoading = false;
+        this.formGroup.reset();
       },
       err => { 
         console.log(err);

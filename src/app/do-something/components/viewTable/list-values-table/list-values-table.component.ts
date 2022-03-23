@@ -78,14 +78,14 @@ export class ListValuesTableComponent implements OnInit {
     if (search.length) {
       this.shownAllListValues = this.allListValues.filter(item => {
         for(let key in item) {
-          if(key !== 'itemId' && item[key] !== null && item[key].toString().includes(search)) {
+          if(item[key] && key !== 'itemId' && item[key].toString().toLowerCase().includes(search.toLowerCase())) {
             return item;
           }
         }
       })
     } else {
       this.shownAllListValues = this.allListValues;
-      this.onPageChange({first: 0, rows: 10});
+      this.onPageChange(this.currentPage);
     }
   }
 }

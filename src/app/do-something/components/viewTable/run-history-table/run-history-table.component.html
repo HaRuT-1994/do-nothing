@@ -6,25 +6,20 @@
   <caption>Run History</caption>
   <thead>
     <tr>
-      <th>Run Date</th>
       <th>Scenario</th>
       <th>Rows Ran</th>
       <th>Status</th>
       <th>Comments</th>
-      <!-- <th colspan="2">
-        <input type="text" placeholder="search" (input)="filterData($event.target.value)">
-      </th> -->
+      <th>Run Date</th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let data of shownAllRunHistory">
-      <td>{{data.runDate}}</td>
-      <td>{{data.scenarioId}}</td>
+      <td>{{data.scenarioName}}</td>
       <td>{{data.rowsRan}}</td>
       <td>{{data.status}}</td>
       <td>{{data.comments}}</td>
-      <!-- <td class="buttonEffect" (click)=onEditRow(data)>Edit</td>
-      <td class="buttonEffect" (click)="onDeleteRow(data.decisionId)">Delete</td> -->
+      <td>{{data.runDate}}</td>
     </tr>
     <tr *ngIf="allRunHistory.length > 10">
       <td colspan="5">

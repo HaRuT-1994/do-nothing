@@ -79,14 +79,15 @@ export class ScenariosTableComponent implements OnInit {
       
       this.shownAllScenarios = this.allScenarios.filter(item => {
         for(let key in item) {
-          if(key !== 'scenarioId' && item[key] !== null && item[key].toString().includes(search)) {
+          if(item[key] && key !== 'scenarioId'
+          && item[key].toString().toLowerCase().includes(search.toLowerCase())) {
             return item;
           }
         }
       })
     } else {
       this.shownAllScenarios = this.allScenarios;
-      this.onPageChange({first: 0, rows: 10});
+      this.onPageChange(this.currentPage);
     }
   }
 }

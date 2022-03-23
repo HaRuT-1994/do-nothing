@@ -3,6 +3,7 @@ export interface RunHistoryModel {
   runDate: Date,
   configurationId: number,
   scenarioId: number,
+  scenarioName: string,
   rowsRan: number,
   status: string,
   comments: string

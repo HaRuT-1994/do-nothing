@@ -9,13 +9,13 @@ export class CommonService {
 
   deleteMsg(context): void {
     setTimeout(() => {
-      context.severity = '';
-    }, 2500)
+       context.severity = '';
+    }, 3000)
   }
 
-  updateForm(formGroup, newData) {
+  updateForm(formGroup, newData): void {
     return Object.keys(formGroup.controls).forEach( (controlName) => {
-          formGroup.controls[controlName].patchValue(newData[controlName]);
+           formGroup.controls[controlName].patchValue(newData[controlName]);
     })
   }
 }

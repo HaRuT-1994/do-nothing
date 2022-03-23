@@ -78,14 +78,14 @@ export class RiskLevelsTableComponent implements OnInit {
     if (search.length) {
       this.shownAllRiskLevels = this.allRiskLevels.filter(item => {
         for(let key in item) {
-          if(key !== 'id' && item[key] !== null && item[key].toString().includes(search)) {
+          if( item[key] && key !== 'id' && item[key].toString().toLowerCase().includes(search).toLowerCase()) {
             return item;
           }
         }
       })
     } else {
       this.shownAllRiskLevels = this.allRiskLevels;
-      this.onPageChange({first: 0, rows: 10});
+      this.onPageChange(this.currentPage);
     }
   }
 }

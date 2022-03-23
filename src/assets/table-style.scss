@@ -8,25 +8,30 @@ table {
   margin: auto;
   margin-top: 25px;
 
+  
+  * {
+    box-sizing: unset !important;
+  }
+
   input {
     width: 140px;
   }
-}
 
-caption {
-  font-size: 30px;
-  font-weight: 500;
-  padding-bottom: 15px;
-}
+  caption {
+    font-size: 30px;
+    font-weight: 500;
+    padding-bottom: 15px;
+  }
 
-th {
-  padding: 5px;
-  background-color: #dde4e2;
-  max-width: 160px;
-}
+  th {
+    padding: 3px;
+    background-color: #dde4e2;
+    max-width: 160px;
+  }
 
-td {
-  padding: 5px;
+  td {
+    padding: 3px;
+  }
 }
 
 .buttonEffect {
@@ -47,4 +52,12 @@ td {
   button {
     width: 15px !important;
   }
+}
+
+.edit {
+ color: #2e31b9;
+}
+
+.delete {
+ color: #c40808;
 }

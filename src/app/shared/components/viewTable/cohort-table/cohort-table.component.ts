@@ -79,14 +79,15 @@ export class CohortTableComponent implements OnInit {
     if (search.length) {
       this.shownAllCohorts = this.allCohorts.filter(item => {
         for(let key in item) {
-          if(key !== 'cohortId' && item[key] !== null && item[key].toString().includes(search)) {
+          if( item[key] && key !== 'cohortId'
+          && item[key].toString().toLowerCase().includes(search.toLowerCase())) {
             return item;
           }
         }
       })
     } else {
       this.shownAllCohorts = this.allCohorts;
-      this.onPageChange({first: 0, rows: 10});
+      this.onPageChange(this.currentPage);
     }
   }
 }

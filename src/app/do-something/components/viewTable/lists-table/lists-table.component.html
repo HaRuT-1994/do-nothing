@@ -8,15 +8,19 @@
     <tr>
       <th>List Name</th>
       <th colspan="2">
-        <input type="text" placeholder="search" (input)="filterData($event.target.value)">
+        <input type="text" placeholder="Search" (input)="filterData($event.target.value)">
       </th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let data of shownAllListss">
       <td>{{data.listName}}</td>
-      <td class="buttonEffect" (click)=onEditRow(data)>Edit</td>
-      <td class="buttonEffect" (click)="onDeleteRow(data.listId)">Delete</td>
+      <td class="buttonEffect" (click)=onEditRow(data)>
+        <span class="edit">Edit</span>
+      </td>
+      <td class="buttonEffect" (click)="onDeleteRow(data.listId)">
+        <span class="delete">Delete</span>
+      </td>
     </tr>
     <tr *ngIf="allLists.length > 10">
       <td colspan="3">

@@ -17,14 +17,14 @@
       <th>whenAlc</th>
       <th>replaceWithCohortId</th>
       <th colspan="2">
-        <input type="text" placeholder="search" (input)="filterData($event.target.value)">
+        <input type="text" placeholder="Search" (input)="filterData($event.target.value)">
       </th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let data of shownAllInterventionOptions">
-      <td>{{data.scenarioId}}</td>
-      <td>{{data.cohortId}}</td>
+      <td>{{data.scenarioName}}</td>
+      <td>{{data.cohortName}}</td>
       <td>{{data.intervention}}</td>
       <td>{{data.available}}</td>
       <td>{{data.reset}}</td>
@@ -33,8 +33,12 @@
       <td>{{data.forceReplace}}</td>
       <td>{{data.whenAlc}}</td>
       <td>{{data.replaceWithCohortId}}</td>
-      <td class="buttonEffect" (click)=onEditRow(data)>Edit</td>
-      <td class="buttonEffect" (click)="onDeleteRow(data.interventionId)">Delete</td>
+      <td class="buttonEffect" (click)=onEditRow(data)>
+        <span class="edit">Edit</span>
+      </td>
+      <td class="buttonEffect" (click)="onDeleteRow(data.interventionId)">
+        <span class="delete">Delete</span>
+      </td>
     </tr>
     <tr *ngIf="allInterventionOptions.length > 10">
       <td colspan="12">

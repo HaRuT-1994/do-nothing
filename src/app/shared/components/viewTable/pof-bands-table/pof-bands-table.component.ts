@@ -78,14 +78,15 @@ export class PoFBandsTableComponent implements OnInit {
     if (search.length) {
       this.sohwnAllPoFBands = this.allPoFBands.filter(item => {
         for(let key in item) {
-          if(key !== 'id' && key !== 'scenarioId' && key !== 'cohortId' && item[key] !== null && item[key].toString().includes(search)) {
+          if( item[key] && key !== 'id' && key !== 'scenarioId' && key !== 'cohortId'
+          && item[key].toString().toLowerCase().includes(search).toLowerCase()) {
             return item;
           }
         }
       })
     } else {
       this.sohwnAllPoFBands = this.allPoFBands;
-      this.onPageChange({first: 0, rows: 10});
+      this.onPageChange(this.currentPage);
     }
   }
 }

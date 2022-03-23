@@ -9,7 +9,7 @@
       <th>Cohorts</th>
       <th>Description</th>
       <th colspan="2">
-        <input type="text" placeholder="search" (input)="filterData($event.target.value)">
+        <input type="text" placeholder="Search" (input)="filterData($event.target.value)">
       </th>
     </tr>
   </thead>
@@ -17,8 +17,12 @@
     <tr *ngFor="let data of shownAllCohorts">
       <td>{{data.cohorts}}</td>
       <td>{{data.description}}</td>
-      <td class="buttonEffect" (click)=onEditRow(data)>Edit</td>
-      <td class="buttonEffect" (click)="onDeleteRow(data.cohortId)">Delete</td>
+      <td class="buttonEffect" (click)=onEditRow(data)>
+        <span class="edit">Edit</span>
+      </td>
+      <td class="buttonEffect" (click)="onDeleteRow(data.cohortId)">
+        <span class="delete">Delete</span>
+      </td>
     </tr>
     <tr *ngIf="allCohorts.length > 10">
       <td colspan="4">
