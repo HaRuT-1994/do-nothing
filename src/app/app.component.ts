@@ -15,44 +15,13 @@ export class AppComponent implements OnInit {
     label: 'Menu',
     items: [
       {
-        label: 'Do Nothing',
+        label: 'Run Scenarios',
         items: [
           {
           label: 'Add Configs',
           icon:'pi pi-fw pi-plus',
           items: [
-            { label: 'Do Nothing', routerLink: AppConfig.routes.add.doNothing },
-            { label: 'Cohort', routerLink: AppConfig.routes.add.cohort },
-            { label: 'Fields', routerLink: AppConfig.routes.add.configFields },
-            { label: 'Scenarios', routerLink: AppConfig.routes.add.configScenarios },
-            { label: 'Curves', routerLink: AppConfig.routes.add.configCurves },
-            { label: 'PoF Bands', routerLink: AppConfig.routes.add.pofBands },
-            { label: 'Risk Levels', routerLink: AppConfig.routes.add.configRiskLevels },
-          ]
-        },
-        {
-          label: 'View all',
-          icon:'pi pi-fw pi-external-link',
-          items: [
-            { label: 'Do Nothing', routerLink: AppConfig.routes.view.doNothingTable },
-            { label: 'Cohort', routerLink: AppConfig.routes.view.cohortTable },
-            { label: 'Fields', routerLink: AppConfig.routes.view.fieldsTable },
-            { label: 'Scenarios', routerLink: AppConfig.routes.view.scenariosTable },
-            { label: 'Curves', routerLink: AppConfig.routes.view.curvesTable },
-            { label: 'PoF Bands', routerLink: AppConfig.routes.view.pofBandsTable },
-            { label: 'Risk Levels', routerLink: AppConfig.routes.view.riskLevelsTable },
-          ]
-        }
-       ]
-      },
-      {
-        label: 'Do Something',
-        items: [
-          {
-          label: 'Add Configs',
-          icon:'pi pi-fw pi-plus',
-          items: [
-            { label: 'Do Nothing', routerLink: AppConfig.routes.add.doNothing },
+            { label: 'Model Configuration', routerLink: AppConfig.routes.add.doNothing },
             { label: 'Cohort', routerLink: AppConfig.routes.add.cohort },
             { label: 'Fields', routerLink: AppConfig.routes.add.configFields },
             { label: 'Scenarios', routerLink: AppConfig.routes.add.configScenarios },
@@ -71,19 +40,19 @@ export class AppComponent implements OnInit {
           label: 'View all',
           icon:'pi pi-fw pi-external-link',
           items: [
-            { label: 'Do Nothing', routerLink: AppConfig.routes.view.doNothingTable },
+            { label: 'Model Configuration', routerLink: AppConfig.routes.view.doNothingTable },
             { label: 'Cohort', routerLink: AppConfig.routes.view.cohortTable },
             { label: 'Fields', routerLink: AppConfig.routes.view.fieldsTable },
             { label: 'Scenarios', routerLink: AppConfig.routes.view.scenariosTable },
             { label: 'Curves', routerLink: AppConfig.routes.view.curvesTable },
             { label: 'PoF Bands', routerLink: AppConfig.routes.view.pofBandsTable },
             { label: 'Risk Levels', routerLink: AppConfig.routes.view.riskLevelsTable },
+            { label: 'Budget', routerLink: AppConfig.routes.view.budgetTable },
+            { label: 'Intervention Options', routerLink: AppConfig.routes.view.interventionOptionsTable },
+            { label: 'Rates', routerLink: AppConfig.routes.view.ratesTable },
+            { label: 'Risk Based Decision', routerLink: AppConfig.routes.view.riskBasedDecisionTable },
             { label: 'Lists', routerLink: AppConfig.routes.view.listsTable },
             { label: 'List Values', routerLink: AppConfig.routes.view.listValuesTable },
-            { label: 'Risk Based Decision', routerLink: AppConfig.routes.view.riskBasedDecisionTable },
-            { label: 'Rates', routerLink: AppConfig.routes.view.ratesTable },
-            { label: 'Intervention Options', routerLink: AppConfig.routes.view.interventionOptionsTable },
-            { label: 'Budget', routerLink: AppConfig.routes.view.budgetTable },
             { label: 'Run History', routerLink: AppConfig.routes.view.runHistory }
           ]
         }
