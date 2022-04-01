@@ -1,37 +1,39 @@
 table, th, td {
-  border: 1.5px solid;
-  border-collapse: collapse;
+  border: 1.5px solid rgb(121, 105, 105);
   text-align: center;
 }
 
 table {
   margin: auto;
   margin-top: 25px;
+  border-collapse: inherit;
+  border-spacing: 0;
 
-  
-  * {
-    box-sizing: unset !important;
+  caption {
+      font-size: 30px;
+      font-weight: 500;
+      padding-bottom: 15px;
   }
 
   input {
     width: 140px;
   }
 
-  caption {
-    font-size: 30px;
-    font-weight: 500;
-    padding-bottom: 15px;
-  }
-
-  th {
+  th, td {
     padding: 3px;
-    background-color: #dde4e2;
     max-width: 160px;
   }
 
+  th {
+    background-color: #dde4e2;
+    text-overflow: nowrap;
+  }
+
   td {
-    padding: 3px;
     background-color: azure;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow-x: hidden;
   }
 }
 
@@ -40,18 +42,6 @@ table {
     cursor: pointer;
     text-decoration: underline;
     color: brown;
-  }
-}
-
-.messgae {
-  position: fixed;
-  top: 20px;
-  left: 45%;
-}
-
-::ng-deep p-paginator {
-  button {
-    width: 15px !important;
   }
 }
 

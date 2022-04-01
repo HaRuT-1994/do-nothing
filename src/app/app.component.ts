@@ -33,7 +33,7 @@ export class AppComponent implements OnInit {
             { label: 'Rates', routerLink: AppConfig.routes.add.configRates },
             { label: 'Risk Based Decision', routerLink: AppConfig.routes.add.configRiskBasedDecision },
             { label: 'Lists', routerLink: AppConfig.routes.add.configLists },
-            { label: 'ListValues', routerLink: AppConfig.routes.add.configListValues }
+            { label: 'List Values', routerLink: AppConfig.routes.add.configListValues }
           ]
         },
         {

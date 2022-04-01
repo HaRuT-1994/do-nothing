@@ -22,15 +22,15 @@
   </thead>
   <tbody>
     <tr *ngFor="let data of shownAllCurves">
-      <td>{{data.scenarioName}}</td>
-      <td>{{data.cohortName}}</td>
-      <td>{{data.calculation}}</td>
-      <td>{{data.poFCurve}}</td>
-      <td>{{data.poFNav}}</td>
-      <td>{{data.healthCurve}}</td>
-      <td>{{data.healthNav}}</td>
-      <td>{{data.poFConstant}}</td>
-      <td>{{data.healthConstant}}</td>
+      <td [attr.title]="data.scenarioName">{{data.scenarioName}}</td>
+      <td [attr.title]="data.cohortName">{{data.cohortName}}</td>
+      <td [attr.title]="data.calculation">{{data.calculation}}</td>
+      <td [attr.title]="data.poFCurve">{{data.poFCurve}}</td>
+      <td [attr.title]="data.poFNav">{{data.poFNav}}</td>
+      <td [attr.title]="data.healthCurve">{{data.healthCurve}}</td>
+      <td [attr.title]="data.healthNav">{{data.healthNav}}</td>
+      <td [attr.title]="data.poFConstant">{{data.poFConstant}}</td>
+      <td [attr.title]="data.healthConstant">{{data.healthConstant}}</td>
       <td class="buttonEffect" (click)=onEditRow(data)>
         <span class="edit">Edit</span>
       </td>

@@ -18,11 +18,11 @@
   </thead>
   <tbody>
     <tr *ngFor="let data of shownAllFields">
-      <td>{{data.tab}}</td>
-      <td>{{data.internalFieldReference}}</td>
-      <td>{{data.fieldNameInSheet}}</td>
-      <td>{{data.column}}</td>
-      <td>{{data.mandatoryForModel}}</td>
+      <td [attr.title]="data.tab">{{data.tab}}</td>
+      <td [attr.title]="data.internalFieldReference">{{data.internalFieldReference}}</td>
+      <td [attr.title]="data.fieldNameInSheet">{{data.fieldNameInSheet}}</td>
+      <td [attr.title]="data.column">{{data.column}}</td>
+      <td [attr.title]="data.mandatoryForModel">{{data.mandatoryForModel}}</td>
       <td class="buttonEffect" (click)=onEditRow(data)>
         <span class="edit">Edit</span>
       </td>

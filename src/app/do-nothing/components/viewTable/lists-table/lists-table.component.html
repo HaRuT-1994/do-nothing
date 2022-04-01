@@ -14,7 +14,7 @@
   </thead>
   <tbody>
     <tr *ngFor="let data of shownAllListss">
-      <td>{{data.listName}}</td>
+      <td [attr.title]="data.listName">{{data.listName}}</td>
       <td class="buttonEffect" (click)=onEditRow(data)>
         <span class="edit">Edit</span>
       </td>

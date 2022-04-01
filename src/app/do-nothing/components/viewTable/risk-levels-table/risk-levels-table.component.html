@@ -17,10 +17,10 @@
   </thead>
   <tbody>
     <tr *ngFor="let data of shownAllRiskLevels">
-      <td>{{data.pof}}</td>
-      <td>{{data.cof}}</td>
-      <td>{{data.riskScore}}</td>
-      <td>{{data.riskRating}}</td>
+      <td [attr.title]="data.pof">{{data.pof}}</td>
+      <td [attr.title]="data.cof">{{data.cof}}</td>
+      <td [attr.title]="data.riskScore">{{data.riskScore}}</td>
+      <td [attr.title]="data.riskRating">{{data.riskRating}}</td>
       <td class="buttonEffect" (click)=onEditRow(data)>
         <span class="edit">Edit</span>
       </td>

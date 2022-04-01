@@ -21,14 +21,14 @@
   </thead>
   <tbody>
     <tr *ngFor="let data of shownAllRiskBasedDecisions">
-      <td>{{data.scenarioName}}</td>
-      <td>{{data.cohortName}}</td>
-      <td>{{data.poF}}</td>
-      <td>{{data.coF}}</td>
-      <td>{{data.risk}}</td>
-      <td>{{data.band}}</td>
-      <td>{{data.intervention}}</td>
-      <td>{{data.frequency}}</td>
+      <td [attr.title]="data.scenarioName">{{data.scenarioName}}</td>
+      <td [attr.title]="data.cohortName">{{data.cohortName}}</td>
+      <td [attr.title]="data.poF">{{data.poF}}</td>
+      <td [attr.title]="data.coF">{{data.coF}}</td>
+      <td [attr.title]="data.risk">{{data.risk}}</td>
+      <td [attr.title]="data.band">{{data.band}}</td>
+      <td [attr.title]="data.intervention">{{data.intervention}}</td>
+      <td [attr.title]="data.frequency">{{data.frequency}}</td>
       <td class="buttonEffect" (click)=onEditRow(data)>
         <span class="edit">Edit</span>
       </td>

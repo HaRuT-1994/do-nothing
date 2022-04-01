@@ -26,19 +26,19 @@
   </thead>
   <tbody>
     <tr *ngFor="let data of shownAllRates">
-      <td>{{data.scenarioName}}</td>
-      <td>{{data.cohortName}}</td>
-      <td>{{data.intervention}}</td>
-      <td>{{data.geography}}</td>
-      <td>{{data.budgetSource}}</td>
-      <td>{{data.value}}</td>
-      <td>{{data.rateType}}</td>
-      <td>{{data.minimumCost}}</td>
-      <td>{{data.rangeType}}</td>
-      <td>{{data.from1}}</td>
-      <td>{{data.value1}}</td>
-      <td>{{data.from2}}</td>
-      <td>{{data.value2}}</td>
+      <td [attr.title]="data.scenarioName">{{data.scenarioName}}</td>
+      <td [attr.title]="data.cohortName">{{data.cohortName}}</td>
+      <td [attr.title]="data.intervention">{{data.intervention}}</td>
+      <td [attr.title]="data.geography">{{data.geography}}</td>
+      <td [attr.title]="data.budgetSource">{{data.budgetSource}}</td>
+      <td [attr.title]="data.value">{{data.value}}</td>
+      <td [attr.title]="data.rateType">{{data.rateType}}</td>
+      <td [attr.title]="data.minimumCost">{{data.minimumCost}}</td>
+      <td [attr.title]="data.rangeType">{{data.rangeType}}</td>
+      <td [attr.title]="data.from1">{{data.from1}}</td>
+      <td [attr.title]="data.value1">{{data.value1}}</td>
+      <td [attr.title]="data.from2">{{data.from2}}</td>
+      <td [attr.title]="data.value2">{{data.value2}}</td>
       <td class="buttonEffect" (click)=onEditRow(data)>
         <span class="edit">Edit</span>
       </td>

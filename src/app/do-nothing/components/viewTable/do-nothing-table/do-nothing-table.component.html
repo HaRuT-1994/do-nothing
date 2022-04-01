@@ -25,18 +25,18 @@
   </thead>
   <tbody>
     <tr *ngFor="let data of shownAllModels">
-      <td>{{data.modelName}}</td>
-      <td>{{data.baseYear}}</td>
-      <td>{{data.yearsToRun}}</td>
-      <td>{{data.skipTheseLifecycle}}</td>
-      <td>{{data.skipTheseUnitClasses}}</td>
-      <td>{{data.dataModelOutputTemplate}}</td>
-      <td>{{data.nrModelColumns}}</td>
-      <td>{{data.debugMode}}</td>
-      <td>{{data.scenarioName}}</td>
-      <td>{{data.allowOverwriteToExceedBudget}}</td>
-      <td>{{data.skipTheseAssetSources}}</td>
-      <td>{{data.conditionRange}}</td>
+      <td [attr.title]="data.modelName">{{data.modelName}}</td>
+      <td [attr.title]="data.baseYear">{{data.baseYear}}</td>
+      <td [attr.title]="data.yearsToRun">{{data.yearsToRun}}</td>
+      <td [attr.title]="data.skipTheseLifecycle">{{data.skipTheseLifecycle}}</td>
+      <td [attr.title]="data.skipTheseUnitClasses">{{data.skipTheseUnitClasses}}</td>
+      <td [attr.title]="data.dataModelOutputTemplate">{{data.dataModelOutputTemplate}}</td>
+      <td [attr.title]="data.nrModelColumns">{{data.nrModelColumns}}</td>
+      <td [attr.title]="data.debugMode">{{data.debugMode}}</td>
+      <td [attr.title]="data.scenarioName">{{data.scenarioName}}</td>
+      <td [attr.title]="data.allowOverwriteToExceedBudget">{{data.allowOverwriteToExceedBudget}}</td>
+      <td [attr.title]="data.skipTheseAssetSources">{{data.skipTheseAssetSources}}</td>
+      <td [attr.title]="data.conditionRange">{{data.conditionRange}}</td>
       <td *ngIf="!runDate" class="buttonEffect" (click)="onEditRow(data)">
         <span class="edit">Edit</span>
       </td>

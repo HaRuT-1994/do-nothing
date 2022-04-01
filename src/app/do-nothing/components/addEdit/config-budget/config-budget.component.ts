@@ -16,9 +16,11 @@ import { ConfigScenariosService } from 'src/app/do-nothing/services/config-scena
 export class ConfigBudgetComponent implements OnInit {
   public formGroup: FormGroup = new FormGroup({
     scenarioId: new FormControl(0),
+    scenarioName: new FormControl(''),
     expLimit: new FormControl(0),
     year: new FormControl(0),
-    budget: new FormControl(0)
+    budget: new FormControl(0),
+    budgetSource: new FormControl('')
   });
   public scenarioData: ConfigData[] = [];
   public severity: string;

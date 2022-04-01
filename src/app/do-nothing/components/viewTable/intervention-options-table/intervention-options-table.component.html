@@ -23,16 +23,16 @@
   </thead>
   <tbody>
     <tr *ngFor="let data of shownAllInterventionOptions">
-      <td>{{data.scenarioName}}</td>
-      <td>{{data.cohortName}}</td>
-      <td>{{data.intervention}}</td>
-      <td>{{data.available}}</td>
-      <td>{{data.reset}}</td>
-      <td>{{data.applyWhenMlc}}</td>
-      <td>{{data.excludeIfCrc}}</td>
-      <td>{{data.forceReplace}}</td>
-      <td>{{data.whenAlc}}</td>
-      <td>{{data.replaceWithCohortId}}</td>
+      <td [attr.title]="data.scenarioName">{{data.scenarioName}}</td>
+      <td [attr.title]="data.cohortName">{{data.cohortName}}</td>
+      <td [attr.title]="data.intervention">{{data.intervention}}</td>
+      <td [attr.title]="data.available">{{data.available}}</td>
+      <td [attr.title]="data.reset">{{data.reset}}</td>
+      <td [attr.title]="data.applyWhenMlc">{{data.applyWhenMlc}}</td>
+      <td [attr.title]="data.excludeIfCrc">{{data.excludeIfCrc}}</td>
+      <td [attr.title]="data.forceReplace">{{data.forceReplace}}</td>
+      <td [attr.title]="data.whenAlc">{{data.whenAlc}}</td>
+      <td [attr.title]="data.replaceWithCohortId">{{data.replaceWithCohortId}}</td>
       <td class="buttonEffect" (click)=onEditRow(data)>
         <span class="edit">Edit</span>
       </td>

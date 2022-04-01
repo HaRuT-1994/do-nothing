@@ -16,9 +16,9 @@
   </thead>
   <tbody>
     <tr *ngFor="let data of shownAllListValues">
-      <td>{{data.listId}}</td>
-      <td>{{data.listLookup}}</td>
-      <td>{{data.listValue}}</td>
+      <td [attr.title]="data.listId">{{data.listId}}</td>
+      <td [attr.title]="data.listLookup">{{data.listLookup}}</td>
+      <td [attr.title]="data.listValue">{{data.listValue}}</td>
       <td class="buttonEffect" (click)=onEditRow(data)>
         <span class="edit">Edit</span>
       </td>

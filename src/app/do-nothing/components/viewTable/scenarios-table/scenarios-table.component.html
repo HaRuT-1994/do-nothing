@@ -17,10 +17,10 @@
   </thead>
   <tbody>
     <tr *ngFor="let data of shownAllScenarios">
-      <td>{{data.scenario}}</td>
-      <td>{{data.validatedOption}}</td>
-      <td>{{data.restrictToBudget}}</td>
-      <td>{{data.run}}</td>
+      <td [attr.title]="data.scenario">{{data.scenario}}</td>
+      <td [attr.title]="data.validatedOption">{{data.validatedOption}}</td>
+      <td [attr.title]="data.restrictToBudget">{{data.restrictToBudget}}</td>
+      <td [attr.title]="data.run">{{data.run}}</td>
       <td class="buttonEffect" (click)=onEditRow(data)>
         <span class="edit">Edit</span>
       </td>

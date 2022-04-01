@@ -15,8 +15,8 @@
   </thead>
   <tbody>
     <tr *ngFor="let data of shownAllCohorts">
-      <td>{{data.cohorts}}</td>
-      <td>{{data.description}}</td>
+      <td [attr.title]="data.cohorts">{{data.cohorts}}</td>
+      <td [attr.title]="data.description">{{data.description}}</td>
       <td class="buttonEffect" (click)=onEditRow(data)>
         <span class="edit">Edit</span>
       </td>
