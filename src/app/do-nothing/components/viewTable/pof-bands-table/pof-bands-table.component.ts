@@ -13,6 +13,7 @@ import { PofBandsService } from 'src/app/do-nothing/services/pof-bands.service';
   styleUrls: ['./pof-bands-table.component.scss']
 })
 export class PoFBandsTableComponent implements OnInit {
+  public createPath = AppConfig.routes.add.pofBands;
   public isLoading: boolean;
   public severity: string;
   public msg: string;
@@ -39,8 +40,10 @@ export class PoFBandsTableComponent implements OnInit {
   }
 
   onEditRow(data: PoFBandsModel): void {
-    this.pofBandService.onEditRow(data);
-    this.router.navigate([AppConfig.routes.edit.pofBands]);
+    if(confirm('Are you sure in editing this config?')) {
+      this.pofBandService.onEditRow(data);
+      this.router.navigate([AppConfig.routes.edit.pofBands]);
+    }
   }
 
   onDeleteRow(id: number): void {

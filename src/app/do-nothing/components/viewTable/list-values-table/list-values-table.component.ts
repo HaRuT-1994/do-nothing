@@ -13,6 +13,7 @@ import { CommonService } from 'src/app/services/common.service';
   styleUrls: ['./list-values-table.component.scss']
 })
 export class ListValuesTableComponent implements OnInit {
+  public createPath = AppConfig.routes.add.configListValues;
   public isLoading: boolean;
   public severity: string;
   public msg: string;
@@ -39,8 +40,10 @@ export class ListValuesTableComponent implements OnInit {
    }
 
   onEditRow(data: ListValuesModel): void {
-    this.listValluesService.onEditRow(data);
-    this.router.navigate([AppConfig.routes.edit.configListValues]);
+    if(confirm('Are you sure in editing this config?')) {
+      this.listValluesService.onEditRow(data);
+      this.router.navigate([AppConfig.routes.edit.configListValues]);
+    }
   }
 
   onDeleteRow(id: number): void {

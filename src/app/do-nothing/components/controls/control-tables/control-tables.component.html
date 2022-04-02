@@ -1,0 +1,30 @@
+<div class="G-flex-center-between menu-tab">
+  <div>
+    <span routerLink="/Projects/Plans">Projects/Plans</span>
+    <span class="selected">Scenario</span>
+    <span routerLink="/Data-Model">Data Models</span>
+  </div>
+  <div>
+    <h2>Sample Project Name</h2>
+  </div>
+</div>
+<section class="G-flex-center-around">
+  <div>
+    <button (click)="onAddConfig()">New</button>
+  </div>
+  <div>
+    <button>Copy</button>
+  </div>
+  <div>
+    <button>Run</button>
+  </div>
+  <div class="G-flex-center-between">
+    <!-- <label>Scenarios to Run</label> -->
+    <mat-form-field appearance="fill" class="dropdown">
+      <mat-label>Config</mat-label>
+      <mat-select>
+        <mat-option *ngFor="let item of controlTables" routerLink="/{{item.routerLink}}">{{item.label}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</section>

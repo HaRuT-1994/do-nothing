@@ -13,6 +13,7 @@ import { CommonService } from 'src/app/services/common.service';
   styleUrls: ['./lists-table.component.scss']
 })
 export class ListsTableComponent implements OnInit {
+  public createPath = AppConfig.routes.add.configLists;
   public isLoading: boolean;
   public severity: string;
   public msg: string;
@@ -39,8 +40,10 @@ export class ListsTableComponent implements OnInit {
    }
 
   onEditRow(data: ListsModel): void {
-    this.listsService.onEditRow(data);
-    this.router.navigate([AppConfig.routes.edit.configLists]);
+    if(confirm('Are you sure in editing this config?')) {
+      this.listsService.onEditRow(data);
+      this.router.navigate([AppConfig.routes.edit.configLists]);
+    }
   }
 
   onDeleteRow(id: number): void {

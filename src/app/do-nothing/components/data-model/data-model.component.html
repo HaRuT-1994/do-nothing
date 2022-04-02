@@ -1,0 +1,56 @@
+<div class="G-flex">
+<article>
+  <h3>BIACMP</h3>
+  <input type="text">
+  <p-panelMenu [model]="items" [style]="{'width':'160px',  'z-index': 1}"></p-panelMenu>
+</article>
+
+<section>
+  <h3>Child Assets</h3>
+  <button type="button">NEW ASSET</button> 
+  <button type="button" (click)="goBack()">Go back</button>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Class</th>
+      <th>Sub Class</th>
+      <th>Sub Sub Class</th>
+      <th>Client Asset Code</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <input type="text">
+      </td>
+      <td>
+        <input type="text">
+      </td>
+      <td>
+        <input type="text">
+      </td>
+      <td>
+        <input type="text">
+      </td>
+      <td>
+        <input type="text">
+      </td>
+    </tr>
+    <tr>
+      <td>Alpha</td>
+      <td>test</td>
+      <td>test</td>
+      <td>145</td>
+      <td>100</td>
+      <td>
+        <span><img src="assets/img/icons8-add-48.png" alt="add"></span>
+        <span><img src="assets/img/icons8-delete-48.png" alt="delete"></span>
+        <span><img src="assets/img/icons8-edit-48.png" alt="edit"></span>
+      </td>
+    </tr>  
+  </tbody>
+</table>
+</section>
+</div>

@@ -2,37 +2,44 @@
   <p-message severity="{{severity}}" text="{{ msg }}"></p-message>
 </div>
 <app-loading *ngIf="isLoading"></app-loading>
-<table [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
-  <caption>Config - Scenarios</caption>
-  <thead>
-    <tr>
-      <th>Scenario Name</th>
-      <th>Validated Option</th>
-      <th>Restrict To Budget</th>
-      <th>Run</th>
-      <th colspan="2">
-        <input type="text" placeholder="Search" (input)="filterData($event.target.value)">
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let data of shownAllScenarios">
-      <td [attr.title]="data.scenario">{{data.scenario}}</td>
-      <td [attr.title]="data.validatedOption">{{data.validatedOption}}</td>
-      <td [attr.title]="data.restrictToBudget">{{data.restrictToBudget}}</td>
-      <td [attr.title]="data.run">{{data.run}}</td>
-      <td class="buttonEffect" (click)=onEditRow(data)>
-        <span class="edit">Edit</span>
-      </td>
-      <td class="buttonEffect" (click)="onDeleteRow(data.scenarioId)">
-        <span class="delete">Delete</span>
-      </td>
-    </tr>
-    <tr *ngIf="allScenarios.length > 10">
-      <td colspan="7">
-        <p-paginator [rows]="10" [totalRecords]="allScenarios.length" [rowsPerPageOptions]="[10,20,30]"
-        (onPageChange)="onPageChange($event)"></p-paginator>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<main [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
+  <app-control-tables [path]="createPath"></app-control-tables>
+  <table>
+    <!-- <caption>Config - Scenarios</caption> -->
+    <thead>
+      <tr>
+        <th>Scenario Name</th>
+        <th>Validated Option</th>
+        <th>Restrict To Budget</th>
+        <th>Edit</th>
+        <th>Delete</th>
+        <th>Run</th>
+        <!-- <th colspan="2">
+          <input type="text" placeholder="Search" (input)="filterData($event.target.value)">
+        </th> -->
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of shownAllScenarios">
+        <td [attr.title]="data.scenario">{{data.scenario}}</td>
+        <td [attr.title]="data.validatedOption">{{data.validatedOption}}</td>
+        <td [attr.title]="data.restrictToBudget">{{data.restrictToBudget}}</td>
+        <td class="buttonEffect" (click)=onEditRow(data)>
+          <span class="edit">Edit</span>
+        </td>
+        <td class="buttonEffect" (click)="onDeleteRow(data.scenarioId)">
+          <span class="delete">Delete</span>
+        </td>
+        <td [attr.title]="data.run">
+          <input class="checkbox" type="checkbox" disabled [checked]="data.run">
+        </td>
+      </tr>
+      <tr *ngIf="allScenarios.length > 10">
+        <td colspan="7">
+          <p-paginator [rows]="10" [totalRecords]="allScenarios.length" [rowsPerPageOptions]="[10,20,30]"
+          (onPageChange)="onPageChange($event)"></p-paginator>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</main>

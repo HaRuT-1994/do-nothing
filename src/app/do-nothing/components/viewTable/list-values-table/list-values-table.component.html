@@ -2,35 +2,38 @@
   <p-message severity="{{severity}}" text="{{ msg }}"></p-message>
 </div>
 <app-loading *ngIf="isLoading"></app-loading>
-<table [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
-  <caption>Config - List Values</caption>
-  <thead>
-    <tr>
-      <th>List</th>
-      <th>List Lookup</th>
-      <th>List Value</th>
-      <th colspan="2">
-        <input type="text" placeholder="Search" (input)="filterData($event.target.value)">
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let data of shownAllListValues">
-      <td [attr.title]="data.listId">{{data.listId}}</td>
-      <td [attr.title]="data.listLookup">{{data.listLookup}}</td>
-      <td [attr.title]="data.listValue">{{data.listValue}}</td>
-      <td class="buttonEffect" (click)=onEditRow(data)>
-        <span class="edit">Edit</span>
-      </td>
-      <td class="buttonEffect" (click)="onDeleteRow(data.itemId)">
-        <span class="delete">Delete</span>
-      </td>
-    </tr>
-    <tr *ngIf="allListValues.length > 10">
-      <td colspan="5">
-        <p-paginator [rows]="10" [totalRecords]="allListValues.length" [rowsPerPageOptions]="[10,20,30]"
-        (onPageChange)="onPageChange($event)"></p-paginator>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<main [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
+  <app-control-tables [path]="createPath"></app-control-tables>
+  <table>
+    <!-- <caption>Config - List Values</caption> -->
+    <thead>
+      <tr>
+        <th>List</th>
+        <th>List Lookup</th>
+        <th>List Value</th>
+        <th colspan="2">
+          <input type="text" placeholder="Search" (input)="filterData($event.target.value)">
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of shownAllListValues">
+        <td [attr.title]="data.listId">{{data.listId}}</td>
+        <td [attr.title]="data.listLookup">{{data.listLookup}}</td>
+        <td [attr.title]="data.listValue">{{data.listValue}}</td>
+        <td class="buttonEffect" (click)=onEditRow(data)>
+          <span class="edit">Edit</span>
+        </td>
+        <td class="buttonEffect" (click)="onDeleteRow(data.itemId)">
+          <span class="delete">Delete</span>
+        </td>
+      </tr>
+      <tr *ngIf="allListValues.length > 10">
+        <td colspan="5">
+          <p-paginator [rows]="10" [totalRecords]="allListValues.length" [rowsPerPageOptions]="[10,20,30]"
+          (onPageChange)="onPageChange($event)"></p-paginator>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</main>

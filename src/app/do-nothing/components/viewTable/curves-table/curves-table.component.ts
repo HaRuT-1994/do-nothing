@@ -13,6 +13,7 @@ import { ConfigCurvesService } from 'src/app/do-nothing/services/config-curves.s
   styleUrls: ['./curves-table.component.scss']
 })
 export class CurvesTableComponent implements OnInit {
+  public createPath = AppConfig.routes.add.configCurves;
   public isLoading: boolean;
   public severity: string;
   public msg: string;
@@ -39,8 +40,10 @@ export class CurvesTableComponent implements OnInit {
   }
 
   onEditRow(data: CurveModel): void {
-    this.curvesService.onEditRow(data);
-    this.router.navigate([AppConfig.routes.edit.configCurves]);
+    if(confirm('Are you sure in editing this config?')) {
+      this.curvesService.onEditRow(data);
+      this.router.navigate([AppConfig.routes.edit.configCurves]);
+    }
   }
 
   onDeleteRow(id: number): void {

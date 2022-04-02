@@ -13,6 +13,7 @@ import { CommonService } from 'src/app/services/common.service';
   styleUrls: ['./risk-based-decision-table.component.scss']
 })
 export class RiskBasedDecisionTableComponent implements OnInit {
+  public createPath = AppConfig.routes.add.configRiskBasedDecision;
   public isLoading: boolean;
   public severity: string;
   public msg: string;
@@ -39,8 +40,10 @@ export class RiskBasedDecisionTableComponent implements OnInit {
    }
 
   onEditRow(data: RiskBasedDecisionModel): void {
-    this.riskBasedDecisionService.onEditRow(data);
-    this.router.navigate([AppConfig.routes.edit.configRiskBasedDecision]);
+    if(confirm('Are you sure in editing this config?')) {
+      this.riskBasedDecisionService.onEditRow(data);
+      this.router.navigate([AppConfig.routes.edit.configRiskBasedDecision]);
+    }
   }
 
   onDeleteRow(id: number): void {

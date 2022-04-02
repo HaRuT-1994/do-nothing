@@ -2,33 +2,36 @@
   <p-message severity="{{severity}}" text="{{ msg }}"></p-message>
 </div>
 <app-loading *ngIf="isLoading"></app-loading>
-<table [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
-  <caption>Config - Cohort</caption>
-  <thead>
-    <tr>
-      <th>Cohorts</th>
-      <th>Description</th>
-      <th colspan="2">
-        <input type="text" placeholder="Search" (input)="filterData($event.target.value)">
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let data of shownAllCohorts">
-      <td [attr.title]="data.cohorts">{{data.cohorts}}</td>
-      <td [attr.title]="data.description">{{data.description}}</td>
-      <td class="buttonEffect" (click)=onEditRow(data)>
-        <span class="edit">Edit</span>
-      </td>
-      <td class="buttonEffect" (click)="onDeleteRow(data.cohortId)">
-        <span class="delete">Delete</span>
-      </td>
-    </tr>
-    <tr *ngIf="allCohorts.length > 10">
-      <td colspan="4">
-        <p-paginator [rows]="10" [totalRecords]="allCohorts.length" [rowsPerPageOptions]="[10,20,30]"
-        (onPageChange)="onPageChange($event)"></p-paginator>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<main [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
+  <app-control-tables [path]="createPath"></app-control-tables>
+  <table>
+    <!-- <caption>Config - Cohort</caption> -->
+    <thead>
+      <tr>
+        <th>Cohorts</th>
+        <th>Description</th>
+        <th colspan="2">
+          <input type="text" placeholder="Search" (input)="filterData($event.target.value)">
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of shownAllCohorts">
+        <td [attr.title]="data.cohorts">{{data.cohorts}}</td>
+        <td [attr.title]="data.description">{{data.description}}</td>
+        <td class="buttonEffect" (click)=onEditRow(data)>
+          <span class="edit">Edit</span>
+        </td>
+        <td class="buttonEffect" (click)="onDeleteRow(data.cohortId)">
+          <span class="delete">Delete</span>
+        </td>
+      </tr>
+      <tr *ngIf="allCohorts.length > 10">
+        <td colspan="4">
+          <p-paginator [rows]="10" [totalRecords]="allCohorts.length" [rowsPerPageOptions]="[10,20,30]"
+          (onPageChange)="onPageChange($event)"></p-paginator>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</main>

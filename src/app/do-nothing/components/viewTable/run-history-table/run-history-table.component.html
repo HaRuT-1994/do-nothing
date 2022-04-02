@@ -2,34 +2,37 @@
   <p-message severity="{{severity}}" text="{{ msg }}"></p-message>
 </div>
 <app-loading *ngIf="isLoading"></app-loading>
-<table [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
-  <caption>Run History</caption>
-  <thead>
-    <tr>
-      <th>Configuration Id</th>
-      <th>Scenario</th>
-      <th>Rows Ran</th>
-      <th>Status</th>
-      <th>Comments</th>
-      <th>Run Start</th>
-      <th>Run End</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let data of shownAllRunHistory">
-      <td [attr.title]="data.configurationId">{{data.configurationId}}</td>
-      <td [attr.title]="data.scenarioName">{{data.scenarioName}}</td>
-      <td [attr.title]="data.rowsRan">{{data.rowsRan}}</td>
-      <td [attr.title]="data.status">{{data.status}}</td>
-      <td [attr.title]="data.comments">{{data.comments}}</td>
-      <td [attr.title]="data.runStart | date: 'full'">{{data.runStart | date: 'medium'}}</td>
-      <td [attr.title]="data.runEnd | date: 'full'">{{data.runEnd | date: 'medium'}}</td>
-    </tr>
-    <tr *ngIf="allRunHistory.length > 10">
-      <td colspan="7">
-        <p-paginator [rows]="10" [totalRecords]="allRunHistory.length" [rowsPerPageOptions]="[10,20,30]"
-        (onPageChange)="onPageChange($event)"></p-paginator>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<main [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
+  <app-control-tables></app-control-tables>
+  <table>
+    <caption>Run History</caption>
+    <thead>
+      <tr>
+        <th>Configuration Id</th>
+        <th>Scenario</th>
+        <th>Rows Ran</th>
+        <th>Status</th>
+        <th>Comments</th>
+        <th>Run Start</th>
+        <th>Run End</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of shownAllRunHistory">
+        <td [attr.title]="data.configurationId">{{data.configurationId}}</td>
+        <td [attr.title]="data.scenarioName">{{data.scenarioName}}</td>
+        <td [attr.title]="data.rowsRan">{{data.rowsRan}}</td>
+        <td [attr.title]="data.status">{{data.status}}</td>
+        <td [attr.title]="data.comments">{{data.comments}}</td>
+        <td [attr.title]="data.runStart | date: 'full'">{{data.runStart | date: 'medium'}}</td>
+        <td [attr.title]="data.runEnd | date: 'full'">{{data.runEnd | date: 'medium'}}</td>
+      </tr>
+      <tr *ngIf="allRunHistory.length > 10">
+        <td colspan="7">
+          <p-paginator [rows]="10" [totalRecords]="allRunHistory.length" [rowsPerPageOptions]="[10,20,30]"
+          (onPageChange)="onPageChange($event)"></p-paginator>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</main>

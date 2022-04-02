@@ -12,9 +12,7 @@ import { CommonService } from 'src/app/services/common.service';
   styleUrls: ['./config-lists.component.scss']
 })
 export class ConfigListsComponent implements OnInit {
-  public formGroup: FormGroup = new FormGroup({
-    listName: new FormControl(""),
-  });
+  public formGroup: FormGroup;
   public severity: string;
   public msg: string;
   public isOnEdit: boolean;
@@ -26,6 +24,7 @@ export class ConfigListsComponent implements OnInit {
                private location: Location) { }
 
   ngOnInit(): void {
+    this.formInit();
     this.isOnEdit = this.listService.isOnEdit;
     if(this.location.path().includes('add')) {
       this.isOnEdit = false;
@@ -33,6 +32,12 @@ export class ConfigListsComponent implements OnInit {
     if (this.isOnEdit) {
       this.commonService.updateForm(this.formGroup, this.listService.editLists);
     }
+  }
+
+  formInit(): void {
+    this.formGroup = new FormGroup({
+      listName: new FormControl("")
+    })
   }
 
   addConfig(): void {
@@ -44,6 +49,7 @@ export class ConfigListsComponent implements OnInit {
         this.msg = 'Config List Form ' +  Message.SUCCESS_MSG;
         this.commonService.deleteMsg(this);
         this.formGroup.reset();
+        this.formInit();
       },
       () => {
         this.isLoading = false;

@@ -13,6 +13,7 @@ import { RiskLevelsService } from 'src/app/do-nothing/services/risk-levels.servi
   styleUrls: ['./risk-levels-table.component.scss']
 })
 export class RiskLevelsTableComponent implements OnInit {
+  public createPath = AppConfig.routes.add.configRiskLevels;
   public isLoading: boolean;
   public severity: string;
   public msg: string;
@@ -39,8 +40,10 @@ export class RiskLevelsTableComponent implements OnInit {
   }
 
   onEditRow(data: RiskLevelsModel): void {
-    this.riskLvlService.onEditRow(data);
-    this.router.navigate([AppConfig.routes.edit.configRiskLevels]);
+    if(confirm('Are you sure in editing this config?')) {
+      this.riskLvlService.onEditRow(data);
+      this.router.navigate([AppConfig.routes.edit.configRiskLevels]);
+    }
   }
 
   onDeleteRow(id: number): void {

@@ -13,6 +13,7 @@ import { ConfigFieldsService } from 'src/app/do-nothing/services/config-fields.s
   styleUrls: ['./fields-table.component.scss']
 })
 export class FieldsTableComponent implements OnInit {
+  public createPath = AppConfig.routes.add.configFields;
   public isLoading: boolean;
   public severity: string;
   public msg: string;
@@ -39,8 +40,10 @@ export class FieldsTableComponent implements OnInit {
   }
 
   onEditRow(data: FieldModel): void {
-    this.fieldService.onEditRow(data);
-    this.router.navigate([AppConfig.routes.edit.configFields]);
+    if(confirm('Are you sure in editing this config?')) {
+      this.fieldService.onEditRow(data);
+      this.router.navigate([AppConfig.routes.edit.configFields]);
+    }
   }
 
   onDeleteRow(id: number): void {

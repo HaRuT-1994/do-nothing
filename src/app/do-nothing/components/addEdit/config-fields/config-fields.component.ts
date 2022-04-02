@@ -12,13 +12,7 @@ import { Location } from '@angular/common';
   styleUrls: ['./config-fields.component.scss']
 })
 export class ConfigFieldsComponent implements OnInit {
-  public formGroup: FormGroup = new FormGroup({
-    tab: new FormControl(''),
-    internalFieldReference: new FormControl(''),
-    fieldNameInSheet: new FormControl(''),
-    column: new FormControl(''),
-    mandatoryForModel: new FormControl(true)
-  });
+  public formGroup: FormGroup;
   public severity: string;
   public msg: string;
   public isOnEdit: boolean;
@@ -29,13 +23,24 @@ export class ConfigFieldsComponent implements OnInit {
                private location: Location) { }
 
   ngOnInit(): void {
-  this.isOnEdit = this.fieldsService.isOnEdit;
-  if(this.location.path().includes('add')) {
-    this.isOnEdit = false;
-  }
-  if (this.isOnEdit) {
-    this.commonService.updateForm(this.formGroup, this.fieldsService.editFields);
-  }
+    this.formInit();
+    this.isOnEdit = this.fieldsService.isOnEdit;
+    if(this.location.path().includes('add')) {
+      this.isOnEdit = false;
+    }
+    if (this.isOnEdit) {
+      this.commonService.updateForm(this.formGroup, this.fieldsService.editFields);
+    }
+}
+
+formInit(): void {
+  this.formGroup = new FormGroup({
+    tab: new FormControl(''),
+    internalFieldReference: new FormControl(''),
+    fieldNameInSheet: new FormControl(''),
+    column: new FormControl(''),
+    mandatoryForModel: new FormControl(true)
+  })
 }
 
   addConfig(): void {
@@ -47,6 +52,7 @@ export class ConfigFieldsComponent implements OnInit {
         this.msg = 'Fields Form ' + Message.SUCCESS_MSG;
         this.commonService.deleteMsg(this);
         this.formGroup.reset();
+        this.formInit();
       },
       err => { 
         console.log(err);

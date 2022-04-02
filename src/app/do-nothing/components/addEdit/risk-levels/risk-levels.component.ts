@@ -12,12 +12,7 @@ import { Location } from '@angular/common';
   styleUrls: ['./risk-levels.component.scss']
 })
 export class RiskLevelsComponent implements OnInit {
-  public formGroup: FormGroup = new FormGroup({
-    pof: new FormControl(''),
-    cof: new FormControl(''),
-    riskScore: new FormControl(''),
-    riskRating: new FormControl(''),
-  });
+  public formGroup: FormGroup;
   public severity: string;
   public msg: string;
   public isOnEdit: boolean;
@@ -28,6 +23,7 @@ export class RiskLevelsComponent implements OnInit {
                private location: Location) { }
 
   ngOnInit(): void {
+    this.formInit();
     this.isOnEdit = this.riskLvlService.isOnEdit;
     if(this.location.path().includes('add')) {
       this.isOnEdit = false;
@@ -35,6 +31,15 @@ export class RiskLevelsComponent implements OnInit {
     if (this.isOnEdit) {
       this.commonService.updateForm(this.formGroup, this.riskLvlService.editRiskLvl);
     }
+  }
+
+  formInit(): void {
+    this.formGroup = new FormGroup({
+      pof: new FormControl(''),
+      cof: new FormControl(''),
+      riskScore: new FormControl(''),
+      riskRating: new FormControl(''),
+    });
   }
 
   addConfig(): void {
@@ -46,6 +51,7 @@ export class RiskLevelsComponent implements OnInit {
         this.msg = 'Risk Levels Form ' + Message.SUCCESS_MSG;
         this.commonService.deleteMsg(this);
         this.formGroup.reset();
+        this.formInit();
       },
       err => {
         console.log(err);

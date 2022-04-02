@@ -2,45 +2,48 @@
   <p-message severity="{{severity}}" text="{{ msg }}"></p-message>
 </div>
 <app-loading *ngIf="isLoading"></app-loading>
-<table [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
-  <caption>Config - Risk Based Decisions</caption>
-  <thead>
-    <tr>
-      <th>Scenario</th>
-      <th>Cohort</th>
-      <th>PoF</th>
-      <th>CoF</th>
-      <th>Risk</th>
-      <th>Band</th>
-      <th>Intervention</th>
-      <th>Frequency</th>
-      <th colspan="2">
-        <input type="text" placeholder="Search" (input)="filterData($event.target.value)">
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let data of shownAllRiskBasedDecisions">
-      <td [attr.title]="data.scenarioName">{{data.scenarioName}}</td>
-      <td [attr.title]="data.cohortName">{{data.cohortName}}</td>
-      <td [attr.title]="data.poF">{{data.poF}}</td>
-      <td [attr.title]="data.coF">{{data.coF}}</td>
-      <td [attr.title]="data.risk">{{data.risk}}</td>
-      <td [attr.title]="data.band">{{data.band}}</td>
-      <td [attr.title]="data.intervention">{{data.intervention}}</td>
-      <td [attr.title]="data.frequency">{{data.frequency}}</td>
-      <td class="buttonEffect" (click)=onEditRow(data)>
-        <span class="edit">Edit</span>
-      </td>
-      <td class="buttonEffect" (click)="onDeleteRow(data.decisionId)">
-        <span class="delete">Delete</span>
-      </td>
-    </tr>
-    <tr *ngIf="allRiskBasedDecisions.length > 10">
-      <td colspan="10">
-        <p-paginator [rows]="10" [totalRecords]="allRiskBasedDecisions.length" [rowsPerPageOptions]="[10,20,30]"
-        (onPageChange)="onPageChange($event)"></p-paginator>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<main [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
+  <app-control-tables [path]="createPath"></app-control-tables>
+  <table>
+    <!-- <caption>Config - Risk Based Decisions</caption> -->
+    <thead>
+      <tr>
+        <th>Scenario</th>
+        <th>Cohort</th>
+        <th>PoF</th>
+        <th>CoF</th>
+        <th>Risk</th>
+        <th>Band</th>
+        <th>Intervention</th>
+        <th>Frequency</th>
+        <th colspan="2">
+          <input type="text" placeholder="Search" (input)="filterData($event.target.value)">
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of shownAllRiskBasedDecisions">
+        <td [attr.title]="data.scenarioName">{{data.scenarioName}}</td>
+        <td [attr.title]="data.cohortName">{{data.cohortName}}</td>
+        <td [attr.title]="data.poF">{{data.poF}}</td>
+        <td [attr.title]="data.coF">{{data.coF}}</td>
+        <td [attr.title]="data.risk">{{data.risk}}</td>
+        <td [attr.title]="data.band">{{data.band}}</td>
+        <td [attr.title]="data.intervention">{{data.intervention}}</td>
+        <td [attr.title]="data.frequency">{{data.frequency}}</td>
+        <td class="buttonEffect" (click)=onEditRow(data)>
+          <span class="edit">Edit</span>
+        </td>
+        <td class="buttonEffect" (click)="onDeleteRow(data.decisionId)">
+          <span class="delete">Delete</span>
+        </td>
+      </tr>
+      <tr *ngIf="allRiskBasedDecisions.length > 10">
+        <td colspan="10">
+          <p-paginator [rows]="10" [totalRecords]="allRiskBasedDecisions.length" [rowsPerPageOptions]="[10,20,30]"
+          (onPageChange)="onPageChange($event)"></p-paginator>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</main>

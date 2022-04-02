@@ -13,12 +13,7 @@ import { Location } from '@angular/common';
   styleUrls: ['./config-scenarios.component.scss']
 })
 export class ConfigScenariosComponent implements OnInit {
-  public formGroup: FormGroup = new FormGroup({
-    scenario: new FormControl(''),
-    validatedOption: new FormControl(true),
-    restrictToBudget: new FormControl(true),
-    run: new FormControl(true)
-  });
+  public formGroup: FormGroup;
   public severity: string;
   public msg: string;
   public isOnEdit: boolean;
@@ -30,6 +25,7 @@ export class ConfigScenariosComponent implements OnInit {
                private location: Location) { }
 
   ngOnInit() {
+    this.formInit();
     this.isOnEdit = this.sccenariosService.isOnEdit;
     if(this.location.path().includes('add')) {
       this.isOnEdit = false;
@@ -39,8 +35,19 @@ export class ConfigScenariosComponent implements OnInit {
     }
   }
 
+  formInit(): void {
+    this.formGroup = new FormGroup({
+      scenario: new FormControl(''),
+      validatedOption: new FormControl(false),
+      restrictToBudget: new FormControl(false),
+      run: new FormControl(false)
+    })
+  }
+
   addConfig(): void {
     this.isLoading = true;
+    console.log(this.formGroup.value);
+    
     this.sccenariosService.addConfigScenarios(this.formGroup.value).subscribe(
       () => {
         this.severity = Severity.SUCCESS;
@@ -48,6 +55,7 @@ export class ConfigScenariosComponent implements OnInit {
         this.msg = 'Scenarios Form ' + Message.SUCCESS_MSG;
         this.commonService.deleteMsg(this);
         this.formGroup.reset();
+        this.formInit();
       },
       err => { 
         console.log(err);

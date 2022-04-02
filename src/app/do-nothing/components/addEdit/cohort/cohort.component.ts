@@ -12,10 +12,7 @@ import { CommonService } from 'src/app/services/common.service';
   styleUrls: ['./cohort.component.scss']
 })
 export class CohortComponent implements OnInit {
-  public formGroup: FormGroup = new FormGroup({
-    cohorts: new FormControl(''),
-    description: new FormControl('')
-  });
+  public formGroup: FormGroup;
   public severity: string;
   public msg: string;
   public isOnEdit: boolean;
@@ -26,6 +23,7 @@ export class CohortComponent implements OnInit {
                private location: Location) { }
 
   ngOnInit(): void {
+    this.formInit();
     this.isOnEdit = this.cohortService.isOnEdit;
     if(this.location.path().includes('add')) {
       this.isOnEdit = false;
@@ -33,6 +31,13 @@ export class CohortComponent implements OnInit {
     if (this.isOnEdit) {
       this.commonService.updateForm(this.formGroup, this.cohortService.editCohort);
     }
+  }
+
+  formInit(): void {
+    this.formGroup = new FormGroup({
+      cohorts: new FormControl(''),
+      description: new FormControl('')
+    })
   }
 
   addConfig(): void {
@@ -44,6 +49,7 @@ export class CohortComponent implements OnInit {
         this.msg = 'Cohort Form ' +  Message.SUCCESS_MSG;
         this.commonService.deleteMsg(this);
         this.formGroup.reset();
+        this.formInit();
       },
       () => {
         this.isLoading = false;

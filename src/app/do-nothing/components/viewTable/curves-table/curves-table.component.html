@@ -2,47 +2,50 @@
   <p-message severity="{{severity}}" text="{{ msg }}"></p-message>
 </div>
 <app-loading *ngIf="isLoading"></app-loading>
-<table [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
-  <caption>Config - Curves</caption>
-  <thead>
-    <tr>
-      <th>Scenario</th>
-      <th>Cohort</th>
-      <th>Calculation</th>
-      <th>PoF Curve</th>
-      <th>PoF NAV</th>
-      <th>Health Curve</th>
-      <th>Health NAV</th>
-      <th>PoF Constant</th>
-      <th>Health Constant</th>
-      <th colspan="2">
-        <input type="text" placeholder="Search" (input)="filterData($event.target.value)">
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let data of shownAllCurves">
-      <td [attr.title]="data.scenarioName">{{data.scenarioName}}</td>
-      <td [attr.title]="data.cohortName">{{data.cohortName}}</td>
-      <td [attr.title]="data.calculation">{{data.calculation}}</td>
-      <td [attr.title]="data.poFCurve">{{data.poFCurve}}</td>
-      <td [attr.title]="data.poFNav">{{data.poFNav}}</td>
-      <td [attr.title]="data.healthCurve">{{data.healthCurve}}</td>
-      <td [attr.title]="data.healthNav">{{data.healthNav}}</td>
-      <td [attr.title]="data.poFConstant">{{data.poFConstant}}</td>
-      <td [attr.title]="data.healthConstant">{{data.healthConstant}}</td>
-      <td class="buttonEffect" (click)=onEditRow(data)>
-        <span class="edit">Edit</span>
-      </td>
-      <td class="buttonEffect" (click)="onDeleteRow(data.id)">
-        <span class="delete">Delete</span>
-      </td>
-    </tr>
-    <tr *ngIf="allCurves.length > 10">
-      <td colspan="11">
-        <p-paginator [rows]="10" [totalRecords]="allCurves.length" [rowsPerPageOptions]="[10,20,30]"
-        (onPageChange)="onPageChange($event)"></p-paginator>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<main [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
+  <app-control-tables [path]="createPath"></app-control-tables>
+  <table>
+    <!-- <caption>Config - Curves</caption> -->
+    <thead>
+      <tr>
+        <th>Scenario</th>
+        <th>Cohort</th>
+        <th>Calculation</th>
+        <th>PoF Curve</th>
+        <th>PoF NAV</th>
+        <th>Health Curve</th>
+        <th>Health NAV</th>
+        <th>PoF Constant</th>
+        <th>Health Constant</th>
+        <th colspan="2">
+          <input type="text" placeholder="Search" (input)="filterData($event.target.value)">
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of shownAllCurves">
+        <td [attr.title]="data.scenarioName">{{data.scenarioName}}</td>
+        <td [attr.title]="data.cohortName">{{data.cohortName}}</td>
+        <td [attr.title]="data.calculation">{{data.calculation}}</td>
+        <td [attr.title]="data.poFCurve">{{data.poFCurve}}</td>
+        <td [attr.title]="data.poFNav">{{data.poFNav}}</td>
+        <td [attr.title]="data.healthCurve">{{data.healthCurve}}</td>
+        <td [attr.title]="data.healthNav">{{data.healthNav}}</td>
+        <td [attr.title]="data.poFConstant">{{data.poFConstant}}</td>
+        <td [attr.title]="data.healthConstant">{{data.healthConstant}}</td>
+        <td class="buttonEffect" (click)=onEditRow(data)>
+          <span class="edit">Edit</span>
+        </td>
+        <td class="buttonEffect" (click)="onDeleteRow(data.id)">
+          <span class="delete">Delete</span>
+        </td>
+      </tr>
+      <tr *ngIf="allCurves.length > 10">
+        <td colspan="11">
+          <p-paginator [rows]="10" [totalRecords]="allCurves.length" [rowsPerPageOptions]="[10,20,30]"
+          (onPageChange)="onPageChange($event)"></p-paginator>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</main>

@@ -15,16 +15,7 @@ import { ConfigRiskBasedDecisionsService } from 'src/app/do-nothing/services/con
   styleUrls: ['./config-risk-based-decisions.component.scss']
 })
 export class ConfigRiskBasedDecisionsComponent implements OnInit {
-  public formGroup: FormGroup = new FormGroup({
-    scenarioId: new FormControl(0),
-    cohortId: new FormControl(0),
-    poF: new FormControl(0),
-    coF: new FormControl(0),
-    risk: new FormControl(0),
-    band: new FormControl(""),
-    intervention: new FormControl(""),
-    frequency: new FormControl(0),
-  });
+  public formGroup: FormGroup;
   public scenarioData: ConfigData[] = [];
   public cohortData: ConfigData[] = [];
   public severity: string;
@@ -40,6 +31,7 @@ export class ConfigRiskBasedDecisionsComponent implements OnInit {
                private location: Location) { }
 
   ngOnInit(): void {
+    this.formInit();
     this.scenariosService.getConfigScenarios().subscribe(
       (res: ConfigData[]) => {
         this.scenarioData = res;
@@ -61,6 +53,19 @@ export class ConfigRiskBasedDecisionsComponent implements OnInit {
     }
   }
 
+  formInit(): void {
+    this.formGroup = new FormGroup({
+      scenarioId: new FormControl(0),
+      cohortId: new FormControl(0),
+      poF: new FormControl(0),
+      coF: new FormControl(0),
+      risk: new FormControl(0),
+      band: new FormControl(""),
+      intervention: new FormControl(""),
+      frequency: new FormControl(0)
+    })
+  }
+  
   addConfig(): void {
     this.isLoading = true;
     this.riskBasedDecisionService.addConfigRiskBasedDecision(this.formGroup.value).subscribe(
@@ -70,6 +75,7 @@ export class ConfigRiskBasedDecisionsComponent implements OnInit {
         this.msg = 'Config Risk Based Decisions Form ' +  Message.SUCCESS_MSG;
         this.commonService.deleteMsg(this);
         this.formGroup.reset();
+        this.formInit();
       },
       () => {
         this.isLoading = false;

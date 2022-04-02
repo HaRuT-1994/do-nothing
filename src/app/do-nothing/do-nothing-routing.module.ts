@@ -16,6 +16,7 @@ import { ConfigScenariosComponent } from './components/addEdit/config-scenarios/
 import { DoNothingComponent } from './components/addEdit/do-nothing/do-nothing.component';
 import { PofBandsComponent } from './components/addEdit/pof-bands/pof-bands.component';
 import { RiskLevelsComponent } from './components/addEdit/risk-levels/risk-levels.component';
+import { DataModelComponent } from './components/data-model/data-model.component';
 import { BudgetTableComponent } from './components/viewTable/budget-table/budget-table.component';
 import { CohortTableComponent } from './components/viewTable/cohort-table/cohort-table.component';
 import { CurvesTableComponent } from './components/viewTable/curves-table/curves-table.component';
@@ -86,7 +87,9 @@ const routes: Routes = [
   { path: route.view.ratesTable, component: RatesTableComponent },
   { path: route.view.interventionOptionsTable, component: InterventionOptionsTableComponent },
   { path: route.view.riskBasedDecisionTable, component: RiskBasedDecisionTableComponent },
-  { path: route.view.runHistory, component: RunHistoryTableComponent }
+  { path: route.view.runHistory, component: RunHistoryTableComponent },
+
+  { path: route.data_model, component: DataModelComponent }
 ];
 
 @NgModule({

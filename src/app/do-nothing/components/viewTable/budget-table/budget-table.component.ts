@@ -13,6 +13,7 @@ import { CommonService } from 'src/app/services/common.service';
   styleUrls: ['./budget-table.component.scss']
 })
 export class BudgetTableComponent implements OnInit {
+  public createPath = AppConfig.routes.add.configBudget;
   public isLoading: boolean;
   public severity: string;
   public msg: string;
@@ -39,8 +40,10 @@ export class BudgetTableComponent implements OnInit {
    }
 
   onEditRow(data: BudgetModel): void {
-    this.budgetService.onEditRow(data);
-    this.router.navigate([AppConfig.routes.edit.configBudget]);
+    if(confirm('Are you sure in editing this config?')) {
+      this.budgetService.onEditRow(data);
+      this.router.navigate([AppConfig.routes.edit.configBudget]);
+    }
   }
 
   onDeleteRow(id: number): void {

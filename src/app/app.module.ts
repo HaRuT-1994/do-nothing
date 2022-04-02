@@ -8,10 +8,12 @@ import { PanelMenuModule } from 'primeng/panelmenu';
 import { DoNothingModule } from './do-nothing/do-nothing.module';
 
 import { AppComponent } from './app.component';
+import { HomeComponent } from './index/home/home.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,

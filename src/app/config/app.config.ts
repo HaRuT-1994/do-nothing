@@ -1,5 +1,3 @@
-import {InjectionToken} from '@angular/core';
-
 interface AppConfig {
     endPoints: any;
     routes: any;
@@ -82,6 +80,10 @@ export const AppConfig: AppConfig = {
         lookupConfigCohorts : 'Lookup/LookupConfigCohorts'
     },
     routes: {
+        projects: {
+            plans: "Projects/Plans",
+        },
+        data_model: "Data-Model",
         add: {
             doNothing: "add-do-nothing",
             cohort: "add-config-cohort",

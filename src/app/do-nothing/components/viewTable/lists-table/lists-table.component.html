@@ -2,31 +2,34 @@
   <p-message severity="{{severity}}" text="{{ msg }}"></p-message>
 </div>
 <app-loading *ngIf="isLoading"></app-loading>
-<table [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
-  <caption>Config - Lists</caption>
-  <thead>
-    <tr>
-      <th>List Name</th>
-      <th colspan="2">
-        <input type="text" placeholder="Search" (input)="filterData($event.target.value)">
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let data of shownAllListss">
-      <td [attr.title]="data.listName">{{data.listName}}</td>
-      <td class="buttonEffect" (click)=onEditRow(data)>
-        <span class="edit">Edit</span>
-      </td>
-      <td class="buttonEffect" (click)="onDeleteRow(data.listId)">
-        <span class="delete">Delete</span>
-      </td>
-    </tr>
-    <tr *ngIf="allLists.length > 10">
-      <td colspan="3">
-        <p-paginator [rows]="10" [totalRecords]="allLists.length" [rowsPerPageOptions]="[10,20,30]"
-        (onPageChange)="onPageChange($event)"></p-paginator>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<main [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
+  <app-control-tables [path]="createPath"></app-control-tables>
+  <table>
+    <!-- <caption>Config - Lists</caption> -->
+    <thead>
+      <tr>
+        <th>List Name</th>
+        <th colspan="2">
+          <input type="text" placeholder="Search" (input)="filterData($event.target.value)">
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of shownAllListss">
+        <td [attr.title]="data.listName">{{data.listName}}</td>
+        <td class="buttonEffect" (click)=onEditRow(data)>
+          <span class="edit">Edit</span>
+        </td>
+        <td class="buttonEffect" (click)="onDeleteRow(data.listId)">
+          <span class="delete">Delete</span>
+        </td>
+      </tr>
+      <tr *ngIf="allLists.length > 10">
+        <td colspan="3">
+          <p-paginator [rows]="10" [totalRecords]="allLists.length" [rowsPerPageOptions]="[10,20,30]"
+          (onPageChange)="onPageChange($event)"></p-paginator>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</main>

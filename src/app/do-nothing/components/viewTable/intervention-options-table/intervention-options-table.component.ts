@@ -13,6 +13,7 @@ import { CommonService } from 'src/app/services/common.service';
   styleUrls: ['./intervention-options-table.component.scss']
 })
 export class InterventionOptionsTableComponent implements OnInit {
+  public createPath = AppConfig.routes.add.configInterventionOptions;
   public isLoading: boolean;
   public severity: string;
   public msg: string;
@@ -39,8 +40,10 @@ export class InterventionOptionsTableComponent implements OnInit {
    }
 
   onEditRow(data: InterventionOptionsModel): void {
-    this.interventionOptionsService.onEditRow(data);
-    this.router.navigate([AppConfig.routes.edit.configInterventionOptions]);
+    if(confirm('Are you sure in editing this config?')) {
+      this.interventionOptionsService.onEditRow(data);
+      this.router.navigate([AppConfig.routes.edit.configInterventionOptions]);
+    }
   }
 
   onDeleteRow(id: number): void {

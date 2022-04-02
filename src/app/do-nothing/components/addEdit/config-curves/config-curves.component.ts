@@ -16,17 +16,7 @@ import { Location } from '@angular/common';
   styleUrls: ['./config-curves.component.scss']
 })
 export class ConfigCurvesComponent implements OnInit {
- public  formGroup: FormGroup = new FormGroup({
-    scenarioId: new FormControl(0),
-    cohortId: new FormControl(0),
-    calculation: new FormControl(''),
-    poFCurve: new FormControl(0),
-    poFNav: new FormControl(0),
-    healthCurve: new FormControl(0),
-    healthNav: new FormControl(0),
-    pofConstant: new FormControl(0),
-    healthConstant: new FormControl(0),
-  });
+ public  formGroup: FormGroup;
   public isOnEdit: boolean;
   public isLoading: boolean;
   public severity: string;
@@ -39,6 +29,7 @@ export class ConfigCurvesComponent implements OnInit {
     private location: Location) { }
 
   ngOnInit() {
+    this.formInit();
     this.cohortService.getConfigCohort().subscribe(
       (res: ConfigData[]) => {        
         this.cohortData = res;
@@ -61,6 +52,20 @@ export class ConfigCurvesComponent implements OnInit {
     }
   }
 
+  formInit(): void {
+    this.formGroup = new FormGroup({
+      scenarioId: new FormControl(0),
+      cohortId: new FormControl(0),
+      calculation: new FormControl(''),
+      poFCurve: new FormControl(0),
+      poFNav: new FormControl(0),
+      healthCurve: new FormControl(0),
+      healthNav: new FormControl(0),
+      pofConstant: new FormControl(0),
+      healthConstant: new FormControl(0)
+    })
+  }
+
   addConfig(): void {
     this.isLoading = true;
     this.curvesService.addConfigCurves(this.formGroup.value).subscribe(
@@ -69,7 +74,8 @@ export class ConfigCurvesComponent implements OnInit {
         this.severity = Severity.SUCCESS;
         this.msg = 'Curve Form ' +  Message.SUCCESS_MSG;
         this.commonService.deleteMsg(this);
-       this.formGroup.reset();
+        this.formGroup.reset();
+        this.formInit();
       },
       () => {
         this.isLoading = false;

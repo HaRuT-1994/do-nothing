@@ -1,0 +1,56 @@
+@import 'src/assets/styles/main-style from angular';
+@import 'src/assets/styles/variables';
+
+section {
+  width: 500px;
+  margin: auto;
+
+  div {
+    width: 100px;
+
+    button {
+      cursor: pointer;
+      width: 100px;
+      margin: 0;
+      background-color: $button-table-bg;
+
+      &:hover {
+        background-color: $button-table-hover;
+      }
+    }
+  }
+}
+
+.mat-form-field {
+  width: 100px;
+}
+
+.menu-tab{
+  width: 600px;
+  padding: 0;
+  margin: auto;
+  margin-top: 40px;
+  margin-bottom: 40px;
+  border-bottom: 2px solid $border-color;
+
+  span {
+    cursor: pointer;
+    border: 1px solid $border-color;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding: 4px;
+
+    &:hover {
+      background-color: $button-table-hover;
+    }
+  }
+
+  .selected {
+    background-color: $button-table-bg;
+  }
+
+  h2 {
+    margin: -4px;
+  }
+}
+

@@ -2,53 +2,56 @@
   <p-message severity="{{severity}}" text="{{ msg }}"></p-message>
 </div>
 <app-loading *ngIf="isLoading"></app-loading>
-<table [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
-  <caption>Model Configuration</caption>
-  <thead>
-    <tr>
-      <th>Model</th>
-      <th>Base year</th>
-      <th>Years to run</th>
-      <th>Skip these Lifecycles</th>
-      <th>Skip these Unit Classes</th>
-      <th>Data Model Output Templates</th>
-      <th>NR Model Columns</th>
-      <th>Debug Mode</th>
-      <th>Scenario Name</th>
-      <th>Allow Overwrite To Exceed Budget</th>
-      <th>Skip these Asset Sources</th>
-      <th>Condition Range</th>
-      <th colspan="2">
-        <input type="text" placeholder="Search" (input)="filterData($event.target.value)">
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let data of shownAllModels">
-      <td [attr.title]="data.modelName">{{data.modelName}}</td>
-      <td [attr.title]="data.baseYear">{{data.baseYear}}</td>
-      <td [attr.title]="data.yearsToRun">{{data.yearsToRun}}</td>
-      <td [attr.title]="data.skipTheseLifecycle">{{data.skipTheseLifecycle}}</td>
-      <td [attr.title]="data.skipTheseUnitClasses">{{data.skipTheseUnitClasses}}</td>
-      <td [attr.title]="data.dataModelOutputTemplate">{{data.dataModelOutputTemplate}}</td>
-      <td [attr.title]="data.nrModelColumns">{{data.nrModelColumns}}</td>
-      <td [attr.title]="data.debugMode">{{data.debugMode}}</td>
-      <td [attr.title]="data.scenarioName">{{data.scenarioName}}</td>
-      <td [attr.title]="data.allowOverwriteToExceedBudget">{{data.allowOverwriteToExceedBudget}}</td>
-      <td [attr.title]="data.skipTheseAssetSources">{{data.skipTheseAssetSources}}</td>
-      <td [attr.title]="data.conditionRange">{{data.conditionRange}}</td>
-      <td *ngIf="!runDate" class="buttonEffect" (click)="onEditRow(data)">
-        <span class="edit">Edit</span>
-      </td>
-      <td class="buttonEffect" (click)="onDeleteRow(data.id)">
-        <span class="delete">Delete</span>
-      </td>
-    </tr>
-    <tr *ngIf="allModels.length > 10">
-      <td colspan="14">
-        <p-paginator [rows]="10" [totalRecords]="allModels.length" [rowsPerPageOptions]="[10,20,30]"
-        (onPageChange)="onPageChange($event)"></p-paginator>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<main [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
+  <app-control-tables [path]="createPath"></app-control-tables>
+  <table>
+    <!-- <caption>Model Configuration</caption> -->
+    <thead>
+      <tr>
+        <th>Model</th>
+        <th>Base year</th>
+        <th>Years to run</th>
+        <th>Skip these Lifecycles</th>
+        <th>Skip these Unit Classes</th>
+        <th>Data Model Output Templates</th>
+        <th>NR Model Columns</th>
+        <th>Debug Mode</th>
+        <th>Scenario Name</th>
+        <th>Allow Overwrite To Exceed Budget</th>
+        <th>Skip these Asset Sources</th>
+        <th>Condition Range</th>
+        <th colspan="2">
+          <input type="text" placeholder="Search" (input)="filterData($event.target.value)">
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of shownAllModels">
+        <td [attr.title]="data.modelName">{{data.modelName}}</td>
+        <td [attr.title]="data.baseYear">{{data.baseYear}}</td>
+        <td [attr.title]="data.yearsToRun">{{data.yearsToRun}}</td>
+        <td [attr.title]="data.skipTheseLifecycle">{{data.skipTheseLifecycle}}</td>
+        <td [attr.title]="data.skipTheseUnitClasses">{{data.skipTheseUnitClasses}}</td>
+        <td [attr.title]="data.dataModelOutputTemplate">{{data.dataModelOutputTemplate}}</td>
+        <td [attr.title]="data.nrModelColumns">{{data.nrModelColumns}}</td>
+        <td [attr.title]="data.debugMode">{{data.debugMode}}</td>
+        <td [attr.title]="data.scenarioName">{{data.scenarioName}}</td>
+        <td [attr.title]="data.allowOverwriteToExceedBudget">{{data.allowOverwriteToExceedBudget}}</td>
+        <td [attr.title]="data.skipTheseAssetSources">{{data.skipTheseAssetSources}}</td>
+        <td [attr.title]="data.conditionRange">{{data.conditionRange}}</td>
+        <td *ngIf="!runDate" class="buttonEffect" (click)="onEditRow(data)">
+          <span class="edit">Edit</span>
+        </td>
+        <td class="buttonEffect" (click)="onDeleteRow(data.id)">
+          <span class="delete">Delete</span>
+        </td>
+      </tr>
+      <tr *ngIf="allModels.length > 10">
+        <td colspan="14">
+          <p-paginator [rows]="10" [totalRecords]="allModels.length" [rowsPerPageOptions]="[10,20,30]"
+          (onPageChange)="onPageChange($event)"></p-paginator>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</main>

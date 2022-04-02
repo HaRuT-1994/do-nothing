@@ -1,11 +1,11 @@
 table, th, td {
-  border: 1.5px solid rgb(121, 105, 105);
+  border: 0.5px solid $border-color;
   text-align: center;
 }
 
 table {
   margin: auto;
-  margin-top: 25px;
+  margin-top: 15px;
   border-collapse: inherit;
   border-spacing: 0;
 
@@ -26,7 +26,6 @@ table {
 
   th {
     background-color: #dde4e2;
-    text-overflow: nowrap;
   }
 
   td {

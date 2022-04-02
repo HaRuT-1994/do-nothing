@@ -7,6 +7,7 @@ import { MessageModule } from 'primeng/message';
 import { MatSelectModule } from '@angular/material/select';
 import { PaginatorModule } from 'primeng/paginator';
 import { SharedModule } from '../shared/shared.module';
+import { PanelMenuModule } from 'primeng/panelmenu';
 
 import { DoNothingRoutingModule } from './do-nothing-routing.module';
 import { CohortComponent } from './components/addEdit/cohort/cohort.component';
@@ -37,6 +38,8 @@ import { ListsTableComponent } from './components/viewTable/lists-table/lists-ta
 import { RatesTableComponent } from './components/viewTable/rates-table/rates-table.component';
 import { RiskBasedDecisionTableComponent } from './components/viewTable/risk-based-decision-table/risk-based-decision-table.component';
 import { RunHistoryTableComponent } from './components/viewTable/run-history-table/run-history-table.component';
+import { ControlTablesComponent } from './components/controls/control-tables/control-tables.component';
+import { DataModelComponent } from './components/data-model/data-model.component';
 
 @NgModule({
   declarations: [
@@ -66,7 +69,9 @@ import { RunHistoryTableComponent } from './components/viewTable/run-history-tab
     ListsTableComponent,
     RatesTableComponent,
     RiskBasedDecisionTableComponent,
-    RunHistoryTableComponent
+    RunHistoryTableComponent,
+    ControlTablesComponent,
+    DataModelComponent
   ],
   imports: [
     CommonModule,
@@ -77,6 +82,7 @@ import { RunHistoryTableComponent } from './components/viewTable/run-history-tab
     MessageModule,
     MatSelectModule,
     PaginatorModule,
+    PanelMenuModule,
     DoNothingRoutingModule
   ],
   providers: [

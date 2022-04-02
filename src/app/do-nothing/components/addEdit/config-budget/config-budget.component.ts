@@ -14,14 +14,7 @@ import { ConfigScenariosService } from 'src/app/do-nothing/services/config-scena
   styleUrls: ['./config-budget.component.scss']
 })
 export class ConfigBudgetComponent implements OnInit {
-  public formGroup: FormGroup = new FormGroup({
-    scenarioId: new FormControl(0),
-    scenarioName: new FormControl(''),
-    expLimit: new FormControl(0),
-    year: new FormControl(0),
-    budget: new FormControl(0),
-    budgetSource: new FormControl('')
-  });
+  public formGroup: FormGroup;
   public scenarioData: ConfigData[] = [];
   public severity: string;
   public msg: string;
@@ -35,7 +28,7 @@ export class ConfigBudgetComponent implements OnInit {
                private location: Location) { }
 
   ngOnInit(): void {
-
+    this.formInit();
     this.scenariosService.getConfigScenarios().subscribe(
       (res: ConfigData[]) => {
         this.scenarioData = res;
@@ -51,6 +44,17 @@ export class ConfigBudgetComponent implements OnInit {
     }
   }
 
+  formInit(): void {
+    this.formGroup = new FormGroup({
+      scenarioId: new FormControl(0),
+      scenarioName: new FormControl(''),
+      expLimit: new FormControl(0),
+      year: new FormControl(0),
+      budget: new FormControl(0),
+      budgetSource: new FormControl('')
+    })
+  }
+
   addConfig(): void {
     this.isLoading = true;
     this.budgetService.addConfigBudget(this.formGroup.value).subscribe(
@@ -60,6 +64,7 @@ export class ConfigBudgetComponent implements OnInit {
         this.msg = 'Config Budget Form ' +  Message.SUCCESS_MSG;
         this.commonService.deleteMsg(this);
         this.formGroup.reset();
+        this.formInit();
       },
       () => {
         this.isLoading = false;

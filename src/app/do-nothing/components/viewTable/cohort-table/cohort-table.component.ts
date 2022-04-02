@@ -6,7 +6,6 @@ import { Severity } from 'src/app/enums/severity.enum';
 import { Message } from 'src/app/enums/message.enum';
 import { CommonService } from 'src/app/services/common.service';
 import { CohortModel } from 'src/app/do-nothing/models/cohortData.interface';
-import { PrimeNGConfig } from 'primeng/api';
 
 @Component({
   selector: 'app-cohort-table',
@@ -14,6 +13,7 @@ import { PrimeNGConfig } from 'primeng/api';
   styleUrls: ['./cohort-table.component.scss']
 })
 export class CohortTableComponent implements OnInit {
+  public createPath = AppConfig.routes.add.cohort;
   public isLoading: boolean;
   public severity: string;
   public msg: string;
@@ -40,8 +40,10 @@ export class CohortTableComponent implements OnInit {
   }
 
   onEditRow(data: CohortModel): void {
-    this.cohortService.onEditRow(data);
-    this.router.navigate([AppConfig.routes.edit.configCohort]);
+    if(confirm('Are you sure in editing this config?')) {
+      this.cohortService.onEditRow(data);
+      this.router.navigate([AppConfig.routes.edit.configCohort]);
+    }
   }
 
   onDeleteRow(id: number): void {

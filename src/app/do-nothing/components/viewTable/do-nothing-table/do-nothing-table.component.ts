@@ -14,6 +14,7 @@ import { PrimeNGConfig } from 'primeng/api';
   styleUrls: ['./do-nothing-table.component.scss']
 })
 export class DoNothingTableComponent implements OnInit {
+  public createPath = AppConfig.routes.add.doNothing;
   public isLoading: boolean;
   public severity: string;
   public msg: string;
@@ -42,8 +43,10 @@ export class DoNothingTableComponent implements OnInit {
   }
 
   onEditRow(data: ModelConfig): void {
-    this.doNothingService.onEditRow(data);
-    this.router.navigate([AppConfig.routes.edit.doNothing]);
+    if(confirm('Are you sure in editing this config?')) {
+      this.doNothingService.onEditRow(data);
+      this.router.navigate([AppConfig.routes.edit.doNothing]);
+    }
   }
 
   onDeleteRow(id: number): void {

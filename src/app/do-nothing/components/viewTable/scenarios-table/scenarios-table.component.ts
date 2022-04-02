@@ -13,6 +13,7 @@ import { ConfigScenariosService } from 'src/app/do-nothing/services/config-scena
   styleUrls: ['./scenarios-table.component.scss']
 })
 export class ScenariosTableComponent implements OnInit {
+  public createPath = AppConfig.routes.add.configScenarios;
   public isLoading: boolean;
   public severity: string;
   public msg: string;
@@ -39,8 +40,10 @@ export class ScenariosTableComponent implements OnInit {
   }
 
   onEditRow(data: ScenarioModel): void {
-    this.scenarioService.onEditRow(data);
-    this.router.navigate([AppConfig.routes.edit.configScenarios]);
+    if(confirm('Are you sure in editing this config?')) {
+      this.scenarioService.onEditRow(data);
+      this.router.navigate([AppConfig.routes.edit.configScenarios]);
+    }
   }
 
   onDeleteRow(id: number): void {

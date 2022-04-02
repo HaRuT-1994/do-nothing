@@ -2,39 +2,70 @@
   <p-message severity="{{severity}}" text="{{ msg }}"></p-message>
 </div>
 <app-loading *ngIf="isLoading"></app-loading>
-<table [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
-  <caption>Config - Budget</caption>
-  <thead>
-    <tr>
-      <th>Scenario</th>
-      <th>Exp Limit</th>
-      <th>Budget</th>
-      <th>Year</th>
-      <th>BudgetSource</th>
-      <th colspan="2">
-        <input type="text" placeholder="Search" (input)="filterData($event.target.value)">
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let data of shownAllBudgets">
-      <td [attr.title]="data.scenarioName">{{data.scenarioName}}</td>
-      <td [attr.title]="data.expLimit">{{data.expLimit}}</td>
-      <td [attr.title]="data.budget">{{data.budget}}</td>
-      <td [attr.title]="data.year">{{data.year}}</td>
-      <td [attr.title]="data.budgetSource">{{data.budgetSource}}</td>
-      <td class="buttonEffect" (click)=onEditRow(data)>
-        <span class="edit">Edit</span>
-      </td>
-      <td class="buttonEffect" (click)="onDeleteRow(data.budgetId)">
-        <span class="delete">Delete</span>
-      </td>
-    </tr>
-    <tr *ngIf="allBudgets.length > 10">
-      <td colspan="7">
-        <p-paginator [rows]="10" [totalRecords]="allBudgets.length" [rowsPerPageOptions]="[10,20,30]"
-        (onPageChange)="onPageChange($event)"></p-paginator>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<main [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
+  <app-control-tables [path]="createPath"></app-control-tables>
+  <table>
+    <!-- <caption>Config - Budget</caption> -->
+    <thead>
+      <tr>
+        <th>Scenario</th>
+        <th>Budget Source</th>
+        <th>Exceeded Allowance</th>
+        <th>Budget</th>
+        <!-- <th>Year</th> -->
+        <th>2022</th>
+        <th>2023</th>
+        <th>2024</th>
+        <th>2025</th>
+        <th>2026</th>
+        <th>2027</th>
+        <th>2028</th>
+        <th>2029</th>
+        <th>2030</th>
+        <th>2031</th>
+        <th>2032</th>
+        <th>2033</th>
+        <th>2034</th>
+        <th>2035</th>
+        <th colspan="2">
+          <input type="text" placeholder="Search" (input)="filterData($event.target.value)">
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of shownAllBudgets">
+        <td [attr.title]="data.scenarioName">{{data.scenarioName}}</td>
+        <td [attr.title]="data.budgetSource">{{data.budgetSource}}</td>
+        <td [attr.title]="data.expLimit">{{data.expLimit}}</td>
+        <td [attr.title]="data.budget">{{data.budget}}</td>
+        <td>$200</td>
+        <td>$200</td>
+        <td>$200</td>
+        <td>$200</td>
+        <td>$200</td>
+        <td>$200</td>
+        <td>$200</td>
+        <td>$200</td>
+        <td>$200</td>
+        <td>$200</td>
+        <td>$200</td>
+        <td>$200</td>
+        <td>$200</td>
+        <td>$200</td>
+        <!-- <td [attr.title]="data.year">{{data.year}}</td> -->
+        <td class="buttonEffect" (click)=onEditRow(data)>
+          <span class="edit">Edit</span>
+        </td>
+        <td class="buttonEffect" (click)="onDeleteRow(data.budgetId)">
+          <span class="delete">Delete</span>
+        </td>
+      </tr>
+      <tr *ngIf="allBudgets.length > 10">
+        <td colspan="20">
+          <p-paginator [rows]="10" [totalRecords]="allBudgets.length" [rowsPerPageOptions]="[10,20,30]"
+          (onPageChange)="onPageChange($event)"></p-paginator>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</main>

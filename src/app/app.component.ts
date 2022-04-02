@@ -15,6 +15,11 @@ export class AppComponent implements OnInit {
     label: 'Menu',
     items: [
       {
+        label: 'Home',
+        icon: 'pi pi-fw pi-home',
+        routerLink: AppConfig.routes.projects.plans,
+      },
+      {
         label: 'Run Scenarios',
         items: [
           {

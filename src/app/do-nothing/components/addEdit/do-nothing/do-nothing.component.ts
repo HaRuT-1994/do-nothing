@@ -15,23 +15,7 @@ import { ModelConfig } from 'src/app/do-nothing/models/modelConfig.interface';
   styleUrls: ['./do-nothing.component.scss']
 })
 export class DoNothingComponent implements OnInit {
-  public formGroup: FormGroup = new FormGroup({
-    modelName: new FormControl('WTP', Validators.required),
-    baseYear: new FormControl(2021, Validators.required),
-    yearsToRun: new FormControl(20, Validators.required),
-    skipTheseLifecycle: new FormControl(''),
-    skipTheseAssetSources: new FormControl(''),
-    skipTheseUnitClasses: new FormControl(''),
-    scenariosToRun: new FormControl('', Validators.required),
-    conditionRange: new FormControl(''),
-    dataModelOutputTemplate: new FormControl(''),
-    nrModelColumns: new FormControl(0),
-    // unitsAndComponentsSeparated: new FormControl(true),
-    // firstPastPostOption: new FormControl(true),
-    debugMode: new FormControl(true),
-    allowOverwriteToExceedBudget: new FormControl(true),
-    allowSurplusBudgetRollover: new FormControl(true)
-  });
+  public formGroup: FormGroup;
   public severity: string;
   public msg: string;
   public isOnEdit: boolean;
@@ -49,6 +33,7 @@ export class DoNothingComponent implements OnInit {
                private location: Location) { }
 
   ngOnInit() {
+    this.formInit();
     this.isOnEdit = this.doNothingService.isOnEdit;
     if(this.location.path().includes('add')) {
       this.isOnEdit = false;
@@ -79,6 +64,26 @@ export class DoNothingComponent implements OnInit {
     );
   }
 
+  formInit(): void {
+    this.formGroup = new FormGroup({
+      modelName: new FormControl('WTP', Validators.required),
+      baseYear: new FormControl(2021, Validators.required),
+      yearsToRun: new FormControl(20, Validators.required),
+      skipTheseLifecycle: new FormControl(''),
+      skipTheseAssetSources: new FormControl(''),
+      skipTheseUnitClasses: new FormControl(''),
+      scenariosToRun: new FormControl('', Validators.required),
+      conditionRange: new FormControl(''),
+      dataModelOutputTemplate: new FormControl(''),
+      nrModelColumns: new FormControl(0),
+      // unitsAndComponentsSeparated: new FormControl(true),
+      // firstPastPostOption: new FormControl(true),
+      debugMode: new FormControl(true),
+      allowOverwriteToExceedBudget: new FormControl(true),
+      allowSurplusBudgetRollover: new FormControl(true)
+    });
+  }
+
   addConfig(): void {
     if(this.formGroup.valid) {
       this.changeValueToId();
@@ -92,6 +97,7 @@ export class DoNothingComponent implements OnInit {
           this.msg = 'Model Configuration Form ' + Message.SUCCESS_MSG;
           this.commonService.deleteMsg(this);
           this.formGroup.reset();
+          this.formInit();
         },
         err => {
           this.isLoading = false;

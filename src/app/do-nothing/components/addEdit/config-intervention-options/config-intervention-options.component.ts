@@ -15,18 +15,7 @@ import { ConfigInterventionOptionsService } from 'src/app/do-nothing/services/co
   styleUrls: ['./config-intervention-options.component.scss']
 })
 export class ConfigInterventionOptionsComponent implements OnInit {
-  public formGroup: FormGroup = new FormGroup({
-    scenarioId: new FormControl(0),
-    cohortId: new FormControl(0),
-    intervention: new FormControl(''),
-    available: new FormControl(true),
-    reset: new FormControl(''),
-    applyWhenMlc: new FormControl(0),
-    excludeIfCrc: new FormControl(''),
-    forceReplace: new FormControl(true),
-    whenAlc: new FormControl(0),
-    replaceWithCohortId: new FormControl(0),
-  });
+  public formGroup: FormGroup;
   public scenarioData: ConfigData[] = [];
   public cohortData: ConfigData[] = [];
   public severity: string;
@@ -42,6 +31,7 @@ export class ConfigInterventionOptionsComponent implements OnInit {
                private location: Location) { }
 
   ngOnInit(): void {
+    this.formInit();
     this.cohortService.getConfigCohort().subscribe(
       (res: ConfigData[]) => {        
         this.cohortData = res;
@@ -63,6 +53,21 @@ export class ConfigInterventionOptionsComponent implements OnInit {
     }
   }
 
+  formInit(): void {
+    this.formGroup = new FormGroup({
+      scenarioId: new FormControl(0),
+      cohortId: new FormControl(0),
+      intervention: new FormControl(''),
+      available: new FormControl(true),
+      reset: new FormControl(''),
+      applyWhenMlc: new FormControl(0),
+      excludeIfCrc: new FormControl(''),
+      forceReplace: new FormControl(true),
+      whenAlc: new FormControl(0),
+      replaceWithCohortId: new FormControl(0)
+    })
+  }
+
   addConfig(): void {
     this.isLoading = true;
     this.interventionOptionsService.addConfigInterventionOptions(this.formGroup.value).subscribe(
@@ -72,6 +77,7 @@ export class ConfigInterventionOptionsComponent implements OnInit {
         this.msg = 'Config Intervention Options Form ' +  Message.SUCCESS_MSG;
         this.commonService.deleteMsg(this);
         this.formGroup.reset();
+        this.formInit();
       },
       () => {
         this.isLoading = false;

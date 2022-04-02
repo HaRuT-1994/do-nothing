@@ -13,6 +13,7 @@ import { CommonService } from 'src/app/services/common.service';
   styleUrls: ['./rates-table.component.scss']
 })
 export class RatesTableComponent implements OnInit {
+  public createPath = AppConfig.routes.add.configRates;
   public isLoading: boolean;
   public severity: string;
   public msg: string;
@@ -39,8 +40,10 @@ export class RatesTableComponent implements OnInit {
    }
 
   onEditRow(data: RatesModel): void {
-    this.rateService.onEditRow(data);
-    this.router.navigate([AppConfig.routes.edit.configRates]);
+    if(confirm('Are you sure in editing this config?')) {
+      this.rateService.onEditRow(data);
+      this.router.navigate([AppConfig.routes.edit.configRates]);
+    }
   }
 
   onDeleteRow(id: number): void {

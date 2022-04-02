@@ -15,15 +15,7 @@ import { Location } from '@angular/common';
   styleUrls: ['./pof-bands.component.scss']
 })
 export class PofBandsComponent {
-  public formGroup: FormGroup = new FormGroup({
-    scenarioId: new FormControl(0),
-    cohortId: new FormControl(0),
-    _1: new FormControl(0),
-    _2: new FormControl(0),
-    _3: new FormControl(0),
-    _4: new FormControl(0),
-    _5: new FormControl(0)
-  });
+  public formGroup: FormGroup;
   public severity: string;
   public msg: string;
   public isOnEdit: boolean;
@@ -38,6 +30,7 @@ export class PofBandsComponent {
               private location: Location) { }
 
   ngOnInit() {
+    this.formInit();
     this.cohortService.getConfigCohort().subscribe(
       (res: ConfigData[]) => {        
         this.cohortData = res;
@@ -60,6 +53,18 @@ export class PofBandsComponent {
     }
   }
 
+  formInit(): void {
+    this.formGroup = new FormGroup({
+      scenarioId: new FormControl(0),
+      cohortId: new FormControl(0),
+      _1: new FormControl(0),
+      _2: new FormControl(0),
+      _3: new FormControl(0),
+      _4: new FormControl(0),
+      _5: new FormControl(0)
+    });
+  }
+
   addConfig(): void {
     this.isLoading = true;
     this.pofBandsService.addPofBands(this.formGroup.value).subscribe(
@@ -69,6 +74,7 @@ export class PofBandsComponent {
         this.msg = 'PoF Bands Form '+ Message.SUCCESS_MSG;
         this.commonService.deleteMsg(this);
         this.formGroup.reset();
+        this.formInit();
       },
       err => { 
         console.log(err);

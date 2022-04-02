@@ -15,21 +15,7 @@ import { ConfigRatesService } from 'src/app/do-nothing/services/config-rates.ser
   styleUrls: ['./config-rates.component.scss']
 })
 export class ConfigRatesComponent implements OnInit {
-  public formGroup: FormGroup = new FormGroup({
-    scenarioId: new FormControl(0),
-    cohortId: new FormControl(0),
-    intervention: new FormControl(''),
-    geography: new FormControl(''),
-    budgetSource: new FormControl(''),
-    value: new FormControl(0),
-    rateType: new FormControl(''),
-    minimumCost: new FormControl(0),
-    rangeType: new FormControl(''),
-    from1: new FormControl(0),
-    value1: new FormControl(0),
-    from2: new FormControl(0),
-    value2: new FormControl(0),
-  });
+  public formGroup: FormGroup;
   public scenarioData: ConfigData[] = [];
   public cohortData: ConfigData[] = [];
   public severity: string;
@@ -45,6 +31,7 @@ export class ConfigRatesComponent implements OnInit {
                private location: Location) { }
 
   ngOnInit(): void {
+    this.formInit();
     this.cohortService.getConfigCohort().subscribe(
       (res: ConfigData[]) => {        
         this.cohortData = res;
@@ -66,6 +53,24 @@ export class ConfigRatesComponent implements OnInit {
     }
   }
 
+  formInit(): void {
+    this.formGroup = new FormGroup({
+      scenarioId: new FormControl(0),
+      cohortId: new FormControl(0),
+      intervention: new FormControl(''),
+      geography: new FormControl(''),
+      budgetSource: new FormControl(''),
+      value: new FormControl(0),
+      rateType: new FormControl(''),
+      minimumCost: new FormControl(0),
+      rangeType: new FormControl(''),
+      from1: new FormControl(0),
+      value1: new FormControl(0),
+      from2: new FormControl(0),
+      value2: new FormControl(0)
+    })
+  }
+
   addConfig(): void {
     this.isLoading = true;
     this.ratesService.addConfigRates(this.formGroup.value).subscribe(
@@ -75,6 +80,7 @@ export class ConfigRatesComponent implements OnInit {
         this.msg = 'Config Rates Form ' +  Message.SUCCESS_MSG;
         this.commonService.deleteMsg(this);
         this.formGroup.reset();
+        this.formInit();
       },
       () => {
         this.isLoading = false;
