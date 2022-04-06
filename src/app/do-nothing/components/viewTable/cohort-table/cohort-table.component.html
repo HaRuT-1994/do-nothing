@@ -1,6 +1,7 @@
 <div class="messgae">
-  <p-message severity="{{severity}}" text="{{ msg }}"></p-message>
+  <p-message severity="{{msgDetails?.severity}}" text="{{ msgDetails?.msg }}"></p-message>
 </div>
+<p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000"></p-confirmDialog>
 <app-loading *ngIf="isLoading"></app-loading>
 <main [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
   <app-control-tables [path]="createPath"></app-control-tables>

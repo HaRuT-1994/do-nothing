@@ -6,6 +6,8 @@ import { Severity } from 'src/app/enums/severity.enum';
 import { PoFBandsModel } from 'src/app/do-nothing/models/pofBandData.interface';
 import { CommonService } from 'src/app/services/common.service';
 import { PofBandsService } from 'src/app/do-nothing/services/pof-bands.service';
+import { ConfirmationService } from 'primeng/api';
+import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 
 @Component({
   selector: 'app-pof-bands-table',
@@ -15,15 +17,15 @@ import { PofBandsService } from 'src/app/do-nothing/services/pof-bands.service';
 export class PoFBandsTableComponent implements OnInit {
   public createPath = AppConfig.routes.add.pofBands;
   public isLoading: boolean;
-  public severity: string;
-  public msg: string;
+  public msgDetails: MsgDetails;
   public allPoFBands: PoFBandsModel[] = [];
   public sohwnAllPoFBands: PoFBandsModel[] = [];
   private currentPage = {first: 0, rows: 10};
 
   constructor( private pofBandService: PofBandsService,
                private router: Router,
-               private commonService: CommonService) { }
+               private commonService: CommonService,
+               private confirmationService: ConfirmationService) { }
 
   ngOnInit(): void {
     this.isLoading = true
@@ -40,32 +42,39 @@ export class PoFBandsTableComponent implements OnInit {
   }
 
   onEditRow(data: PoFBandsModel): void {
-    if(confirm('Are you sure in editing this config?')) {
-      this.pofBandService.onEditRow(data);
-      this.router.navigate([AppConfig.routes.edit.pofBands]);
-    }
+    this.confirmationService.confirm({
+      message: 'Are you sure in editing this config?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.pofBandService.onEditRow(data);
+        this.router.navigate([AppConfig.routes.edit.pofBands]);
+      }
+    });
   }
 
   onDeleteRow(id: number): void {
-    if(confirm('Are you sure in delating this config?')) {
-      this.isLoading = true;
-      this.pofBandService.deletePoFBand(id).subscribe(
-        () => {
-          this.isLoading = false;
-          this.allPoFBands = this.allPoFBands.filter( (val) => val['id'] !== id);
-          this.onPageChange(this.currentPage);
-          this.severity = Severity.SUCCESS;
-          this.msg = Message.DELETE_SUCCESS_MSG;
-          this.commonService.deleteMsg(this);
-        },
-        () => {
-          this.isLoading = false;
-          this.severity = Severity.ERROR;
-          this.msg = Message.ERROR_MSG;
-          this.commonService.deleteMsg(this);
-        }
-      );
-    }
+    this.confirmationService.confirm({
+      message: 'Are you sure in delating this config?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.isLoading = true;
+        this.pofBandService.deletePoFBand(id).subscribe(
+          () => {
+            this.isLoading = false;
+            this.allPoFBands = this.allPoFBands.filter( (val) => val['id'] !== id);
+            this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
+            this.commonService.deleteMsg(this);
+          },
+          () => {
+            this.isLoading = false;
+            this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
+            this.commonService.deleteMsg(this);
+          }
+        );
+      }
+    });
   }
 
   onPageChange(ev) {

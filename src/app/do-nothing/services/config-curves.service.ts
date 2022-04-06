@@ -4,9 +4,7 @@ import { Observable } from 'rxjs';
 import { AppConfig } from '../../config/app.config';
 import { CurveModel } from '../models/curveData.interface';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ConfigCurvesService {
   public editCurves: CurveModel[] = [];
   public isOnEdit: boolean;

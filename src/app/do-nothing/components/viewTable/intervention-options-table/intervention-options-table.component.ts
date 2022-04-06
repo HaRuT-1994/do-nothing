@@ -6,6 +6,8 @@ import { ConfigInterventionOptionsService } from 'src/app/do-nothing/services/co
 import { Message } from 'src/app/enums/message.enum';
 import { Severity } from 'src/app/enums/severity.enum';
 import { CommonService } from 'src/app/services/common.service';
+import { ConfirmationService } from 'primeng/api';
+import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 
 @Component({
   selector: 'app-intervention-options-table',
@@ -15,15 +17,15 @@ import { CommonService } from 'src/app/services/common.service';
 export class InterventionOptionsTableComponent implements OnInit {
   public createPath = AppConfig.routes.add.configInterventionOptions;
   public isLoading: boolean;
-  public severity: string;
-  public msg: string;
+  public msgDetails: MsgDetails;
   public allInterventionOptions: InterventionOptionsModel[] = [];
   public shownAllInterventionOptions: InterventionOptionsModel[] = [];
   private currentPage = {first: 0, rows: 10};
 
   constructor( private interventionOptionsService: ConfigInterventionOptionsService,
                private router: Router,
-               private commonService: CommonService) { }
+               private commonService: CommonService,
+               private confirmationService: ConfirmationService) { }
 
    ngOnInit(): void {
     this.isLoading = true
@@ -40,32 +42,40 @@ export class InterventionOptionsTableComponent implements OnInit {
    }
 
   onEditRow(data: InterventionOptionsModel): void {
-    if(confirm('Are you sure in editing this config?')) {
-      this.interventionOptionsService.onEditRow(data);
-      this.router.navigate([AppConfig.routes.edit.configInterventionOptions]);
-    }
+    this.confirmationService.confirm({
+      message: 'Are you sure in editing this config?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.interventionOptionsService.onEditRow(data);
+        this.router.navigate([AppConfig.routes.edit.configInterventionOptions]);
+      }
+    });
   }
 
   onDeleteRow(id: number): void {
-    if(confirm('Are you sure in delating this config?')) {
-      this.isLoading = true;
-      this.interventionOptionsService.deleteInterventionOption(id).subscribe(
-        () => {
-          this.isLoading = false;
-          this.allInterventionOptions = this.allInterventionOptions.filter( (val) => val['interventionId'] !== id);
-          this.onPageChange(this.currentPage);
-          this.severity = Severity.SUCCESS;
-          this.msg = Message.DELETE_SUCCESS_MSG;
-          this.commonService.deleteMsg(this);
-        },
-        () => {
-          this.isLoading = false;
-          this.severity = Severity.ERROR;
-          this.msg = Message.ERROR_MSG;
-          this.commonService.deleteMsg(this);
-        }
-      );
-    }
+    this.confirmationService.confirm({
+      message: 'Are you sure in delating this config?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.isLoading = true;
+        this.interventionOptionsService.deleteInterventionOption(id).subscribe(
+          () => {
+            this.isLoading = false;
+            this.allInterventionOptions = this.allInterventionOptions.filter( (val) => val['interventionId'] !== id);
+            this.onPageChange(this.currentPage);
+            this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
+            this.commonService.deleteMsg(this);
+          },
+          () => {
+            this.isLoading = false;
+            this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
+            this.commonService.deleteMsg(this);
+          }
+        );
+      }
+    });
   }
 
   onPageChange(ev): void {

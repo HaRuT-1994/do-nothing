@@ -4,6 +4,7 @@ table, th, td {
 }
 
 table {
+  min-width: 450px;
   margin: auto;
   margin-top: 15px;
   border-collapse: inherit;
@@ -32,7 +33,7 @@ table {
     background-color: azure;
     white-space: nowrap;
     text-overflow: ellipsis;
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 }
 

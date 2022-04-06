@@ -3,5 +3,20 @@
 @import 'src/assets/styles/form-style';
 @import 'src/assets/styles/table-style';
 @import 'src/assets/styles/flex';
-@import 'src/assets/styles/main-style from angular';
 @import 'src/assets/styles/variables';
+
+.mat-form-field-appearance-fill .mat-form-field-flex {
+  padding: 0 0.75em !important;
+}
+
+p-paginator {
+  button {
+    width: 15px !important;
+  }
+}
+
+.messgae {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+}

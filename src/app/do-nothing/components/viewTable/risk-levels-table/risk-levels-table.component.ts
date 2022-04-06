@@ -6,6 +6,8 @@ import { Severity } from 'src/app/enums/severity.enum';
 import { RiskLevelsModel } from 'src/app/do-nothing/models/riskLevelData.interface';
 import { CommonService } from 'src/app/services/common.service';
 import { RiskLevelsService } from 'src/app/do-nothing/services/risk-levels.service';
+import { ConfirmationService } from 'primeng/api';
+import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 
 @Component({
   selector: 'app-risk-levels-table',
@@ -15,15 +17,15 @@ import { RiskLevelsService } from 'src/app/do-nothing/services/risk-levels.servi
 export class RiskLevelsTableComponent implements OnInit {
   public createPath = AppConfig.routes.add.configRiskLevels;
   public isLoading: boolean;
-  public severity: string;
-  public msg: string;
+  public msgDetails: MsgDetails;
   public allRiskLevels: RiskLevelsModel[] = [];
   public shownAllRiskLevels: RiskLevelsModel[] = [];
   private currentPage = {first: 0, rows: 10};
 
   constructor(private riskLvlService: RiskLevelsService,
               private router: Router,
-              private commonService: CommonService) { }
+              private commonService: CommonService,
+              private confirmationService: ConfirmationService) { }
 
   ngOnInit(): void {
     this.isLoading = true
@@ -40,32 +42,40 @@ export class RiskLevelsTableComponent implements OnInit {
   }
 
   onEditRow(data: RiskLevelsModel): void {
-    if(confirm('Are you sure in editing this config?')) {
-      this.riskLvlService.onEditRow(data);
-      this.router.navigate([AppConfig.routes.edit.configRiskLevels]);
-    }
+    this.confirmationService.confirm({
+      message: 'Are you sure in editing this config?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.riskLvlService.onEditRow(data);
+        this.router.navigate([AppConfig.routes.edit.configRiskLevels]);
+      }
+    });
   }
 
   onDeleteRow(id: number): void {
-    if(confirm('Are you sure in delating this config?')) {
-      this.isLoading = true;
-      this.riskLvlService.deleteRiskLevel(id).subscribe(
-        () => {
-          this.isLoading = false;
-          this.allRiskLevels = this.allRiskLevels.filter( (val) => val['id'] !== id);
-          this.onPageChange(this.currentPage);
-          this.severity = Severity.SUCCESS;
-          this.msg = Message.DELETE_SUCCESS_MSG;
-          this.commonService.deleteMsg(this);
-        },
-        () => {
-          this.isLoading = false;
-          this.severity = Severity.ERROR;
-          this.msg = Message.ERROR_MSG;
-          this.commonService.deleteMsg(this);
-        }
-      );
-    }
+    this.confirmationService.confirm({
+      message: 'Are you sure in deleting this config?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.isLoading = true;
+        this.riskLvlService.deleteRiskLevel(id).subscribe(
+          () => {
+            this.isLoading = false;
+            this.allRiskLevels = this.allRiskLevels.filter( (val) => val['id'] !== id);
+            this.onPageChange(this.currentPage);
+            this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
+            this.commonService.deleteMsg(this);
+          },
+          () => {
+            this.isLoading = false;
+            this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
+            this.commonService.deleteMsg(this);
+          }
+        );
+      }
+    });
   }
 
   onPageChange(ev) {

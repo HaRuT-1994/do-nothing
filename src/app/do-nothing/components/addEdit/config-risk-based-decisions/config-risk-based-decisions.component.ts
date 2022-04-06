@@ -8,6 +8,7 @@ import { CohortService } from 'src/app/do-nothing/services/cohort.service';
 import { CommonService } from 'src/app/services/common.service';
 import { ConfigScenariosService } from 'src/app/do-nothing/services/config-scenarios.service';
 import { ConfigRiskBasedDecisionsService } from 'src/app/do-nothing/services/config-RiskBasedDecisions.service';
+import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 
 @Component({
   selector: 'app-config-risk-based-decisions',
@@ -18,8 +19,7 @@ export class ConfigRiskBasedDecisionsComponent implements OnInit {
   public formGroup: FormGroup;
   public scenarioData: ConfigData[] = [];
   public cohortData: ConfigData[] = [];
-  public severity: string;
-  public msg: string;
+  public msgDetails: MsgDetails;
   public isOnEdit: boolean;
   public isLoading: boolean;
   
@@ -71,16 +71,14 @@ export class ConfigRiskBasedDecisionsComponent implements OnInit {
     this.riskBasedDecisionService.addConfigRiskBasedDecision(this.formGroup.value).subscribe(
       () => {
         this.isLoading = false;
-        this.severity = Severity.SUCCESS;
-        this.msg = 'Config Risk Based Decisions Form ' +  Message.SUCCESS_MSG;
+        this.msgDetails = {msg: 'Config Risk Based Decisions Form ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         this.commonService.deleteMsg(this);
         this.formGroup.reset();
         this.formInit();
       },
       () => {
         this.isLoading = false;
-        this.severity = Severity.ERROR;
-        this.msg = Message.ERROR_MSG;
+        this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
         this.commonService.deleteMsg(this);
       }
     );
@@ -91,14 +89,12 @@ export class ConfigRiskBasedDecisionsComponent implements OnInit {
     this.riskBasedDecisionService.onEditRiskBasedDecision(this.formGroup.value).subscribe(
       () => {
         this.isLoading = false;
-        this.severity = Severity.SUCCESS;
-        this.msg = 'Risk Based Decision Form ' +  Message.EDIT_SUCCESS_MSG;
+        this.msgDetails = {msg: 'Risk Based Decision Form ' +  Message.EDIT_SUCCESS_MSG, severity: Severity.SUCCESS};
         this.commonService.deleteMsg(this);
       },
       () => {
         this.isLoading = false;
-        this.severity = Severity.ERROR;
-        this.msg = Message.ERROR_MSG;
+        this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
         this.commonService.deleteMsg(this);
       }
     );

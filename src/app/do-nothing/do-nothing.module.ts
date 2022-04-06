@@ -8,6 +8,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { PaginatorModule } from 'primeng/paginator';
 import { SharedModule } from '../shared/shared.module';
 import { PanelMenuModule } from 'primeng/panelmenu';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import {TableModule} from 'primeng/table';
+import { ConfirmationService } from 'primeng/api';
 
 import { DoNothingRoutingModule } from './do-nothing-routing.module';
 import { CohortComponent } from './components/addEdit/cohort/cohort.component';
@@ -40,6 +43,19 @@ import { RiskBasedDecisionTableComponent } from './components/viewTable/risk-bas
 import { RunHistoryTableComponent } from './components/viewTable/run-history-table/run-history-table.component';
 import { ControlTablesComponent } from './components/controls/control-tables/control-tables.component';
 import { DataModelComponent } from './components/data-model/data-model.component';
+import { CohortService } from './services/cohort.service';
+import { ConfigBudgetService } from './services/config-budget.service';
+import { ConfigCurvesService } from './services/config-curves.service';
+import { ConfigFieldsService } from './services/config-fields.service';
+import { ConfigInterventionOptionsService } from './services/config-InterventionOptions.service';
+import { ConfigListsService } from './services/config-lists.service';
+import { ConfigListValuesService } from './services/config-listValues.service';
+import { ConfigRatesService } from './services/config-rates.service';
+import { ConfigRiskBasedDecisionsService } from './services/config-RiskBasedDecisions.service';
+import { ConfigScenariosService } from './services/config-scenarios.service';
+import { DoNothingService } from './services/do-nothing.service';
+import { RiskLevelsService } from './services/risk-levels.service';
+import { RunHistoryService } from './services/runHistroy.service';
 
 @NgModule({
   declarations: [
@@ -75,18 +91,34 @@ import { DataModelComponent } from './components/data-model/data-model.component
   ],
   imports: [
     CommonModule,
-    SharedModule,
     FormsModule,
+    SharedModule,
     ReactiveFormsModule,
     TabMenuModule,
     MessageModule,
     MatSelectModule,
     PaginatorModule,
     PanelMenuModule,
+    TableModule,
+    ConfirmDialogModule,
     DoNothingRoutingModule
   ],
   providers: [
-    PofBandsService
+    CohortService,
+    PofBandsService,
+    ConfigBudgetService,
+    ConfigCurvesService,
+    ConfigFieldsService,
+    ConfigInterventionOptionsService,
+    ConfigListsService,
+    ConfigListValuesService,
+    ConfigRatesService,
+    ConfigRiskBasedDecisionsService,
+    ConfigScenariosService,
+    DoNothingService,
+    RiskLevelsService,
+    RunHistoryService,
+    ConfirmationService
   ]
 })
 export class DoNothingModule { }

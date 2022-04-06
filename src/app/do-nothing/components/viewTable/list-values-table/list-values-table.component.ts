@@ -6,6 +6,8 @@ import { ConfigListValuesService } from 'src/app/do-nothing/services/config-list
 import { Message } from 'src/app/enums/message.enum';
 import { Severity } from 'src/app/enums/severity.enum';
 import { CommonService } from 'src/app/services/common.service';
+import { ConfirmationService } from 'primeng/api';
+import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 
 @Component({
   selector: 'app-list-values-table',
@@ -15,15 +17,15 @@ import { CommonService } from 'src/app/services/common.service';
 export class ListValuesTableComponent implements OnInit {
   public createPath = AppConfig.routes.add.configListValues;
   public isLoading: boolean;
-  public severity: string;
-  public msg: string;
+  public msgDetails: MsgDetails;
   public allListValues: ListValuesModel[] = [];
   public shownAllListValues: ListValuesModel[] = [];
   private currentPage = {first: 0, rows: 10};
 
   constructor( private listValluesService: ConfigListValuesService,
                private router: Router,
-               private commonService: CommonService) { }
+               private commonService: CommonService,
+               private confirmationService: ConfirmationService) { }
 
    ngOnInit(): void {
     this.isLoading = true
@@ -40,32 +42,40 @@ export class ListValuesTableComponent implements OnInit {
    }
 
   onEditRow(data: ListValuesModel): void {
-    if(confirm('Are you sure in editing this config?')) {
-      this.listValluesService.onEditRow(data);
-      this.router.navigate([AppConfig.routes.edit.configListValues]);
-    }
+    this.confirmationService.confirm({
+      message: 'Are you sure in editing this config?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.listValluesService.onEditRow(data);
+        this.router.navigate([AppConfig.routes.edit.configListValues]);
+      }
+    });
   }
 
   onDeleteRow(id: number): void {
-    if(confirm('Are you sure in delating this config?')) {
-      this.isLoading = true;
-      this.listValluesService.deleteListValues(id).subscribe(
-        () => {
-          this.isLoading = false;
-          this.allListValues = this.allListValues.filter( (val) => val['itemId'] !== id);
-          this.onPageChange(this.currentPage);
-          this.severity = Severity.SUCCESS;
-          this.msg = Message.DELETE_SUCCESS_MSG;
-          this.commonService.deleteMsg(this);
-        },
-        () => {
-          this.isLoading = false;
-          this.severity = Severity.ERROR;
-          this.msg = Message.ERROR_MSG;
-          this.commonService.deleteMsg(this);
-        }
-      );
-    }
+    this.confirmationService.confirm({
+      message: 'Are you sure in deleteing this config?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.isLoading = true;
+        this.listValluesService.deleteListValues(id).subscribe(
+          () => {
+            this.isLoading = false;
+            this.allListValues = this.allListValues.filter( (val) => val['itemId'] !== id);
+            this.onPageChange(this.currentPage);
+            this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
+            this.commonService.deleteMsg(this);
+          },
+          () => {
+            this.isLoading = false;
+            this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
+            this.commonService.deleteMsg(this);
+          }
+        );
+      }
+    });
   }
 
   onPageChange(ev): void {

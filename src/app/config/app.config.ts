@@ -85,7 +85,7 @@ export const AppConfig: AppConfig = {
         },
         data_model: "Data-Model",
         add: {
-            doNothing: "add-do-nothing",
+            doNothing: "add-config-model",
             cohort: "add-config-cohort",
             configScenarios: "add-config-scenarios",
             configFields: "add-config-fields",
@@ -100,7 +100,7 @@ export const AppConfig: AppConfig = {
             configListValues: "add-config-listValues",
         },
         edit: {
-            doNothing: "edit-do-nothing",
+            doNothing: "edit-config-model",
             configCohort: "edit-config-cohort",
             configScenarios: "edit-config-scenarios",
             configFields: "edit-config-fields",
@@ -121,7 +121,7 @@ export const AppConfig: AppConfig = {
             fieldsTable: "fields-table",
             riskLevelsTable: "risk-levels-table",
             pofBandsTable: "pof-bands-table",
-            doNothingTable: "do-nothing-table",
+            doNothingTable: "model-table",
             listsTable: "lists-table",
             listValuesTable: "list-values-table",
             ratesTable: "rates-table",

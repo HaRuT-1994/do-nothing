@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { AppConfig } from '../../config/app.config';
 import { ListsModel } from '../models/listsData.interface';
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class ConfigListsService {
   public editLists: ListsModel[] = [];
   public isOnEdit: boolean;

@@ -1,56 +1,55 @@
+<app-loading *ngIf="isLoading"></app-loading>
 <div class="G-flex">
 <article>
   <h3>BIACMP</h3>
-  <input type="text">
-  <p-panelMenu [model]="items" [style]="{'width':'160px',  'z-index': 1}"></p-panelMenu>
+  <input type="text" #inp>
+  <span class="p-button-icon pi pi-times" (click)="inp.value = ''"></span>
+  <p-panelMenu [model]="items" [style]="{'width':'160px', 'z-index': 1}"></p-panelMenu>
 </article>
 
 <section>
   <h3>Child Assets</h3>
-  <button type="button">NEW ASSET</button> 
-  <button type="button" (click)="goBack()">Go back</button>
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Class</th>
-      <th>Sub Class</th>
-      <th>Sub Sub Class</th>
-      <th>Client Asset Code</th>
-      <th>Action</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>
-        <input type="text">
-      </td>
-      <td>
-        <input type="text">
-      </td>
-      <td>
-        <input type="text">
-      </td>
-      <td>
-        <input type="text">
-      </td>
-      <td>
-        <input type="text">
-      </td>
-    </tr>
-    <tr>
-      <td>Alpha</td>
-      <td>test</td>
-      <td>test</td>
-      <td>145</td>
-      <td>100</td>
-      <td>
-        <span><img src="assets/img/icons8-add-48.png" alt="add"></span>
-        <span><img src="assets/img/icons8-delete-48.png" alt="delete"></span>
-        <span><img src="assets/img/icons8-edit-48.png" alt="edit"></span>
-      </td>
-    </tr>  
-  </tbody>
-</table>
+  <div class="G-flex">
+    <button type="button">NEW ASSET</button> 
+    <button type="button" (click)="goBack()">Go back</button>
+  </div>
+
+<!-- responsiveLayout="scroll" dataKey="id"
+[paginator]="true" [rows]="10" (selectionChange)="onSelectionChange($event)" [totalRecords]="totalRecords" [loading]="loading" [globalFilterFields]="['name', 'country', 'company']" -->
+  <p-table [value]="customers">
+    <ng-template pTemplate="header">
+        <tr>
+            <th pSortableColumn="name">Name<p-sortIcon field="name"></p-sortIcon></th>
+            <th pSortableColumn="country">Country<p-sortIcon field="country"></p-sortIcon></th>
+            <th pSortableColumn="company">Company<p-sortIcon field="company"></p-sortIcon></th>
+            <th>Action</th>
+        </tr>
+        <tr>
+          <th>
+              <p-columnFilter type="text" field="name"></p-columnFilter>
+          </th>
+          <th>
+              <p-columnFilter type="text" field="country"></p-columnFilter>
+          </th>
+          <th>
+              <p-columnFilter type="text" field="company"></p-columnFilter>
+          </th>
+          <th></th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-customer>
+        <tr>
+          <td>{{customer.name}}</td>
+          <td>{{customer.country}}</td>
+          <td>{{customer.company}}</td>
+          <td>
+            <span class="p-button-icon pi pi-plus-circle" (click)="onAddAsset()"></span>
+            <span class="p-button-icon pi pi-trash" (click)="onRemoveAsset()"></span>
+            <span class="p-button-icon pi pi-pencil" (click)="onEditAsset()"></span>
+          </td>
+        </tr>
+    </ng-template>
+  </p-table>
+
 </section>
 </div>

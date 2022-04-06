@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { AppConfig } from '../../config/app.config';
 import { RunHistoryModel } from '../models/runHistoryData.interface';
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class RunHistoryService {
   
   constructor(private http: HttpClient) { }

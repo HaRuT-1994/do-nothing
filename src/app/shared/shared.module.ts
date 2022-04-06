@@ -10,7 +10,7 @@ import { PageNotFoundComponent } from './components/page-not-found.component';
     PageNotFoundComponent
   ],
   imports: [
-    CommonModule,
+    CommonModule
   ],
   exports: [
     LoadingComponent,

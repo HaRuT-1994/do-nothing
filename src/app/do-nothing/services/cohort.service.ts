@@ -1,13 +1,11 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AppConfig } from '../../config/app.config';
 import { CohortModel } from '../models/cohortData.interface';
 import { ConfigData } from '../../models/configData.interface';
+import { Injectable } from '@angular/core';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class CohortService {
   public editCohort: CohortModel[] = [];
   public isOnEdit: boolean;

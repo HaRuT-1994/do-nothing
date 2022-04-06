@@ -9,7 +9,7 @@ export class CommonService {
 
   deleteMsg(context): void {
     setTimeout(() => {
-       context.severity = '';
+       context.msgDetails.severity = '';
     }, 3000)
   }
 

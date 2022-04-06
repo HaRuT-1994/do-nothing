@@ -6,6 +6,8 @@ import { ConfigBudgetService } from 'src/app/do-nothing/services/config-budget.s
 import { Message } from 'src/app/enums/message.enum';
 import { Severity } from 'src/app/enums/severity.enum';
 import { CommonService } from 'src/app/services/common.service';
+import { ConfirmationService } from 'primeng/api';
+import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 
 @Component({
   selector: 'app-budget-table',
@@ -15,15 +17,15 @@ import { CommonService } from 'src/app/services/common.service';
 export class BudgetTableComponent implements OnInit {
   public createPath = AppConfig.routes.add.configBudget;
   public isLoading: boolean;
-  public severity: string;
-  public msg: string;
+  public msgDetails: MsgDetails;
   public allBudgets: BudgetModel[] = [];
   public shownAllBudgets: BudgetModel[] = [];
   private currentPage = {first: 0, rows: 10};
 
   constructor( private budgetService: ConfigBudgetService,
                private router: Router,
-               private commonService: CommonService) { }
+               private commonService: CommonService,
+               private confirmationService: ConfirmationService) { }
 
    ngOnInit(): void {
     this.isLoading = true
@@ -40,32 +42,40 @@ export class BudgetTableComponent implements OnInit {
    }
 
   onEditRow(data: BudgetModel): void {
-    if(confirm('Are you sure in editing this config?')) {
-      this.budgetService.onEditRow(data);
-      this.router.navigate([AppConfig.routes.edit.configBudget]);
-    }
+    this.confirmationService.confirm({
+      message: 'Are you sure in editing this config?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.budgetService.onEditRow(data);
+        this.router.navigate([AppConfig.routes.edit.configBudget]);
+      }
+    });
   }
 
   onDeleteRow(id: number): void {
-    if(confirm('Are you sure in delating this config?')) {
-      this.isLoading = true;
-      this.budgetService.deleteBudget(id).subscribe(
-        () => {
-          this.isLoading = false;
-          this.allBudgets = this.allBudgets.filter( (val) => val['budgetId'] !== id);
-          this.onPageChange(this.currentPage);
-          this.severity = Severity.SUCCESS;
-          this.msg = Message.DELETE_SUCCESS_MSG;
-          this.commonService.deleteMsg(this);
-        },
-        () => {
-          this.isLoading = false;
-          this.severity = Severity.ERROR;
-          this.msg = Message.ERROR_MSG;
-          this.commonService.deleteMsg(this);
-        }
-      );
-    }
+    this.confirmationService.confirm({
+      message: 'Are you sure in deleting this config?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.isLoading = true;
+        this.budgetService.deleteBudget(id).subscribe(
+          () => {
+            this.isLoading = false;
+            this.allBudgets = this.allBudgets.filter( (val) => val['budgetId'] !== id);
+            this.onPageChange(this.currentPage);
+            this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
+            this.commonService.deleteMsg(this);
+          },
+          () => {
+            this.isLoading = false;
+            this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
+            this.commonService.deleteMsg(this);
+          }
+        );
+      }
+    });
   }
 
   onPageChange(ev): void {

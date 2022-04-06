@@ -8,6 +8,7 @@ import { ConfigData } from 'src/app/models/configData.interface';
 import { ConfigScenariosService } from 'src/app/do-nothing/services/config-scenarios.service';
 import { CohortService } from 'src/app/do-nothing/services/cohort.service';
 import { Location } from '@angular/common';
+import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 
 @Component({
   selector: 'app-pof-bands',
@@ -16,8 +17,7 @@ import { Location } from '@angular/common';
 })
 export class PofBandsComponent {
   public formGroup: FormGroup;
-  public severity: string;
-  public msg: string;
+  public msgDetails: MsgDetails;
   public isOnEdit: boolean;
   public isLoading: boolean;
   public cohortData: ConfigData[] = [];
@@ -32,7 +32,7 @@ export class PofBandsComponent {
   ngOnInit() {
     this.formInit();
     this.cohortService.getConfigCohort().subscribe(
-      (res: ConfigData[]) => {        
+      (res: ConfigData[]) => {
         this.cohortData = res;
       }
     )
@@ -70,16 +70,14 @@ export class PofBandsComponent {
     this.pofBandsService.addPofBands(this.formGroup.value).subscribe(
       () => {
         this.isLoading = false;
-        this.severity = Severity.SUCCESS;
-        this.msg = 'PoF Bands Form '+ Message.SUCCESS_MSG;
+        this.msgDetails = {msg: 'PoF Bands Form ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         this.commonService.deleteMsg(this);
         this.formGroup.reset();
         this.formInit();
       },
       err => { 
         console.log(err);
-        this.severity = Severity.ERROR;
-        this.msg = Message.ERROR_MSG;
+        this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
         this.commonService.deleteMsg(this);
         this.isLoading = false;
       }
@@ -91,14 +89,12 @@ export class PofBandsComponent {
     this.pofBandsService.onEditPoFBand(this.formGroup.value).subscribe(
       () => {
         this.isLoading = false;
-        this.severity = Severity.SUCCESS;
-        this.msg = 'PoF Bands Form ' +  Message.EDIT_SUCCESS_MSG;
+        this.msgDetails = {msg: 'PoF Bands Form ' +  Message.EDIT_SUCCESS_MSG, severity: Severity.SUCCESS};
         this.commonService.deleteMsg(this);
       },
       () => {
         this.isLoading = false;
-        this.severity = Severity.ERROR;
-        this.msg = Message.ERROR_MSG;
+        this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
         this.commonService.deleteMsg(this);
       }
     );

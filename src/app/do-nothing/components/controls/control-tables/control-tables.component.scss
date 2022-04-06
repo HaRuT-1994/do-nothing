@@ -1,16 +1,12 @@
-@import 'src/assets/styles/main-style from angular';
 @import 'src/assets/styles/variables';
 
 section {
-  width: 500px;
+  width: $control-table-width;
   margin: auto;
 
   div {
-    width: 100px;
-
     button {
-      cursor: pointer;
-      width: 100px;
+      width: 130px;
       margin: 0;
       background-color: $button-table-bg;
 
@@ -22,11 +18,11 @@ section {
 }
 
 .mat-form-field {
-  width: 100px;
+  width: 130px;
 }
 
 .menu-tab{
-  width: 600px;
+  width: $control-table-width;
   padding: 0;
   margin: auto;
   margin-top: 40px;

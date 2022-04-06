@@ -6,6 +6,8 @@ import { Severity } from 'src/app/enums/severity.enum';
 import { Message } from 'src/app/enums/message.enum';
 import { CommonService } from 'src/app/services/common.service';
 import { CohortModel } from 'src/app/do-nothing/models/cohortData.interface';
+import {ConfirmationService} from 'primeng/api';
+import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 
 @Component({
   selector: 'app-cohort-table',
@@ -15,15 +17,15 @@ import { CohortModel } from 'src/app/do-nothing/models/cohortData.interface';
 export class CohortTableComponent implements OnInit {
   public createPath = AppConfig.routes.add.cohort;
   public isLoading: boolean;
-  public severity: string;
-  public msg: string;
+  public msgDetails: MsgDetails;
   public allCohorts: CohortModel[] = [];
   public shownAllCohorts: CohortModel[] = [];
   private currentPage = {first: 0, rows: 10};
 
   constructor( private cohortService: CohortService,
                private router: Router,
-               private commonService: CommonService) { }
+               private commonService: CommonService,
+               private confirmationService: ConfirmationService) { }
 
   ngOnInit(): void {
     this.isLoading = true
@@ -40,32 +42,40 @@ export class CohortTableComponent implements OnInit {
   }
 
   onEditRow(data: CohortModel): void {
-    if(confirm('Are you sure in editing this config?')) {
-      this.cohortService.onEditRow(data);
-      this.router.navigate([AppConfig.routes.edit.configCohort]);
-    }
+    this.confirmationService.confirm({
+      message: 'Are you sure in editing this config?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.cohortService.onEditRow(data);
+        this.router.navigate([AppConfig.routes.edit.configCohort]);
+      }
+    });
   }
 
   onDeleteRow(id: number): void {
-    if(confirm('Are you sure in delating this config?')) {
-      this.isLoading = true;
-      this.cohortService.deleteCohort(id).subscribe(
-        () => {
-          this.isLoading = false;
-          this.allCohorts = this.allCohorts.filter( (val) => val['cohortId'] !== id);
-          this.onPageChange(this.currentPage);
-          this.severity = Severity.SUCCESS;
-          this.msg = Message.DELETE_SUCCESS_MSG;
-          this.commonService.deleteMsg(this);
-        },
-        () => {
-          this.isLoading = false;
-          this.severity = Severity.ERROR;
-          this.msg = Message.ERROR_MSG;
-          this.commonService.deleteMsg(this);
-        }
-      );
-    }
+    this.confirmationService.confirm({
+      message: 'Are you sure in deleting this config?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.isLoading = true;
+        this.cohortService.deleteCohort(id).subscribe(
+          () => {
+            this.isLoading = false;
+            this.allCohorts = this.allCohorts.filter( (val) => val['cohortId'] !== id);
+            this.onPageChange(this.currentPage);
+            this.msgDetails = {msg: Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
+            this.commonService.deleteMsg(this);
+          },
+          () => {
+            this.isLoading = false;
+            this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
+            this.commonService.deleteMsg(this);
+          }
+        );
+      }
+    });
   }
 
   onPageChange(ev): void {

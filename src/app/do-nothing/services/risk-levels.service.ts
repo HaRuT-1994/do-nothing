@@ -4,9 +4,7 @@ import { Observable } from 'rxjs';
 import { AppConfig } from '../../config/app.config';
 import { RiskLevelsModel } from '../models/riskLevelData.interface';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class RiskLevelsService {
   public editRiskLvl: RiskLevelsModel[] = [];
   public isOnEdit: boolean;

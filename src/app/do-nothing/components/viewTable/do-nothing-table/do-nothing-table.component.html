@@ -1,9 +1,21 @@
 <div class="messgae">
-  <p-message severity="{{severity}}" text="{{ msg }}"></p-message>
+  <p-message severity="{{ msgDetails?.severity }}" text="{{ msgDetails?.msg }}"></p-message>
 </div>
+<p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000"></p-confirmDialog>
 <app-loading *ngIf="isLoading"></app-loading>
 <main [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
   <app-control-tables [path]="createPath"></app-control-tables>
+  <div class="G-flex-center-center model">
+    <h2>Model</h2>
+    <div class="G-flex-center-between">
+      <mat-form-field appearance="fill" class="dropdown">
+        <mat-label>Select Model</mat-label>
+        <mat-select>
+          <mat-option>1</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
   <table>
     <!-- <caption>Model Configuration</caption> -->
     <thead>
@@ -23,10 +35,11 @@
         <th colspan="2">
           <input type="text" placeholder="Search" (input)="filterData($event.target.value)">
         </th>
+        <th>Run</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let data of shownAllModels">
+      <tr *ngFor="let data of shownAllModels; index as i">
         <td [attr.title]="data.modelName">{{data.modelName}}</td>
         <td [attr.title]="data.baseYear">{{data.baseYear}}</td>
         <td [attr.title]="data.yearsToRun">{{data.yearsToRun}}</td>
@@ -44,6 +57,10 @@
         </td>
         <td class="buttonEffect" (click)="onDeleteRow(data.id)">
           <span class="delete">Delete</span>
+        </td>
+        <td>
+          <input class="checkbox" type="checkbox" (change)="onChecked(data)">
+          <!-- [checked]="data.run" -->
         </td>
       </tr>
       <tr *ngIf="allModels.length > 10">

@@ -6,6 +6,7 @@ import { Message } from 'src/app/enums/message.enum';
 import { CommonService } from 'src/app/services/common.service';
 import { ConfigData } from 'src/app/models/configData.interface';
 import { Location } from '@angular/common';
+import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 
 @Component({
   selector: 'app-config-scenarios',
@@ -14,8 +15,7 @@ import { Location } from '@angular/common';
 })
 export class ConfigScenariosComponent implements OnInit {
   public formGroup: FormGroup;
-  public severity: string;
-  public msg: string;
+  public msgDetails: MsgDetails;
   public isOnEdit: boolean;
   public isLoading: boolean;
   public scenarioData: ConfigData[] = [];
@@ -50,17 +50,15 @@ export class ConfigScenariosComponent implements OnInit {
     
     this.sccenariosService.addConfigScenarios(this.formGroup.value).subscribe(
       () => {
-        this.severity = Severity.SUCCESS;
         this.isLoading = false;
-        this.msg = 'Scenarios Form ' + Message.SUCCESS_MSG;
+        this.msgDetails = {msg: 'Scenarios Form ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         this.commonService.deleteMsg(this);
         this.formGroup.reset();
         this.formInit();
       },
       err => { 
         console.log(err);
-        this.severity = Severity.ERROR;
-        this.msg = Message.ERROR_MSG;
+        this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
         this.commonService.deleteMsg(this);
         this.isLoading = false;
       }
@@ -72,14 +70,12 @@ export class ConfigScenariosComponent implements OnInit {
     this.sccenariosService.onEditScenario(this.formGroup.value).subscribe(
       () => {
         this.isLoading = false;
-        this.severity = Severity.SUCCESS;
-        this.msg = 'Scenario Form ' +  Message.EDIT_SUCCESS_MSG;
+        this.msgDetails = {msg: 'Scenario Form ' +  Message.EDIT_SUCCESS_MSG, severity: Severity.SUCCESS};
         this.commonService.deleteMsg(this);
       },
       () => {
         this.isLoading = false;
-        this.severity = Severity.ERROR;
-        this.msg = Message.ERROR_MSG;
+        this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
         this.commonService.deleteMsg(this);
       }
     );

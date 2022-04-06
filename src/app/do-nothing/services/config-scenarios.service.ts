@@ -5,9 +5,7 @@ import { AppConfig } from '../../config/app.config';
 import { ConfigData } from '../../models/configData.interface';
 import { ScenarioModel } from '../models/scenarioData.interface';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ConfigScenariosService {
   public editScenario: ScenarioModel[] = [];
   public isOnEdit: boolean;

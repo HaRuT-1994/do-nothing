@@ -5,6 +5,7 @@ import { Message } from 'src/app/enums/message.enum';
 import { ConfigFieldsService } from 'src/app/do-nothing/services/config-fields.service';
 import { CommonService } from 'src/app/services/common.service';
 import { Location } from '@angular/common';
+import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 
 @Component({
   selector: 'app-config-fields',
@@ -13,8 +14,7 @@ import { Location } from '@angular/common';
 })
 export class ConfigFieldsComponent implements OnInit {
   public formGroup: FormGroup;
-  public severity: string;
-  public msg: string;
+  public msgDetails: MsgDetails;
   public isOnEdit: boolean;
   public isLoading: boolean;
 
@@ -47,9 +47,8 @@ formInit(): void {
     this.isLoading = true;
     this.fieldsService.addConfigFields(this.formGroup.value).subscribe(
       () => {
-        this.severity = Severity.SUCCESS;
         this.isLoading = false;
-        this.msg = 'Fields Form ' + Message.SUCCESS_MSG;
+        this.msgDetails = {msg: 'Fields Form ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         this.commonService.deleteMsg(this);
         this.formGroup.reset();
         this.formInit();
@@ -57,8 +56,7 @@ formInit(): void {
       err => { 
         console.log(err);
         this.isLoading = false;
-        this.severity = Severity.ERROR;
-        this.msg = Message.ERROR_MSG;
+        this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
         this.commonService.deleteMsg(this);
       }
     );
@@ -69,14 +67,12 @@ formInit(): void {
     this.fieldsService.onEditField(this.formGroup.value).subscribe(
       () => {
         this.isLoading = false;
-        this.severity = Severity.SUCCESS;
-        this.msg = 'Fields Form ' +  Message.EDIT_SUCCESS_MSG;
+        this.msgDetails = {msg: 'Fields Form ' +  Message.EDIT_SUCCESS_MSG, severity: Severity.SUCCESS};
         this.commonService.deleteMsg(this);
       },
       () => {
         this.isLoading = false;
-        this.severity = Severity.ERROR;
-        this.msg = Message.ERROR_MSG;
+        this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
         this.commonService.deleteMsg(this);
       }
     );

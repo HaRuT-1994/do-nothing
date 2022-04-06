@@ -1,11 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppConfig } from 'src/app/config/app.config';
+import {ConfirmationService} from 'primeng/api';
 
 @Component({
   selector: 'app-control-tables',
   templateUrl: './control-tables.component.html',
-  styleUrls: ['./control-tables.component.scss']
+  styleUrls: ['./control-tables.component.scss'],
+  providers: [ConfirmationService]
 })
 export class ControlTablesComponent implements OnInit {
   @Input() path: string;
@@ -26,15 +28,19 @@ export class ControlTablesComponent implements OnInit {
     { label: 'Run History', routerLink: AppConfig.routes.view.runHistory }
   ]
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private confirmationService: ConfirmationService) { }
 
   ngOnInit(): void {
   }
 
-
-  onAddConfig() {
-    if(confirm('Are you sure about adding config?')){
-      this.router.navigate([this.path]);
-    }
+  onAddConfig(): void {
+    this.confirmationService.confirm({
+        message: 'Are you sure about adding config?',
+        header: 'Confirmation',
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
+            this.router.navigate([this.path]);
+        }
+    });
   }
 }

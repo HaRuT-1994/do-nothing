@@ -2,12 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AppConfig } from '../../config/app.config';
-import { ConfigData } from '../../models/configData.interface';
 import { FieldModel } from '../models/fieldData.interface';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ConfigFieldsService {
   editFields: FieldModel[] = [];
   isOnEdit: boolean;

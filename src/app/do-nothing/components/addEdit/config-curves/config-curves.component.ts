@@ -9,6 +9,7 @@ import { ConfigData } from 'src/app/models/configData.interface';
 import { ConfigScenariosService } from 'src/app/do-nothing/services/config-scenarios.service';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
+import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 
 @Component({
   selector: 'app-config-curves',
@@ -19,8 +20,7 @@ export class ConfigCurvesComponent implements OnInit {
  public  formGroup: FormGroup;
   public isOnEdit: boolean;
   public isLoading: boolean;
-  public severity: string;
-  public msg: string;
+  public msgDetails: MsgDetails;
   public cohortData: ConfigData[] = [];
   public scenarioData: ConfigData[] = [];
 
@@ -71,16 +71,14 @@ export class ConfigCurvesComponent implements OnInit {
     this.curvesService.addConfigCurves(this.formGroup.value).subscribe(
       () => {
         this.isLoading = false;
-        this.severity = Severity.SUCCESS;
-        this.msg = 'Curve Form ' +  Message.SUCCESS_MSG;
+        this.msgDetails = {msg: 'Curve Form ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         this.commonService.deleteMsg(this);
         this.formGroup.reset();
         this.formInit();
       },
       () => {
         this.isLoading = false;
-        this.severity = Severity.ERROR;
-        this.msg = Message.ERROR_MSG;
+        this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR}
         this.commonService.deleteMsg(this);
       }
     );
@@ -91,14 +89,12 @@ export class ConfigCurvesComponent implements OnInit {
     this.curvesService.onEditCurve(this.formGroup.value).subscribe(
       () => {
         this.isLoading = false;
-        this.severity = Severity.SUCCESS;
-        this.msg = 'Curves Form ' +  Message.EDIT_SUCCESS_MSG;
+        this.msgDetails = {msg: 'Curves Form ' +  Message.EDIT_SUCCESS_MSG, severity: Severity.SUCCESS};
         this.commonService.deleteMsg(this);
       },
       () => {
         this.isLoading = false;
-        this.severity = Severity.ERROR;
-        this.msg = Message.ERROR_MSG;
+        this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR}
         this.commonService.deleteMsg(this);
       }
     );

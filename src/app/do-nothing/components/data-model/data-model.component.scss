@@ -12,6 +12,8 @@ table {
   td {
     span {
       margin: 0 2px;
+      cursor: pointer;
+
       img {
         width: 20px;
       }
@@ -27,5 +29,38 @@ section {
     width: 140px;
     background-color: rgba(27, 105, 223, 0.658);
     color: white;
+    
+    &:hover {
+      background-color: rgb(3, 141, 233);
+      cursor: pointer;
+    }
   }
+
+  
+}
+
+span {
+  margin: 0 8px;
+  padding: 5px;
+  border-radius: 12px;
+  background-color: #699cea;
+
+  &:hover {
+    background-color: rgb(3, 141, 233);
+    cursor: pointer;
+  }
+}
+
+.pi-trash, .pi-times {
+  background-color: #e7241594;
+
+  &:hover {
+    background-color: rgb(255, 72, 0);
+    cursor: pointer;
+  }
+}
+
+.pi-times {
+  margin: 1px;
+  padding: 1px;
 }

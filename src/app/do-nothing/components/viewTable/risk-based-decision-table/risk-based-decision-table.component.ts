@@ -6,6 +6,8 @@ import { ConfigRiskBasedDecisionsService } from 'src/app/do-nothing/services/con
 import { Message } from 'src/app/enums/message.enum';
 import { Severity } from 'src/app/enums/severity.enum';
 import { CommonService } from 'src/app/services/common.service';
+import { ConfirmationService } from 'primeng/api';
+import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 
 @Component({
   selector: 'app-risk-based-decision-table',
@@ -15,15 +17,15 @@ import { CommonService } from 'src/app/services/common.service';
 export class RiskBasedDecisionTableComponent implements OnInit {
   public createPath = AppConfig.routes.add.configRiskBasedDecision;
   public isLoading: boolean;
-  public severity: string;
-  public msg: string;
+  public msgDetails: MsgDetails;
   public allRiskBasedDecisions: RiskBasedDecisionModel[] = [];
   public shownAllRiskBasedDecisions: RiskBasedDecisionModel[] = [];
   private currentPage = {first: 0, rows: 10};
 
   constructor( private riskBasedDecisionService: ConfigRiskBasedDecisionsService,
                private router: Router,
-               private commonService: CommonService) { }
+               private commonService: CommonService,
+               private confirmationService: ConfirmationService) { }
 
    ngOnInit(): void {
      this.isLoading = true
@@ -40,32 +42,40 @@ export class RiskBasedDecisionTableComponent implements OnInit {
    }
 
   onEditRow(data: RiskBasedDecisionModel): void {
-    if(confirm('Are you sure in editing this config?')) {
-      this.riskBasedDecisionService.onEditRow(data);
-      this.router.navigate([AppConfig.routes.edit.configRiskBasedDecision]);
-    }
+    this.confirmationService.confirm({
+      message: 'Are you sure in editing this config?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.riskBasedDecisionService.onEditRow(data);
+        this.router.navigate([AppConfig.routes.edit.configRiskBasedDecision]);
+      }
+    });
   }
 
   onDeleteRow(id: number): void {
-    if(confirm('Are you sure in delating this config?')) {
-      this.isLoading = true;
-      this.riskBasedDecisionService.deleteRiskBasedDecision(id).subscribe(
-        () => {
-          this.isLoading = false;
-          this.allRiskBasedDecisions = this.allRiskBasedDecisions.filter( (val) => val['decisionId'] !== id);
-          this.onPageChange(this.currentPage);
-          this.severity = Severity.SUCCESS;
-          this.msg = Message.DELETE_SUCCESS_MSG;
-          this.commonService.deleteMsg(this);
-        },
-        () => {
-          this.isLoading = false;
-          this.severity = Severity.ERROR;
-          this.msg = Message.ERROR_MSG;
-          this.commonService.deleteMsg(this);
-        }
-      );
-    }
+    this.confirmationService.confirm({
+      message: 'Are you sure in deleting this config?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.isLoading = true;
+        this.riskBasedDecisionService.deleteRiskBasedDecision(id).subscribe(
+          () => {
+            this.isLoading = false;
+            this.allRiskBasedDecisions = this.allRiskBasedDecisions.filter( (val) => val['decisionId'] !== id);
+            this.onPageChange(this.currentPage);
+            this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
+            this.commonService.deleteMsg(this);
+          },
+          () => {
+            this.isLoading = false;
+            this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
+            this.commonService.deleteMsg(this);
+          }
+        );
+      }
+    });
   }
 
   onPageChange(ev): void {

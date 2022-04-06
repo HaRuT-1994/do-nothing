@@ -1,6 +1,7 @@
 <div class="messgae">
-  <p-message severity="{{severity}}" text="{{ msg }}"></p-message>
+  <p-message severity="{{ msgDetails?.severity }}" text="{{ msgDetails?.msg }}"></p-message>
 </div>
+<p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000"></p-confirmDialog>
 <app-loading *ngIf="isLoading"></app-loading>
 <main [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
   <app-control-tables [path]="createPath"></app-control-tables>
@@ -11,12 +12,9 @@
         <th>Scenario Name</th>
         <th>Validated Option</th>
         <th>Restrict To Budget</th>
-        <th>Edit</th>
-        <th>Delete</th>
-        <th>Run</th>
-        <!-- <th colspan="2">
+        <th colspan="2">
           <input type="text" placeholder="Search" (input)="filterData($event.target.value)">
-        </th> -->
+        </th>
       </tr>
     </thead>
     <tbody>
@@ -29,9 +27,6 @@
         </td>
         <td class="buttonEffect" (click)="onDeleteRow(data.scenarioId)">
           <span class="delete">Delete</span>
-        </td>
-        <td [attr.title]="data.run">
-          <input class="checkbox" type="checkbox" disabled [checked]="data.run">
         </td>
       </tr>
       <tr *ngIf="allScenarios.length > 10">

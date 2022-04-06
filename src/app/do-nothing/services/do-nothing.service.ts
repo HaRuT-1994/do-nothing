@@ -4,9 +4,7 @@ import { Observable } from 'rxjs';
 import { AppConfig } from '../../config/app.config';
 import { ModelConfig } from '../models/modelConfig.interface';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class DoNothingService {
   public editModel: ModelConfig[] = [];
   public isOnEdit: boolean;

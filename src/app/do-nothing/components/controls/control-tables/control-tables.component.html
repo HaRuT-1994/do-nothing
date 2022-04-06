@@ -1,6 +1,8 @@
+<div class="menu-tab" style="border-style:none">
+  <span routerLink="/Projects/Plans">Back to Projects</span>
+</div>
 <div class="G-flex-center-between menu-tab">
   <div>
-    <span routerLink="/Projects/Plans">Projects/Plans</span>
     <span class="selected">Scenario</span>
     <span routerLink="/Data-Model">Data Models</span>
   </div>
@@ -8,7 +10,7 @@
     <h2>Sample Project Name</h2>
   </div>
 </div>
-<section class="G-flex-center-around">
+<section class="G-flex-center-between">
   <div>
     <button (click)="onAddConfig()">New</button>
   </div>
@@ -19,7 +21,6 @@
     <button>Run</button>
   </div>
   <div class="G-flex-center-between">
-    <!-- <label>Scenarios to Run</label> -->
     <mat-form-field appearance="fill" class="dropdown">
       <mat-label>Config</mat-label>
       <mat-select>
@@ -28,3 +29,4 @@
     </mat-form-field>
   </div>
 </section>
+<p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000"></p-confirmDialog>

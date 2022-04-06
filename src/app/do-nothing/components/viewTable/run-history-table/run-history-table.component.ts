@@ -10,8 +10,6 @@ import { RunHistoryService } from 'src/app/do-nothing/services/runHistroy.servic
 })
 export class RunHistoryTableComponent implements OnInit {
   public isLoading: boolean;
-  public severity: string;
-  public msg: string;
   public allRunHistory: RunHistoryModel[] = [];
   public shownAllRunHistory: RunHistoryModel[] = [];
   private currentPage = {first: 0, rows: 10};

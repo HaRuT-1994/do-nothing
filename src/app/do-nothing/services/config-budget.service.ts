@@ -4,9 +4,7 @@ import { Observable } from 'rxjs';
 import { AppConfig } from '../../config/app.config';
 import { BudgetModel } from '../models/budgetData.interface';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ConfigBudgetService {
   public editBudget: BudgetModel[] = [];
   public isOnEdit: boolean;

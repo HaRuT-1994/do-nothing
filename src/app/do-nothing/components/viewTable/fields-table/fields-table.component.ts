@@ -6,6 +6,8 @@ import { Severity } from 'src/app/enums/severity.enum';
 import { FieldModel } from 'src/app/do-nothing/models/fieldData.interface';
 import { CommonService } from 'src/app/services/common.service';
 import { ConfigFieldsService } from 'src/app/do-nothing/services/config-fields.service';
+import { ConfirmationService } from 'primeng/api';
+import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 
 @Component({
   selector: 'app-fields-table',
@@ -15,15 +17,15 @@ import { ConfigFieldsService } from 'src/app/do-nothing/services/config-fields.s
 export class FieldsTableComponent implements OnInit {
   public createPath = AppConfig.routes.add.configFields;
   public isLoading: boolean;
-  public severity: string;
-  public msg: string;
+  public msgDetails: MsgDetails;
   public allFields: FieldModel[] = [];
   public shownAllFields: FieldModel[] = [];
   private currentPage = {first: 0, rows: 10};
 
   constructor( private fieldService: ConfigFieldsService,
                private router: Router,
-               private commonService: CommonService) {}
+               private commonService: CommonService,
+               private confirmationService: ConfirmationService) {}
 
   ngOnInit(): void {
     this.isLoading = true
@@ -40,32 +42,40 @@ export class FieldsTableComponent implements OnInit {
   }
 
   onEditRow(data: FieldModel): void {
-    if(confirm('Are you sure in editing this config?')) {
-      this.fieldService.onEditRow(data);
-      this.router.navigate([AppConfig.routes.edit.configFields]);
-    }
+    this.confirmationService.confirm({
+      message: 'Are you sure in editing this config?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.fieldService.onEditRow(data);
+        this.router.navigate([AppConfig.routes.edit.configFields]);
+      }
+    });
   }
 
   onDeleteRow(id: number): void {
-    if(confirm('Are you sure in delating this config?')) {
-      this.isLoading = true;
-      this.fieldService.deleteField(id).subscribe(
-        () => {
-          this.isLoading = false;
-          this.allFields = this.allFields.filter( (val) => val['id'] !== id);
-          this.onPageChange(this.currentPage);
-          this.severity = Severity.SUCCESS;
-          this.msg = Message.DELETE_SUCCESS_MSG;
-          this.commonService.deleteMsg(this);
-        },
-        () => {
-          this.isLoading = false;
-          this.severity = Severity.ERROR;
-          this.msg = Message.ERROR_MSG;
-          this.commonService.deleteMsg(this);
-        }
-      );
-    }
+    this.confirmationService.confirm({
+      message: 'Are you sure in deleting this config?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.isLoading = true;
+        this.fieldService.deleteField(id).subscribe(
+          () => {
+            this.isLoading = false;
+            this.allFields = this.allFields.filter( (val) => val['id'] !== id);
+            this.onPageChange(this.currentPage);
+            this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
+            this.commonService.deleteMsg(this);
+          },
+          () => {
+            this.isLoading = false;
+            this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
+            this.commonService.deleteMsg(this);
+          }
+        );
+      }
+    });
   }
 
   onPageChange(ev) {

@@ -4,9 +4,7 @@ import { Observable } from 'rxjs';
 import { AppConfig } from '../../config/app.config';
 import { InterventionOptionsModel } from '../models/interventionOptionsData.interface';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ConfigInterventionOptionsService {
   public editInterventionOptions: InterventionOptionsModel[] = [];
   public isOnEdit: boolean;

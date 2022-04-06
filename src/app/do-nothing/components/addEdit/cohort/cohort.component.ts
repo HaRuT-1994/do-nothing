@@ -5,6 +5,7 @@ import { CohortService } from 'src/app/do-nothing/services/cohort.service';
 import { Severity } from 'src/app/enums/severity.enum';
 import { Message } from 'src/app/enums/message.enum';
 import { CommonService } from 'src/app/services/common.service';
+import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 
 @Component({
   selector: 'app-cohort',
@@ -13,8 +14,7 @@ import { CommonService } from 'src/app/services/common.service';
 })
 export class CohortComponent implements OnInit {
   public formGroup: FormGroup;
-  public severity: string;
-  public msg: string;
+  public msgDetails: MsgDetails;
   public isOnEdit: boolean;
   public isLoading: boolean;
   
@@ -45,16 +45,14 @@ export class CohortComponent implements OnInit {
     this.cohortService.addCohort(this.formGroup.value).subscribe(
       () => {
         this.isLoading = false;
-        this.severity = Severity.SUCCESS;
-        this.msg = 'Cohort Form ' +  Message.SUCCESS_MSG;
+        this.msgDetails = {msg: 'Cohort Form ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         this.commonService.deleteMsg(this);
         this.formGroup.reset();
         this.formInit();
       },
       () => {
         this.isLoading = false;
-        this.severity = Severity.ERROR;
-        this.msg = Message.ERROR_MSG;
+        this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
         this.commonService.deleteMsg(this);
       }
     );
@@ -65,14 +63,12 @@ export class CohortComponent implements OnInit {
     this.cohortService.onEditCohort(this.formGroup.value).subscribe(
       () => {
         this.isLoading = false;
-        this.severity = Severity.SUCCESS;
-        this.msg = 'Cohort Form ' +  Message.EDIT_SUCCESS_MSG;
+        this.msgDetails = {msg: 'Cohort Form ' +  Message.EDIT_SUCCESS_MSG, severity: Severity.SUCCESS};
         this.commonService.deleteMsg(this);
       },
       () => {
         this.isLoading = false;
-        this.severity = Severity.ERROR;
-        this.msg = Message.ERROR_MSG;
+        this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
         this.commonService.deleteMsg(this);
       }
     );

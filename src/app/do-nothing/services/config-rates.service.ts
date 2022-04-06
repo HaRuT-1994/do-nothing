@@ -4,9 +4,7 @@ import { Observable } from 'rxjs';
 import { AppConfig } from '../../config/app.config';
 import { RatesModel } from '../models/ratesData.interface';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ConfigRatesService {
   public editRates: RatesModel[] = [];
   public isOnEdit: boolean;

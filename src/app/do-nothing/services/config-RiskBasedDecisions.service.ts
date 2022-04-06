@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { AppConfig } from '../../config/app.config';
 import { RiskBasedDecisionModel } from '../models/riskBasedDecisionData.interface';
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class ConfigRiskBasedDecisionsService {
   public editRiskBasedDecision: RiskBasedDecisionModel[] = [];
   public isOnEdit: boolean;

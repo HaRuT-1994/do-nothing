@@ -6,6 +6,8 @@ import { Severity } from 'src/app/enums/severity.enum';
 import { ScenarioModel } from 'src/app/do-nothing/models/scenarioData.interface';
 import { CommonService } from 'src/app/services/common.service';
 import { ConfigScenariosService } from 'src/app/do-nothing/services/config-scenarios.service';
+import { ConfirmationService } from 'primeng/api';
+import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 
 @Component({
   selector: 'app-scenarios-table',
@@ -15,15 +17,15 @@ import { ConfigScenariosService } from 'src/app/do-nothing/services/config-scena
 export class ScenariosTableComponent implements OnInit {
   public createPath = AppConfig.routes.add.configScenarios;
   public isLoading: boolean;
-  public severity: string;
-  public msg: string;
+  public msgDetails: MsgDetails;
   public allScenarios: ScenarioModel[] = [];
   public shownAllScenarios: ScenarioModel[] = [];
   private currentPage = {first: 0, rows: 10};
 
   constructor( private scenarioService: ConfigScenariosService,
                private router: Router,
-               private commonService: CommonService) { }
+               private commonService: CommonService,
+               private confirmationService: ConfirmationService) { }
 
   ngOnInit(): void {
     this.isLoading = true
@@ -40,32 +42,40 @@ export class ScenariosTableComponent implements OnInit {
   }
 
   onEditRow(data: ScenarioModel): void {
-    if(confirm('Are you sure in editing this config?')) {
-      this.scenarioService.onEditRow(data);
-      this.router.navigate([AppConfig.routes.edit.configScenarios]);
-    }
+    this.confirmationService.confirm({
+      message: 'Are you sure in editing this config?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.scenarioService.onEditRow(data);
+        this.router.navigate([AppConfig.routes.edit.configScenarios]);
+      }
+    });
   }
 
   onDeleteRow(id: number): void {
-    if(confirm('Are you sure in delating this config?')) {
-      this.isLoading = true;
-      this.scenarioService.deleteScenario(id).subscribe(
-        () => {
-          this.isLoading = false;
-          this.allScenarios = this.allScenarios.filter( (val) => val['scenarioId'] !== id);
-          this.onPageChange(this.currentPage);
-          this.severity = Severity.SUCCESS;
-          this.msg = Message.DELETE_SUCCESS_MSG;
-          this.commonService.deleteMsg(this);
-        },
-        () => {
-          this.isLoading = false;
-          this.severity = Severity.ERROR;
-          this.msg = Message.ERROR_MSG;
-          this.commonService.deleteMsg(this); 
-        }
-      );
-    }
+    this.confirmationService.confirm({
+      message: 'Are you sure in deleting this config?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.isLoading = true;
+        this.scenarioService.deleteScenario(id).subscribe(
+          () => {
+            this.isLoading = false;
+            this.allScenarios = this.allScenarios.filter( (val) => val['scenarioId'] !== id);
+            this.onPageChange(this.currentPage);
+            this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
+            this.commonService.deleteMsg(this);
+          },
+          () => {
+            this.isLoading = false;
+            this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
+            this.commonService.deleteMsg(this); 
+          }
+        );
+      }
+    });
   }
 
   onPageChange(ev): void {

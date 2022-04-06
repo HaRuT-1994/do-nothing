@@ -8,6 +8,7 @@ import { ConfigData } from 'src/app/models/configData.interface';
 import { ConfigScenariosService } from 'src/app/do-nothing/services/config-scenarios.service';
 import { Location } from '@angular/common';
 import { ModelConfig } from 'src/app/do-nothing/models/modelConfig.interface';
+import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 
 @Component({
   selector: 'app-do-nothing',
@@ -16,8 +17,7 @@ import { ModelConfig } from 'src/app/do-nothing/models/modelConfig.interface';
 })
 export class DoNothingComponent implements OnInit {
   public formGroup: FormGroup;
-  public severity: string;
-  public msg: string;
+  public msgDetails: MsgDetails;
   public isOnEdit: boolean;
   public isLoading: boolean;
   public skipTheseLifecycles: ConfigData[] = [];
@@ -93,8 +93,7 @@ export class DoNothingComponent implements OnInit {
       this.doNothingService.addDoNothing(this.formGroup.value).subscribe(
         () => {
           this.isLoading = false;
-          this.severity = Severity.SUCCESS;
-          this.msg = 'Model Configuration Form ' + Message.SUCCESS_MSG;
+          this.msgDetails = {msg: 'Model Configuration Form ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
           this.commonService.deleteMsg(this);
           this.formGroup.reset();
           this.formInit();
@@ -102,8 +101,7 @@ export class DoNothingComponent implements OnInit {
         err => {
           this.isLoading = false;
           console.log(err);
-          this.severity = Severity.ERROR;
-          this.msg = Message.ERROR_MSG;
+          this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
           this.commonService.deleteMsg(this);
         }
       );
@@ -119,14 +117,12 @@ export class DoNothingComponent implements OnInit {
       this.doNothingService.onEditModelConfig(this.formGroup.value).subscribe(
         () => {
           this.isLoading = false;
-          this.severity = Severity.SUCCESS;
-          this.msg = 'Model Configurarion Form ' + Message.EDIT_SUCCESS_MSG;
+          this.msgDetails = {msg: 'Model Configurarion Form ' +  Message.EDIT_SUCCESS_MSG, severity: Severity.SUCCESS};
           this.commonService.deleteMsg(this);
         },
         () => {
           this.isLoading = false;
-          this.severity = Severity.ERROR;
-          this.msg = Message.ERROR_MSG;
+          this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
           this.commonService.deleteMsg(this);
         }
       );
