@@ -7,7 +7,6 @@ import { RatesModel } from '../models/ratesData.interface';
 @Injectable()
 export class ConfigRatesService {
   public editRates: RatesModel[] = [];
-  public isOnEdit: boolean;
   
   constructor(private http: HttpClient) { }
 
@@ -30,6 +29,5 @@ export class ConfigRatesService {
 
   onEditRow(data): void {
     this.editRates = data;
-    this.isOnEdit = true;    
   }
 }

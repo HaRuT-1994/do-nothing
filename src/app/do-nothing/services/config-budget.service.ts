@@ -7,8 +7,7 @@ import { BudgetModel } from '../models/budgetData.interface';
 @Injectable()
 export class ConfigBudgetService {
   public editBudget: BudgetModel[] = [];
-  public isOnEdit: boolean;
-  
+
   constructor(private http: HttpClient) { }
 
   addConfigBudget(data: any): Observable<BudgetModel[]> {
@@ -16,7 +15,7 @@ export class ConfigBudgetService {
   }
 
   getAllBudgets(): Observable<BudgetModel[]> {
-    return this.http.get<BudgetModel[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.getAllBudgets}`);
+    return this.http.get<BudgetModel[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.budgetDetails}`);
   }
   
   deleteBudget(id: number): Observable<any> {
@@ -30,6 +29,5 @@ export class ConfigBudgetService {
 
   onEditRow(data): void {
     this.editBudget = data;
-    this.isOnEdit = true;    
   }
 }

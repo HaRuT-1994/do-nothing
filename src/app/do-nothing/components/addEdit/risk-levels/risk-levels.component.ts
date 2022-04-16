@@ -4,8 +4,8 @@ import { RiskLevelsService } from 'src/app/do-nothing/services/risk-levels.servi
 import { Severity } from 'src/app/enums/severity.enum';
 import { Message } from 'src/app/enums/message.enum';
 import { CommonService } from 'src/app/services/common.service';
-import { Location } from '@angular/common';
 import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
+import { DynamicDialogConfig } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-risk-levels',
@@ -20,14 +20,12 @@ export class RiskLevelsComponent implements OnInit {
 
   constructor( private riskLvlService: RiskLevelsService,
                private commonService: CommonService,
-               private location: Location) { }
+               private dialogConfig: DynamicDialogConfig) { }
 
   ngOnInit(): void {
     this.formInit();
-    this.isOnEdit = this.riskLvlService.isOnEdit;
-    if(this.location.path().includes('add')) {
-      this.isOnEdit = false;
-    }
+    this.isOnEdit = !this.dialogConfig.data?.add;
+
     if (this.isOnEdit) {
       this.commonService.updateForm(this.formGroup, this.riskLvlService.editRiskLvl);
     }
@@ -75,10 +73,5 @@ export class RiskLevelsComponent implements OnInit {
         this.commonService.deleteMsg(this);
       }
     );
-  }
-
-  goBack(): void {
-    this.location.back();
-    this.isOnEdit = false;
   }
 }

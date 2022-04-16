@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Location } from '@angular/common';
 import { CohortService } from 'src/app/do-nothing/services/cohort.service';
 import { Severity } from 'src/app/enums/severity.enum';
 import { Message } from 'src/app/enums/message.enum';
 import { CommonService } from 'src/app/services/common.service';
 import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
+import { DynamicDialogConfig } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-cohort',
@@ -20,14 +20,12 @@ export class CohortComponent implements OnInit {
   
   constructor( private cohortService: CohortService,
                private commonService: CommonService,
-               private location: Location) { }
+               private dialogConfig: DynamicDialogConfig) { }
 
   ngOnInit(): void {
     this.formInit();
-    this.isOnEdit = this.cohortService.isOnEdit;
-    if(this.location.path().includes('add')) {
-      this.isOnEdit = false;
-    }
+    this.isOnEdit = !this.dialogConfig.data?.add;
+    
     if (this.isOnEdit) {
       this.commonService.updateForm(this.formGroup, this.cohortService.editCohort);
     }
@@ -72,10 +70,5 @@ export class CohortComponent implements OnInit {
         this.commonService.deleteMsg(this);
       }
     );
-  }
-
-  goBack(): void {
-    this.location.back();
-    this.isOnEdit = false;
   }
 }

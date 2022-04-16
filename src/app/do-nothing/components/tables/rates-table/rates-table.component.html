@@ -1,0 +1,63 @@
+<div class="messgae">
+  <p-message severity="{{ msgDetails?.severity }}" text="{{ msgDetails?.msg }}"></p-message>
+</div>
+<p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000"></p-confirmDialog>
+<app-loading *ngIf="isLoading"></app-loading>
+<main>
+  <app-control-tables [path]="createPath"></app-control-tables>
+  <table [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
+    <!-- <caption>Config - Rates</caption> -->
+    <thead>
+      <tr>
+        <th>Scenario</th>
+        <th>Cohort</th>
+        <th>Intervention</th>
+        <th>Geography</th>
+        <th>Budget Source</th>
+        <th>Value</th>
+        <th>Rate Type</th>
+        <th>Minimum Cost</th>
+        <th>Range Type</th>
+        <th>From1</th>
+        <th>Value1</th>
+        <th>From2</th>
+        <th>Value2</th>
+        <th colspan="3">
+          <input type="text" placeholder="Search" (input)="filterData($event.target.value)">
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of shownAllRates">
+        <td [attr.title]="data.scenario.value">{{data.scenario.value}}</td>
+        <td [attr.title]="data.cohort.value">{{data.cohort.value}}</td>
+        <td [attr.title]="data.intervention">{{data.intervention}}</td>
+        <td [attr.title]="data.geography">{{data.geography}}</td>
+        <td [attr.title]="data.budgetSource">{{data.budgetSource}}</td>
+        <td [attr.title]="data.value">{{data.value}}</td>
+        <td [attr.title]="data.rateType">{{data.rateType}}</td>
+        <td [attr.title]="data.minimumCost">{{data.minimumCost}}</td>
+        <td [attr.title]="data.rangeType">{{data.rangeType}}</td>
+        <td [attr.title]="data.from1">{{data.from1}}</td>
+        <td [attr.title]="data.value1">{{data.value1}}</td>
+        <td [attr.title]="data.from2">{{data.from2}}</td>
+        <td [attr.title]="data.value2">{{data.value2}}</td>
+        <td class="buttonEffect" (click)=onEditRow(data)>
+          <span class="edit">Edit</span>
+        </td>
+        <td class="buttonEffect" (click)="onDeleteRow(data.ratesId)">
+          <span class="delete">Delete</span>
+        </td>
+        <td>
+          <input class="checkbox" type="checkbox" (change)="onChecked(data)">
+        </td>
+      </tr>
+      <tr *ngIf="allRates.length > 10">
+        <td colspan="15">
+          <p-paginator [rows]="10" [totalRecords]="allRates.length" [rowsPerPageOptions]="[10,20,30]"
+          (onPageChange)="onPageChange($event)"></p-paginator>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</main>

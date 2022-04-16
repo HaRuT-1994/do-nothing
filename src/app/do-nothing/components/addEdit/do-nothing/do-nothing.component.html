@@ -4,7 +4,7 @@
 <app-loading *ngIf="isLoading"></app-loading>
 <main [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
   <h1>Model Configuration</h1>
-  <form action="" [formGroup]="formGroup">
+  <form [formGroup]="formGroup">
     <div class="G-flex-justify-around">
       <div class="G-column gap">
         <div class="G-flex-center-between">
@@ -21,48 +21,48 @@
         </div>
         <div class="G-flex-center-between">
           <label>Skip these Lifecycles</label>
-          <mat-form-field appearance="fill" class="dropdown">
+          <!-- <mat-form-field appearance="fill" class="dropdown">
             <mat-label>Lifecycles</mat-label>
             <mat-select formControlName="skipTheseLifecycle" multiple>
               <mat-option *ngFor="let lifecycle of skipTheseLifecycles" [value]="lifecycle.value">{{lifecycle.value}}</mat-option>
+              <mat-option>{{skipTheseLifecycles[1]?.value }}</mat-option>
             </mat-select>
-          </mat-form-field>
+          </mat-form-field> -->
+          <p-multiSelect [showHeader]=false  [options]="skipTheseLifecycles"  defaultLabel="Lifecycles" formControlName="skipTheseLifecycle" optionLabel="value" optionValue="id" ></p-multiSelect>
         </div>
         <div class="G-flex-center-between">
           <label>Skip these Asset Sources</label>
-          <mat-form-field appearance="fill" class="dropdown">
+          <!-- <mat-form-field appearance="fill" class="dropdown">
             <mat-label>Asset Sources</mat-label>
             <mat-select formControlName="skipTheseAssetSources" multiple>
               <mat-option *ngFor="let assetSource of skipTheseAssetSources" [value]="assetSource.value">{{assetSource.value}}</mat-option>
             </mat-select>
-          </mat-form-field>
+          </mat-form-field> -->
+          <p-multiSelect [showHeader]=false [options]="skipTheseAssetSources" defaultLabel="Asset Sources" optionLabel="value" optionValue="id" formControlName="skipTheseAssetSources"></p-multiSelect>
         </div>
         <div class="G-flex-center-between">
           <label>Skip these Unit Classes</label>
-          <mat-form-field appearance="fill" class="dropdown">
+          <!-- <mat-form-field appearance="fill" class="dropdown">
             <mat-label>Unit Classes</mat-label>
             <mat-select formControlName="skipTheseUnitClasses" multiple>
               <mat-option *ngFor="let unitClass of skipTheseUnitClasses" [value]="unitClass.value">{{unitClass.value}}</mat-option>
             </mat-select>
-          </mat-form-field>
+          </mat-form-field> -->
+          <p-multiSelect [showHeader]=false [options]="skipTheseUnitClasses" defaultLabel="Unit Classes" optionLabel="value" optionValue="id" formControlName="skipTheseUnitClasses"></p-multiSelect>
         </div>
         <div class="G-flex-center-between">
           <label>Scenarios to Run</label>
-          <mat-form-field appearance="fill" class="dropdown">
+          <!-- <mat-form-field appearance="fill" class="dropdown">
             <mat-label>Run</mat-label>
             <mat-select formControlName="scenariosToRun" multiple>
               <mat-option *ngFor="let scenario of scenariosToRun" [value]="scenario.value">{{ scenario.value }}</mat-option>
             </mat-select>
-          </mat-form-field>
+          </mat-form-field> -->
+          <p-multiSelect [showHeader]=false [options]="scenariosToRun" defaultLabel="Scenarios to Run" optionLabel="value" optionValue="id" formControlName="scenariosToRun"></p-multiSelect>
         </div>
         <div class="G-flex-center-between">
           <label>Condition Range</label>
-          <mat-form-field appearance="fill" class="dropdown">
-            <mat-label>Range</mat-label>
-            <mat-select formControlName="conditionRange">
-              <mat-option *ngFor="let range of conditionRange" [value]="range">{{ range }}</mat-option>
-            </mat-select>
-          </mat-form-field>
+          <p-dropdown [options]="conditionRange" formControlName="conditionRange" editable="true"></p-dropdown>
         </div>
         <div class="G-flex-center-between">
           <label for="dataModelOutputTemplate">Data Model Output Templates</label>
@@ -100,6 +100,5 @@
     
     <button type="submit" *ngIf="!isOnEdit" (click)="addConfig()">Submit</button>
     <button type="submit" *ngIf="isOnEdit" (click)="editConfig()">Submit</button>
-    <button type="button" (click)="goBack()">Go back</button>
   </form>
 </main>

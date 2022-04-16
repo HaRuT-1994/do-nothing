@@ -1,12 +1,15 @@
 @import 'src/assets/styles/variables';
 
+.control {
+  max-width: 90vw;
+  margin: auto;
+}
 section {
-  width: $control-table-width;
   margin: auto;
 
   div {
     button {
-      width: 130px;
+      width: 120px;
       margin: 0;
       background-color: $button-table-bg;
 
@@ -17,12 +20,7 @@ section {
   }
 }
 
-.mat-form-field {
-  width: 130px;
-}
-
 .menu-tab{
-  width: $control-table-width;
   padding: 0;
   margin: auto;
   margin-top: 40px;

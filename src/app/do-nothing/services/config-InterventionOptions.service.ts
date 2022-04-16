@@ -7,7 +7,6 @@ import { InterventionOptionsModel } from '../models/interventionOptionsData.inte
 @Injectable()
 export class ConfigInterventionOptionsService {
   public editInterventionOptions: InterventionOptionsModel[] = [];
-  public isOnEdit: boolean;
   
   constructor(private http: HttpClient) { }
 
@@ -30,6 +29,5 @@ export class ConfigInterventionOptionsService {
 
   onEditRow(data): void {
     this.editInterventionOptions = data;
-    this.isOnEdit = true;    
   }
 }

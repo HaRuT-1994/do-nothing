@@ -7,8 +7,8 @@ import { CommonService } from 'src/app/services/common.service';
 import { ConfigData } from 'src/app/models/configData.interface';
 import { ConfigScenariosService } from 'src/app/do-nothing/services/config-scenarios.service';
 import { CohortService } from 'src/app/do-nothing/services/cohort.service';
-import { Location } from '@angular/common';
 import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
+import { DynamicDialogConfig } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-pof-bands',
@@ -27,7 +27,7 @@ export class PofBandsComponent {
               private commonService: CommonService,
               private cohortService: CohortService,
               private configScenariosService: ConfigScenariosService,
-              private location: Location) { }
+              private dialogConfig: DynamicDialogConfig) { }
 
   ngOnInit() {
     this.formInit();
@@ -36,17 +36,11 @@ export class PofBandsComponent {
         this.cohortData = res;
       }
     )
-
     this.configScenariosService.getConfigScenarios().subscribe(
-      (res: ConfigData[]) => {
-        this.scenarioData = res;
-      }
-    )
+      (res: ConfigData[]) => this.scenarioData = res
+    );
+    this.isOnEdit = !this.dialogConfig.data?.add;
 
-    this.isOnEdit = this.pofBandsService.isOnEdit;
-    if(this.location.path().includes('add')) {
-      this.isOnEdit = false;
-    }
     if (this.isOnEdit) {
       
       this.commonService.updateForm(this.formGroup, this.pofBandsService.editPofBand);
@@ -55,8 +49,8 @@ export class PofBandsComponent {
 
   formInit(): void {
     this.formGroup = new FormGroup({
-      scenarioId: new FormControl(0),
-      cohortId: new FormControl(0),
+      scenario: new FormControl(0),
+      cohort: new FormControl(0),
       _1: new FormControl(0),
       _2: new FormControl(0),
       _3: new FormControl(0),
@@ -67,6 +61,7 @@ export class PofBandsComponent {
 
   addConfig(): void {
     this.isLoading = true;
+    this.changeToObj();
     this.pofBandsService.addPofBands(this.formGroup.value).subscribe(
       () => {
         this.isLoading = false;
@@ -100,8 +95,17 @@ export class PofBandsComponent {
     );
   }
 
-  goBack(): void {
-    this.location.back();
-    this.isOnEdit = false;
+  // private arrToString(data: string[]) {
+  //   data.forEach(i => this.formGroup.value[i] = this.formGroup.value[i].toString());
+  // }
+
+  private changeToObj() {
+    let scenario = this.scenarioData.filter(item => item.id === this.formGroup.get('scenario').value);
+    let cohort = this.cohortData.filter(item => item.id === this.formGroup.get('cohort').value);
+
+    this.formGroup.patchValue({
+      scenario: scenario[0],
+      cohort: cohort[0]
+    })
   }
 }

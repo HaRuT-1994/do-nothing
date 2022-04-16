@@ -7,7 +7,6 @@ import { RiskBasedDecisionModel } from '../models/riskBasedDecisionData.interfac
 @Injectable()
 export class ConfigRiskBasedDecisionsService {
   public editRiskBasedDecision: RiskBasedDecisionModel[] = [];
-  public isOnEdit: boolean;
   
   constructor(private http: HttpClient) { }
 
@@ -30,6 +29,5 @@ export class ConfigRiskBasedDecisionsService {
 
   onEditRow(data): void {
     this.editRiskBasedDecision = data;
-    this.isOnEdit = true;    
   }
 }

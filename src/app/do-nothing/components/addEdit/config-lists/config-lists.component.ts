@@ -1,6 +1,6 @@
-import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { ConfigListsService } from 'src/app/do-nothing/services/config-lists.service';
 import { Message } from 'src/app/enums/message.enum';
@@ -19,16 +19,14 @@ export class ConfigListsComponent implements OnInit {
   public isLoading: boolean;
   
   constructor( 
-               private listService: ConfigListsService,
-               private commonService: CommonService,
-               private location: Location) { }
+              private listService: ConfigListsService,
+              private commonService: CommonService,
+              private dialogConfig: DynamicDialogConfig) { }
 
   ngOnInit(): void {
     this.formInit();
-    this.isOnEdit = this.listService.isOnEdit;
-    if(this.location.path().includes('add')) {
-      this.isOnEdit = false;
-    }
+    this.isOnEdit = !this.dialogConfig.data?.add;
+    
     if (this.isOnEdit) {
       this.commonService.updateForm(this.formGroup, this.listService.editLists);
     }
@@ -72,10 +70,5 @@ export class ConfigListsComponent implements OnInit {
         this.commonService.deleteMsg(this);
       }
     );
-  }
-
-  goBack(): void {
-    this.location.back();
-    this.isOnEdit = false;
   }
 }

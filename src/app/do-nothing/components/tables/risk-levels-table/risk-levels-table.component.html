@@ -1,0 +1,45 @@
+<div class="messgae">
+  <p-message severity="{{ msgDetails?.severity }}" text="{{ msgDetails?.msg }}"></p-message>
+</div>
+<p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000"></p-confirmDialog>
+<app-loading *ngIf="isLoading"></app-loading>
+<main>
+  <app-control-tables [path]="createPath"></app-control-tables>
+  <table [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
+    <!-- <caption>Config - Risk Levels</caption> -->
+    <thead>
+      <tr>
+        <th>POF</th>
+        <th>COF</th>
+        <th>Risk Score</th>
+        <th>Risk Rating</th>
+        <th colspan="3">
+          <input type="text" placeholder="Search" (input)="filterData($event.target.value)">
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of shownAllRiskLevels">
+        <td [attr.title]="data.pof">{{data.pof}}</td>
+        <td [attr.title]="data.cof">{{data.cof}}</td>
+        <td [attr.title]="data.riskScore">{{data.riskScore}}</td>
+        <td [attr.title]="data.riskRating">{{data.riskRating}}</td>
+        <td class="buttonEffect" (click)=onEditRow(data)>
+          <span class="edit">Edit</span>
+        </td>
+        <td class="buttonEffect" (click)="onDeleteRow(data.id)">
+          <span class="delete">Delete</span>
+        </td>
+        <td>
+          <input class="checkbox" type="checkbox" (change)="onChecked(data)">
+        </td>
+      </tr>
+      <tr *ngIf="allRiskLevels.length > 10">
+        <td colspan="7">
+          <p-paginator [rows]="10" [totalRecords]="allRiskLevels.length" [rowsPerPageOptions]="[10,20,30]"
+          (onPageChange)="onPageChange($event)"></p-paginator>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</main> 

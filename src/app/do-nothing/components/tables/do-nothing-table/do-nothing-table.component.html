@@ -1,0 +1,77 @@
+<div class="messgae">
+  <p-message severity="{{ msgDetails?.severity }}" text="{{ msgDetails?.msg }}"></p-message>
+</div>
+<p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000"></p-confirmDialog>
+<app-loading *ngIf="isLoading"></app-loading>
+<main>
+  <app-control-tables [path]="createPath" [needRun]="true"></app-control-tables>
+  <div class="display-mod">
+    <div class="G-flex-center-start model">
+      <h2>Model</h2>
+      <div class="G-flex-center">
+        <mat-form-field appearance="fill" class="dropdown">
+          <mat-label>Select Model</mat-label>
+          <mat-select (selectionChange)="filterModel($event.value)">
+            <mat-option [value]="'All'">All</mat-option>
+            <mat-option *ngFor="let model of models" [value]="model">{{model}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <table [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
+      <!-- <caption>Model Configuration</caption> -->
+      <thead>
+        <tr>
+          <th>Model</th>
+          <th>Base year</th>
+          <th>Years to run</th>
+          <th>Skip these Lifecycles</th>
+          <th>Skip these Unit Classes</th>
+          <th>Data Model Output Templates</th>
+          <th>NR Model Columns</th>
+          <th>Debug Mode</th>
+          <th>Scenario Name</th>
+          <th>Allow Overwrite To Exceed Budget</th>
+          <th>Skip these Asset Sources</th>
+          <th>Condition Range</th>
+          <th colspan="2">
+            <input type="text" placeholder="Search" (input)="filterData($event.target.value)">
+          </th>
+          <th>Run</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of shownAllModels; index as i">
+          <td [attr.title]="data.modelName">{{data.modelName}}</td>
+          <td [attr.title]="data.baseYear">{{data.baseYear}}</td>
+          <td [attr.title]="data.yearsToRun">{{data.yearsToRun}}</td>
+          <td [attr.title]="data.skipTheseLifecycle">{{data.skipTheseLifecycle}}</td>
+          <td [attr.title]="data.skipTheseUnitClasses">{{data.skipTheseUnitClasses}}</td>
+          <td [attr.title]="data.dataModelOutputTemplate">{{data.dataModelOutputTemplate}}</td>
+          <td [attr.title]="data.nrModelColumns">{{data.nrModelColumns}}</td>
+          <td [attr.title]="data.debugMode">{{data.debugMode}}</td>
+          <td [attr.title]="data.scenarioName">{{data.scenarioName}}</td>
+          <td [attr.title]="data.allowOverwriteToExceedBudget">{{data.allowOverwriteToExceedBudget}}</td>
+          <td [attr.title]="data.skipTheseAssetSources">{{data.skipTheseAssetSources}}</td>
+          <td [attr.title]="data.conditionRange">{{data.conditionRange}}</td>
+          <td *ngIf="!runDate" class="buttonEffect" (click)="onEditRow(data)">
+            <span class="edit">Edit</span>
+          </td>
+          <td class="buttonEffect" (click)="onDeleteRow(data.id)">
+            <span class="delete">Delete</span>
+          </td>
+          <td>
+            <input class="checkbox" type="checkbox" (change)="onChecked(data)">
+            <!-- [checked]="data.run" -->
+          </td>
+        </tr>
+        <tr *ngIf="allModels.length > 10">
+          <td colspan="15">
+            <p-paginator [rows]="10" [totalRecords]="allModels.length" [rowsPerPageOptions]="[10,20,30]"
+            (onPageChange)="onPageChange($event)"></p-paginator>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</main>

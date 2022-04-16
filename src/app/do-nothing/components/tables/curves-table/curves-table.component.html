@@ -1,0 +1,55 @@
+<div class="messgae">
+  <p-message severity="{{ msgDetails?.severity }}" text="{{ msgDetails?.msg }}"></p-message>
+</div>
+<p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000"></p-confirmDialog>
+<app-loading *ngIf="isLoading"></app-loading>
+<main>
+  <app-control-tables [path]="createPath"></app-control-tables>
+  <table [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
+    <!-- <caption>Config - Curves</caption> -->
+    <thead>
+      <tr>
+        <th>Scenario</th>
+        <th>Cohort</th>
+        <th>Calculation</th>
+        <th>PoF Curve</th>
+        <th>PoF NAV</th>
+        <th>Health Curve</th>
+        <th>Health NAV</th>
+        <th>PoF Constant</th>
+        <th>Health Constant</th>
+        <th colspan="3">
+          <input type="text" placeholder="Search" (input)="filterData($event.target.value)">
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of shownAllCurves; let i = index">
+        <td [attr.title]="data.scenario.value">{{data.scenario.value}}</td>
+        <td [attr.title]="data.cohort.value">{{data.cohort.value}}</td>
+        <td [attr.title]="data.calculation">{{data.calculation}}</td>
+        <td [attr.title]="data.poFCurve">{{data.poFCurve}}</td>
+        <td [attr.title]="data.poFNav">{{data.poFNav}}</td>
+        <td [attr.title]="data.healthCurve">{{data.healthCurve}}</td>
+        <td [attr.title]="data.healthNav">{{data.healthNav}}</td>
+        <td [attr.title]="data.poFConstant">{{data.poFConstant}}</td>
+        <td [attr.title]="data.healthConstant">{{data.healthConstant}}</td>
+        <td class="buttonEffect" (click)="onEditRow(data, i)">
+          <span class="edit">Edit</span>
+        </td>
+        <td class="buttonEffect" (click)="onDeleteRow(data.id)">
+          <span class="delete">Delete</span>
+        </td>
+        <td>
+          <input class="checkbox" type="checkbox" (change)="onChecked(data)">
+        </td>
+      </tr>
+      <tr *ngIf="allCurves.length > 10">
+        <td colspan="12">
+          <p-paginator [rows]="10" [totalRecords]="allCurves.length" [rowsPerPageOptions]="[10,20,30]"
+          (onPageChange)="onPageChange($event)"></p-paginator>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</main>

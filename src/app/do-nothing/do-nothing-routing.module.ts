@@ -17,20 +17,20 @@ import { DoNothingComponent } from './components/addEdit/do-nothing/do-nothing.c
 import { PofBandsComponent } from './components/addEdit/pof-bands/pof-bands.component';
 import { RiskLevelsComponent } from './components/addEdit/risk-levels/risk-levels.component';
 import { DataModelComponent } from './components/data-model/data-model.component';
-import { BudgetTableComponent } from './components/viewTable/budget-table/budget-table.component';
-import { CohortTableComponent } from './components/viewTable/cohort-table/cohort-table.component';
-import { CurvesTableComponent } from './components/viewTable/curves-table/curves-table.component';
-import { DoNothingTableComponent } from './components/viewTable/do-nothing-table/do-nothing-table.component';
-import { FieldsTableComponent } from './components/viewTable/fields-table/fields-table.component';
-import { InterventionOptionsTableComponent } from './components/viewTable/intervention-options-table/intervention-options-table.component';
-import { ListValuesTableComponent } from './components/viewTable/list-values-table/list-values-table.component';
-import { ListsTableComponent } from './components/viewTable/lists-table/lists-table.component';
-import { PoFBandsTableComponent } from './components/viewTable/pof-bands-table/pof-bands-table.component';
-import { RatesTableComponent } from './components/viewTable/rates-table/rates-table.component';
-import { RiskBasedDecisionTableComponent } from './components/viewTable/risk-based-decision-table/risk-based-decision-table.component';
-import { RiskLevelsTableComponent } from './components/viewTable/risk-levels-table/risk-levels-table.component';
-import { RunHistoryTableComponent } from './components/viewTable/run-history-table/run-history-table.component';
-import { ScenariosTableComponent } from './components/viewTable/scenarios-table/scenarios-table.component';
+import { BudgetTableComponent } from './components/tables/budget-table/budget-table.component';
+import { CohortTableComponent } from './components/tables/cohort-table/cohort-table.component';
+import { CurvesTableComponent } from './components/tables/curves-table/curves-table.component';
+import { DoNothingTableComponent } from './components/tables/do-nothing-table/do-nothing-table.component';
+import { FieldsTableComponent } from './components/tables/fields-table/fields-table.component';
+import { InterventionOptionsTableComponent } from './components/tables/intervention-options-table/intervention-options-table.component';
+import { ListValuesTableComponent } from './components/tables/list-values-table/list-values-table.component';
+import { ListsTableComponent } from './components/tables/lists-table/lists-table.component';
+import { PoFBandsTableComponent } from './components/tables/pof-bands-table/pof-bands-table.component';
+import { RatesTableComponent } from './components/tables/rates-table/rates-table.component';
+import { RiskBasedDecisionTableComponent } from './components/tables/risk-based-decision-table/risk-based-decision-table.component';
+import { RiskLevelsTableComponent } from './components/tables/risk-levels-table/risk-levels-table.component';
+import { RunHistoryTableComponent } from './components/tables/run-history-table/run-history-table.component';
+import { ScenariosTableComponent } from './components/tables/scenarios-table/scenarios-table.component';
 
 const route = AppConfig.routes;
 

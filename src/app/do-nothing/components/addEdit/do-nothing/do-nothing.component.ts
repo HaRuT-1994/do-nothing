@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DoNothingService } from 'src/app/do-nothing/services/do-nothing.service';
 import { Severity } from 'src/app/enums/severity.enum';
 import { Message } from 'src/app/enums/message.enum';
 import { CommonService } from 'src/app/services/common.service';
 import { ConfigData } from 'src/app/models/configData.interface';
 import { ConfigScenariosService } from 'src/app/do-nothing/services/config-scenarios.service';
-import { Location } from '@angular/common';
 import { ModelConfig } from 'src/app/do-nothing/models/modelConfig.interface';
 import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
+import { DynamicDialogConfig } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-do-nothing',
@@ -21,74 +21,71 @@ export class DoNothingComponent implements OnInit {
   public isOnEdit: boolean;
   public isLoading: boolean;
   public skipTheseLifecycles: ConfigData[] = [];
+  private selectedLifecycles: number[];
   public skipTheseAssetSources: ConfigData[] = [];
   public skipTheseUnitClasses: ConfigData[] = [];
-  public scenariosToRun: ConfigData[] = []; 
+  public scenariosToRun = []; 
   public conditionRange = ['1 to 5', '1 to 10'];
   private editModel: ModelConfig[] = [];
 
   constructor( private doNothingService: DoNothingService,
                private commonService: CommonService,
                private configScenariosService: ConfigScenariosService,
-               private location: Location) { }
+               private dialogConfig: DynamicDialogConfig,
+               private formBuilder: FormBuilder) { }
 
   ngOnInit() {
+    this.selectedLifecycles = this.separateIdfromObj(this.skipTheseLifecycles);
+    console.log(this.selectedLifecycles);
+    
     this.formInit();
-    this.isOnEdit = this.doNothingService.isOnEdit;
-    if(this.location.path().includes('add')) {
-      this.isOnEdit = false;
-    }
-    this.editModel = this.doNothingService.editModel;
-    if (this.isOnEdit) {
-      this.strToArray(['skipTheseLifecycle', 'skipTheseAssetSources', 'skipTheseUnitClasses' ]);
-      this.commonService.updateForm(this.formGroup, this.editModel);
-      this.formGroup.patchValue({
-        scenariosToRun: [this.editModel['scenarioName']]
-      })
-    }
-
-    this.doNothingService.getSkipTheseLifecycles().subscribe(
-      (res: ConfigData[])=> this.skipTheseLifecycles = res
-    );
-
-    this.doNothingService.getSkipTheseAssetSources().subscribe(
-      (res: ConfigData[]) => this.skipTheseAssetSources = res
-    );
-
-    this.doNothingService.getSkipTheseUnitClasses().subscribe(
-      (res: ConfigData[]) => this.skipTheseUnitClasses = res
-    );
-
+    this.isOnEdit = !this.dialogConfig.data?.add;
+    this.skipTheseLifecycles = this.doNothingService.skipTheseLifecycles;
+    this.skipTheseAssetSources = this.doNothingService.skipTheseAssetSources;
+    this.skipTheseUnitClasses = this.doNothingService.skipTheseUnitClasses;
+    
+    
     this.configScenariosService.getConfigScenarios().subscribe(
       (res: ConfigData[]) => this.scenariosToRun = res
-    );
+      );
+      
+
+      //console.log(this.skipTheseAssetSources, )
+      if (this.isOnEdit) {
+        this.editModel = this.doNothingService.editModel;
+        //this.skipTheseLifecycles = [{id: 1856486, value: 'Disposed'}]
+        //this.strToArray(['skipTheseLifecycle', 'skipTheseAssetSources', 'skipTheseUnitClasses' ]);
+        //this.separateIdfromObj(this.skipTheseLifecycles)
+        this.editModel['skipTheseLifecycle'] = this.selectedLifecycles;
+        console.log(this.formGroup, this.editModel, this.skipTheseLifecycles, this.separateIdfromObj(this.skipTheseLifecycles));
+       //this.commonService.updateForm(this.formGroup, this.editModel);
+    }
   }
 
   formInit(): void {
-    this.formGroup = new FormGroup({
-      modelName: new FormControl('WTP', Validators.required),
-      baseYear: new FormControl(2021, Validators.required),
-      yearsToRun: new FormControl(20, Validators.required),
-      skipTheseLifecycle: new FormControl(''),
-      skipTheseAssetSources: new FormControl(''),
-      skipTheseUnitClasses: new FormControl(''),
-      scenariosToRun: new FormControl('', Validators.required),
-      conditionRange: new FormControl(''),
-      dataModelOutputTemplate: new FormControl(''),
-      nrModelColumns: new FormControl(0),
+    this.formGroup = this.formBuilder.group({
+      modelName: ['WTP', Validators.required],
+      baseYear: [2021, Validators.required],
+      yearsToRun: [20, Validators.required],
+      skipTheseLifecycle: [this.selectedLifecycles],
+      skipTheseAssetSources: [''],
+      skipTheseUnitClasses: [''],
+      scenariosToRun: [[1]],
+      conditionRange: [''],
+      dataModelOutputTemplate: [''],
+      nrModelColumns: [0],
       // unitsAndComponentsSeparated: new FormControl(true),
       // firstPastPostOption: new FormControl(true),
-      debugMode: new FormControl(true),
-      allowOverwriteToExceedBudget: new FormControl(true),
-      allowSurplusBudgetRollover: new FormControl(true)
+      debugMode: [true],
+      allowOverwriteToExceedBudget: [true],
+      allowSurplusBudgetRollover: [true],
     });
   }
 
   addConfig(): void {
     if(this.formGroup.valid) {
-      this.changeValueToId();
       this.isLoading = true;
-      this.arrToString(['skipTheseLifecycle', 'skipTheseAssetSources', 'skipTheseUnitClasses', 'scenariosToRun', 'conditionRange']);
+      this.arrToString(['skipTheseLifecycle', 'skipTheseAssetSources', 'skipTheseUnitClasses', 'scenariosToRun']);
       
       this.doNothingService.addDoNothing(this.formGroup.value).subscribe(
         () => {
@@ -110,7 +107,6 @@ export class DoNothingComponent implements OnInit {
 
   editConfig(): void {
     if(this.formGroup.valid) {
-      this.changeValueToId();
       this.isLoading = true;
       this.arrToString(['skipTheseLifecycle', 'skipTheseAssetSources', 'skipTheseUnitClasses', 'scenariosToRun', 'conditionRange']);
 
@@ -129,11 +125,6 @@ export class DoNothingComponent implements OnInit {
     }
   }
 
-  goBack(): void {
-    this.location.back();
-    this.isOnEdit = false;
-  }
-
   private arrToString(data: string[]) {
     data.forEach(i => this.formGroup.value[i] = this.formGroup.value[i].toString());
   }
@@ -142,13 +133,19 @@ export class DoNothingComponent implements OnInit {
     data.forEach(i => this.editModel[i] = this.editModel[i].split(",") );
   }
 
-  private changeValueToId() {
-    this.formGroup.value.scenariosToRun.forEach((scenario, i) => {
-      this.scenariosToRun.forEach(item => {
-        if(scenario === item.value) {
-          this.formGroup.value.scenariosToRun[i] = item.id;
+  private separateIdfromObj(data: ConfigData[]): number[] {
+    let arr = [];
+    console.log(this.editModel['skipTheseLifecycle']);
+    data.forEach(obj => {
+      
+      
+      this.editModel['skipTheseLifecycle'].split(',').forEach(item => {
+        if(item === obj.value) {
+          arr.push(obj.id);
         }
       })
     })
-  }
+
+    return arr;
+  } 
 }

@@ -1,0 +1,43 @@
+<div class="messgae">
+  <p-message severity="{{ msgDetails?.severity }}" text="{{ msgDetails?.msg }}"></p-message>
+</div>
+<p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000"></p-confirmDialog>
+<app-loading *ngIf="isLoading"></app-loading>
+<main>
+  <app-control-tables [path]="createPath"></app-control-tables>
+  <table [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
+    <!-- <caption>Config - Scenarios</caption> -->
+    <thead>
+      <tr>
+        <th>Scenario Name</th>
+        <th>Validated Option</th>
+        <th>Restrict To Budget</th>
+        <th colspan="3">
+          <input type="text" placeholder="Search" (input)="filterData($event.target.value)">
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of shownAllScenarios">
+        <td [attr.title]="data.scenario">{{data.scenario}}</td>
+        <td [attr.title]="data.validatedOption">{{data.validatedOption}}</td>
+        <td [attr.title]="data.restrictToBudget">{{data.restrictToBudget}}</td>
+        <td class="buttonEffect" (click)=onEditRow(data)>
+          <span class="edit">Edit</span>
+        </td>
+        <td class="buttonEffect" (click)="onDeleteRow(data.scenarioId)">
+          <span class="delete">Delete</span>
+        </td>
+        <td>
+          <input class="checkbox" type="checkbox" (change)="onChecked(data)">
+        </td>
+      </tr>
+      <tr *ngIf="allScenarios.length > 10">
+        <td colspan="7">
+          <p-paginator [rows]="10" [totalRecords]="allScenarios.length" [rowsPerPageOptions]="[10,20,30]"
+          (onPageChange)="onPageChange($event)"></p-paginator>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</main>

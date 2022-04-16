@@ -5,8 +5,8 @@ import { Severity } from 'src/app/enums/severity.enum';
 import { Message } from 'src/app/enums/message.enum';
 import { CommonService } from 'src/app/services/common.service';
 import { ConfigData } from 'src/app/models/configData.interface';
-import { Location } from '@angular/common';
 import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
+import { DynamicDialogConfig } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-config-scenarios',
@@ -22,14 +22,12 @@ export class ConfigScenariosComponent implements OnInit {
 
   constructor( private sccenariosService: ConfigScenariosService,
                private commonService: CommonService,
-               private location: Location) { }
+               private dialogConfig: DynamicDialogConfig) { }
 
   ngOnInit() {
     this.formInit();
-    this.isOnEdit = this.sccenariosService.isOnEdit;
-    if(this.location.path().includes('add')) {
-      this.isOnEdit = false;
-    }
+    this.isOnEdit = !this.dialogConfig.data?.add;
+    
     if (this.isOnEdit) {
       this.commonService.updateForm(this.formGroup, this.sccenariosService.editScenario);
     }
@@ -79,10 +77,5 @@ export class ConfigScenariosComponent implements OnInit {
         this.commonService.deleteMsg(this);
       }
     );
-  }
-
-  goBack(): void {
-    this.location.back();
-    this.isOnEdit = false;
   }
 }

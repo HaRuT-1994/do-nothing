@@ -7,7 +7,7 @@ import { FieldModel } from '../models/fieldData.interface';
 @Injectable()
 export class ConfigFieldsService {
   editFields: FieldModel[] = [];
-  isOnEdit: boolean;
+
   constructor(private http: HttpClient) { }
 
   addConfigFields(data: any): Observable<any> {
@@ -29,6 +29,5 @@ export class ConfigFieldsService {
 
   onEditRow(data): void {
     this.editFields = data;
-    this.isOnEdit = true;
   }
 }

@@ -9,21 +9,23 @@
       <div class="G-column gap">
         <div class="G-flex-center-between">
           <label for="scenarioId">Scenario Id</label>
-          <mat-form-field appearance="fill" class="dropdown">
+          <!-- <mat-form-field appearance="fill" class="dropdown">
             <mat-label>Scenario</mat-label>
             <mat-select formControlName="scenarioId">
               <mat-option *ngFor="let scenario of scenarioData" [value]="scenario.id">{{scenario.value}}</mat-option>
             </mat-select>
-          </mat-form-field>
+          </mat-form-field> -->
+          <p-dropdown [options]="scenarioData"  optionLabel="value"  optionValue="id"  formControlName="scenario" editable="true" ></p-dropdown>
         </div>
         <div class="G-flex-center-between">
           <label for="cohortId">Cohort Id</label>
-          <mat-form-field appearance="fill" class="dropdown">
+          <!-- <mat-form-field appearance="fill" class="dropdown">
             <mat-label>Cohort</mat-label>
             <mat-select formControlName="cohortId">
               <mat-option *ngFor="let cohort of cohortData" [value]="cohort.id">{{cohort.value}}</mat-option>
             </mat-select>
-          </mat-form-field>
+          </mat-form-field> -->
+          <p-dropdown [options]="cohortData" optionValue="id" optionLabel="value" formControlName="cohort" editable="true"  ></p-dropdown>
         </div>
         <div class="G-flex-center-between">
           <label for="1">[>=1]</label>
@@ -50,6 +52,5 @@
    
     <button type="submit" *ngIf="!isOnEdit" (click)="addConfig()">Submit</button>
     <button type="submit" *ngIf="isOnEdit" (click)="editConfig()">Submit</button>
-    <button type="button" (click)="goBack()">Go back</button>
   </form>
 </main>

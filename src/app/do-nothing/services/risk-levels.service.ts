@@ -7,7 +7,6 @@ import { RiskLevelsModel } from '../models/riskLevelData.interface';
 @Injectable()
 export class RiskLevelsService {
   public editRiskLvl: RiskLevelsModel[] = [];
-  public isOnEdit: boolean;
   
   constructor(private http: HttpClient) { }
 
@@ -30,6 +29,5 @@ export class RiskLevelsService {
 
   onEditRow(data): void {
     this.editRiskLvl = data;
-    this.isOnEdit = true;
   }
 }

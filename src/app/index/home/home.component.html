@@ -1,10 +1,14 @@
-<main class="G-flex-center-center G-flex-wrap">
-  <div routerLink="/model-table">Go scenarios</div>
-  <div>2</div>
-  <div>3</div>
-  <div>4</div>
-  <div>5</div>
-  <div>6</div>
-  <div>7</div>
-  <div>8</div>
+<header class="G-flex-center-around">
+  <h2>Run Models</h2>
+  <div class="G-flex-center-center">
+    <p>Sample User</p>
+    <img src="assets/img/user-image-icon-19.jpg" alt="user" width="40px">
+  </div>
+</header>
+<main class="G-flex-center-start G-flex-wrap">
+  <div routerLink="/model-table" *ngFor="let project of projects">
+    <img src="{{project.imgSrc}}" alt="project.project">
+    <h3>{{project.label}}</h3>
+    <p>Last Modified</p>
+  </div>
 </main>

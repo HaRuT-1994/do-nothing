@@ -1,4 +1,3 @@
-import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Message } from 'src/app/enums/message.enum';
@@ -9,6 +8,7 @@ import { CommonService } from 'src/app/services/common.service';
 import { ConfigScenariosService } from 'src/app/do-nothing/services/config-scenarios.service';
 import { ConfigRatesService } from 'src/app/do-nothing/services/config-rates.service';
 import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
+import { DynamicDialogConfig } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-config-rates',
@@ -28,7 +28,7 @@ export class ConfigRatesComponent implements OnInit {
                private commonService: CommonService,
                private cohortService: CohortService,
                private scenariosService: ConfigScenariosService,
-               private location: Location) { }
+               private dialogConfig: DynamicDialogConfig) { }
 
   ngOnInit(): void {
     this.formInit();
@@ -37,17 +37,12 @@ export class ConfigRatesComponent implements OnInit {
         this.cohortData = res;
       }
     )
-
     this.scenariosService.getConfigScenarios().subscribe(
-      (res: ConfigData[]) => {
-        this.scenarioData = res;
-      }
-    )
+      (res: ConfigData[]) => this.scenarioData = res
+    );
+    
+    this.isOnEdit = !this.dialogConfig.data?.add;
 
-    this.isOnEdit = this.ratesService.isOnEdit;
-    if(this.location.path().includes('add')) {
-      this.isOnEdit = false;
-    }
     if (this.isOnEdit) {
       this.commonService.updateForm(this.formGroup, this.ratesService.editRates);
     }
@@ -55,8 +50,8 @@ export class ConfigRatesComponent implements OnInit {
 
   formInit(): void {
     this.formGroup = new FormGroup({
-      scenarioId: new FormControl(0),
-      cohortId: new FormControl(0),
+      scenario: new FormControl(0),
+      cohort: new FormControl(0),
       intervention: new FormControl(''),
       geography: new FormControl(''),
       budgetSource: new FormControl(''),
@@ -73,6 +68,7 @@ export class ConfigRatesComponent implements OnInit {
 
   addConfig(): void {
     this.isLoading = true;
+    this.changeToObj();
     this.ratesService.addConfigRates(this.formGroup.value).subscribe(
       () => {
         this.isLoading = false;
@@ -105,8 +101,13 @@ export class ConfigRatesComponent implements OnInit {
     );
   }
 
-  goBack(): void {
-    this.location.back();
-    this.isOnEdit = false;
+  private changeToObj() {
+    let scenario = this.scenarioData.filter(item => item.id === this.formGroup.get('scenario').value);
+    let cohort = this.cohortData.filter(item => item.id === this.formGroup.get('cohort').value);
+
+    this.formGroup.patchValue({
+      scenario: scenario[0],
+      cohort: cohort[0]
+    })
   }
 }

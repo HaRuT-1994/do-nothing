@@ -20,13 +20,13 @@ import { ConfigScenariosComponent } from './components/addEdit/config-scenarios/
 import { PofBandsComponent } from './components/addEdit/pof-bands/pof-bands.component';
 import { DoNothingComponent } from './components/addEdit/do-nothing/do-nothing.component';
 import { RiskLevelsComponent } from './components/addEdit/risk-levels/risk-levels.component';
-import { DoNothingTableComponent } from './components/viewTable/do-nothing-table/do-nothing-table.component';
-import { CohortTableComponent } from './components/viewTable/cohort-table/cohort-table.component';
-import { FieldsTableComponent } from './components/viewTable/fields-table/fields-table.component';
-import { PoFBandsTableComponent } from './components/viewTable/pof-bands-table/pof-bands-table.component';
-import { ScenariosTableComponent } from './components/viewTable/scenarios-table/scenarios-table.component';
-import { RiskLevelsTableComponent } from './components/viewTable/risk-levels-table/risk-levels-table.component';
-import { CurvesTableComponent } from './components/viewTable/curves-table/curves-table.component';
+import { DoNothingTableComponent } from './components/tables/do-nothing-table/do-nothing-table.component';
+import { CohortTableComponent } from './components/tables/cohort-table/cohort-table.component';
+import { FieldsTableComponent } from './components/tables/fields-table/fields-table.component';
+import { PoFBandsTableComponent } from './components/tables/pof-bands-table/pof-bands-table.component';
+import { ScenariosTableComponent } from './components/tables/scenarios-table/scenarios-table.component';
+import { RiskLevelsTableComponent } from './components/tables/risk-levels-table/risk-levels-table.component';
+import { CurvesTableComponent } from './components/tables/curves-table/curves-table.component';
 import { PofBandsService } from './services/pof-bands.service';
 import { ConfigBudgetComponent } from './components/addEdit/config-budget/config-budget.component';
 import { ConfigInterventionOptionsComponent } from './components/addEdit/config-intervention-options/config-intervention-options.component';
@@ -34,13 +34,13 @@ import { ConfigRatesComponent } from './components/addEdit/config-rates/config-r
 import { ConfigListsComponent } from './components/addEdit/config-lists/config-lists.component';
 import { ConfigRiskBasedDecisionsComponent } from './components/addEdit/config-risk-based-decisions/config-risk-based-decisions.component';
 import { ConfigListValuesComponent } from './components/addEdit/config-list-values/config-list-values.component';
-import { BudgetTableComponent } from './components/viewTable/budget-table/budget-table.component';
-import { InterventionOptionsTableComponent } from './components/viewTable/intervention-options-table/intervention-options-table.component';
-import { ListValuesTableComponent } from './components/viewTable/list-values-table/list-values-table.component';
-import { ListsTableComponent } from './components/viewTable/lists-table/lists-table.component';
-import { RatesTableComponent } from './components/viewTable/rates-table/rates-table.component';
-import { RiskBasedDecisionTableComponent } from './components/viewTable/risk-based-decision-table/risk-based-decision-table.component';
-import { RunHistoryTableComponent } from './components/viewTable/run-history-table/run-history-table.component';
+import { BudgetTableComponent } from './components/tables/budget-table/budget-table.component';
+import { InterventionOptionsTableComponent } from './components/tables/intervention-options-table/intervention-options-table.component';
+import { ListValuesTableComponent } from './components/tables/list-values-table/list-values-table.component';
+import { ListsTableComponent } from './components/tables/lists-table/lists-table.component';
+import { RatesTableComponent } from './components/tables/rates-table/rates-table.component';
+import { RiskBasedDecisionTableComponent } from './components/tables/risk-based-decision-table/risk-based-decision-table.component';
+import { RunHistoryTableComponent } from './components/tables/run-history-table/run-history-table.component';
 import { ControlTablesComponent } from './components/controls/control-tables/control-tables.component';
 import { DataModelComponent } from './components/data-model/data-model.component';
 import { CohortService } from './services/cohort.service';
@@ -56,6 +56,10 @@ import { ConfigScenariosService } from './services/config-scenarios.service';
 import { DoNothingService } from './services/do-nothing.service';
 import { RiskLevelsService } from './services/risk-levels.service';
 import { RunHistoryService } from './services/runHistroy.service';
+import { DialogService } from 'primeng/dynamicdialog';
+import {MultiSelectModule} from 'primeng/multiselect';
+import {DropdownModule} from 'primeng/dropdown';
+import { ConfigBudgetYearComponent } from './components/addEdit/config-budget-year/config-budget-year.component';
 
 @NgModule({
   declarations: [
@@ -87,7 +91,8 @@ import { RunHistoryService } from './services/runHistroy.service';
     RiskBasedDecisionTableComponent,
     RunHistoryTableComponent,
     ControlTablesComponent,
-    DataModelComponent
+    DataModelComponent,
+    ConfigBudgetYearComponent
   ],
   imports: [
     CommonModule,
@@ -101,7 +106,9 @@ import { RunHistoryService } from './services/runHistroy.service';
     PanelMenuModule,
     TableModule,
     ConfirmDialogModule,
-    DoNothingRoutingModule
+    DoNothingRoutingModule,
+    MultiSelectModule,
+    DropdownModule
   ],
   providers: [
     CohortService,
@@ -118,7 +125,8 @@ import { RunHistoryService } from './services/runHistroy.service';
     DoNothingService,
     RiskLevelsService,
     RunHistoryService,
-    ConfirmationService
+    ConfirmationService,
+    DialogService
   ]
 })
 export class DoNothingModule { }

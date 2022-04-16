@@ -1,3 +1,11 @@
+header {
+  border-bottom: 1px solid rgb(201, 191, 164);
+
+  p {
+    padding-right: 15px;
+  };
+}
+
 main {
   width: 100%;
   padding: 50px;
@@ -7,5 +15,15 @@ main {
     height: 200px;
     text-align: center;
     border: 1px solid rgb(201, 191, 164);
+
+    img {
+      height: 140px;
+    }
+
+    p, h3 {
+      padding: 0;
+      margin: 0;
+    }
   }
 }
+

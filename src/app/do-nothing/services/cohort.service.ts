@@ -8,7 +8,6 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class CohortService {
   public editCohort: CohortModel[] = [];
-  public isOnEdit: boolean;
   
   constructor(private http: HttpClient) { }
 
@@ -35,6 +34,5 @@ export class CohortService {
 
   onEditRow(data): void {
     this.editCohort = data;
-    this.isOnEdit = true;    
   }
 }

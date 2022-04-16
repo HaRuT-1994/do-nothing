@@ -7,7 +7,6 @@ import { PoFBandsModel } from '../models/pofBandData.interface';
 @Injectable()
 export class PofBandsService {
   public editPofBand: PoFBandsModel[] = [];
-  public isOnEdit: boolean;
   
   constructor(private http: HttpClient) { }
 
@@ -30,6 +29,5 @@ export class PofBandsService {
 
   onEditRow(data): void {
     this.editPofBand = data;
-    this.isOnEdit = true;
   }
 }

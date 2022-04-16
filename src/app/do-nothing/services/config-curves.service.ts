@@ -7,7 +7,6 @@ import { CurveModel } from '../models/curveData.interface';
 @Injectable()
 export class ConfigCurvesService {
   public editCurves: CurveModel[] = [];
-  public isOnEdit: boolean;
 
   constructor(private http: HttpClient) { }
 
@@ -30,6 +29,5 @@ export class ConfigCurvesService {
 
   onEditRow(data): void {
     this.editCurves = data;
-    this.isOnEdit = true;
   }
 }

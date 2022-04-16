@@ -4,8 +4,8 @@ import { Severity } from 'src/app/enums/severity.enum';
 import { Message } from 'src/app/enums/message.enum';
 import { ConfigFieldsService } from 'src/app/do-nothing/services/config-fields.service';
 import { CommonService } from 'src/app/services/common.service';
-import { Location } from '@angular/common';
 import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
+import { DynamicDialogConfig } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-config-fields',
@@ -20,14 +20,11 @@ export class ConfigFieldsComponent implements OnInit {
 
   constructor( private fieldsService: ConfigFieldsService,
                private commonService: CommonService,
-               private location: Location) { }
+               private dialogConfig: DynamicDialogConfig) { }
 
   ngOnInit(): void {
     this.formInit();
-    this.isOnEdit = this.fieldsService.isOnEdit;
-    if(this.location.path().includes('add')) {
-      this.isOnEdit = false;
-    }
+    this.isOnEdit = !this.dialogConfig.data?.add;
     if (this.isOnEdit) {
       this.commonService.updateForm(this.formGroup, this.fieldsService.editFields);
     }
@@ -76,10 +73,5 @@ formInit(): void {
         this.commonService.deleteMsg(this);
       }
     );
-  }
-
-  goBack(): void {
-    this.location.back();
-    this.isOnEdit = false;
   }
 }

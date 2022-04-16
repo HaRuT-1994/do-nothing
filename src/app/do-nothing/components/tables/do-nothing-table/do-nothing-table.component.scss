@@ -1,0 +1,16 @@
+@import 'src/assets/styles/variables';
+
+.model {
+  margin: 10px 0;
+
+  h2 {
+    margin-right: 30px;
+  }
+}
+
+.display-mod {
+  display: inline-block;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+}

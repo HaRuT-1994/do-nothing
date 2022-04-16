@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ConfigCurvesService } from 'src/app/do-nothing/services/config-curves.service';
 import { Severity } from 'src/app/enums/severity.enum';
 import { Message } from 'src/app/enums/message.enum';
@@ -7,9 +7,9 @@ import { CommonService } from 'src/app/services/common.service';
 import { CohortService } from 'src/app/do-nothing/services/cohort.service';
 import { ConfigData } from 'src/app/models/configData.interface';
 import { ConfigScenariosService } from 'src/app/do-nothing/services/config-scenarios.service';
-import { Router } from '@angular/router';
-import { Location } from '@angular/common';
 import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
+import { DynamicDialogConfig } from 'primeng/dynamicdialog';
+import { CurveModel } from 'src/app/do-nothing/models/curveData.interface';
 
 @Component({
   selector: 'app-config-curves',
@@ -23,58 +23,57 @@ export class ConfigCurvesComponent implements OnInit {
   public msgDetails: MsgDetails;
   public cohortData: ConfigData[] = [];
   public scenarioData: ConfigData[] = [];
+  public editCurves: CurveModel[] = [];
+  // private selectedScenario = this.editCurves['scenario'].id;
 
   constructor(private curvesService: ConfigCurvesService, private commonService: CommonService,
-    private cohortService: CohortService, private configScenariosService: ConfigScenariosService, private router: Router,
-    private location: Location) { }
+    private cohortService: CohortService, private configScenariosService: ConfigScenariosService, private dialogConfig: DynamicDialogConfig, private formBuilder: FormBuilder, private cdRef: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.formInit();
     this.cohortService.getConfigCohort().subscribe(
-      (res: ConfigData[]) => {        
+      (res: ConfigData[]) => {
         this.cohortData = res;
       }
     )
-
     this.configScenariosService.getConfigScenarios().subscribe(
       (res: ConfigData[]) => {
         this.scenarioData = res;
       }
     )
-
-    this.isOnEdit = this.curvesService.isOnEdit;
-    if(this.location.path().includes('add')) {
-      this.isOnEdit = false;
-    }
+    this.isOnEdit = !this.dialogConfig.data?.add;
 
     if (this.isOnEdit) {
-      this.commonService.updateForm(this.formGroup, this.curvesService.editCurves)  
+      this.editCurves = this.curvesService.editCurves;
+      this.commonService.updateForm(this.formGroup, this.editCurves);
     }
   }
 
   formInit(): void {
-    this.formGroup = new FormGroup({
-      scenarioId: new FormControl(0),
-      cohortId: new FormControl(0),
-      calculation: new FormControl(''),
-      poFCurve: new FormControl(0),
-      poFNav: new FormControl(0),
-      healthCurve: new FormControl(0),
-      healthNav: new FormControl(0),
-      pofConstant: new FormControl(0),
-      healthConstant: new FormControl(0)
+    this.formGroup = this.formBuilder.group({
+      scenario: [''],
+      cohort: [''],
+      calculation: [''],
+      poFCurve: [0],
+      poFNav: [0],
+      healthCurve: [0],
+      healthNav: [0],
+      pofConstant: [0],
+      healthConstant: [0]
     })
   }
 
   addConfig(): void {
     this.isLoading = true;
+    this.commonService.changeToObj(this.formGroup, this.scenarioData, this.cohortData);
     this.curvesService.addConfigCurves(this.formGroup.value).subscribe(
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: 'Curve Form ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         this.commonService.deleteMsg(this);
-        this.formGroup.reset();
-        this.formInit();
+        this.commonService.updateData(this.formGroup, true)
+        this.editCurves = this.formGroup.value;
+        this.commonService.updateForm(this.formGroup, this.editCurves);
       },
       () => {
         this.isLoading = false;
@@ -86,11 +85,15 @@ export class ConfigCurvesComponent implements OnInit {
 
   editConfig(): void {
     this.isLoading = true;
+    this.commonService.changeToObj(this.formGroup, this.scenarioData, this.cohortData);
     this.curvesService.onEditCurve(this.formGroup.value).subscribe(
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: 'Curves Form ' +  Message.EDIT_SUCCESS_MSG, severity: Severity.SUCCESS};
         this.commonService.deleteMsg(this);
+        this.commonService.updateData(this.formGroup);
+        this.editCurves = this.formGroup.value;
+        this.commonService.updateForm(this.formGroup, this.editCurves);
       },
       () => {
         this.isLoading = false;
@@ -98,10 +101,5 @@ export class ConfigCurvesComponent implements OnInit {
         this.commonService.deleteMsg(this);
       }
     );
-  }
-
-  goBack(): void {
-    this.location.back();
-    this.isOnEdit = false;
   }
 }

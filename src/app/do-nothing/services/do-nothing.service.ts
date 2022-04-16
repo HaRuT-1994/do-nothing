@@ -1,30 +1,43 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { ConfigData } from 'src/app/models/configData.interface';
 import { AppConfig } from '../../config/app.config';
 import { ModelConfig } from '../models/modelConfig.interface';
 
 @Injectable()
 export class DoNothingService {
   public editModel: ModelConfig[] = [];
-  public isOnEdit: boolean;
+  public skipTheseLifecycles: ConfigData[] = [];
+  public skipTheseAssetSources: ConfigData[] = [];
+  public skipTheseUnitClasses: ConfigData[] = [];
   
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    this.getSkipTheseLifecycles();
+    this.getSkipTheseAssetSources();
+    this.getSkipTheseUnitClasses();
+  }
 
   addDoNothing(data: any): Observable<any> {
     return this.http.post(`${AppConfig.baseUrl}api/${AppConfig.endPoints.addModelConfig}`, data);
   }
 
-  getSkipTheseLifecycles(): Observable<any> {
-    return this.http.get(`${AppConfig.baseUrl}api/${AppConfig.endPoints.lookupSkipTheseLifecycles}`);
+  getSkipTheseLifecycles(): void {
+    this.http.get(`${AppConfig.baseUrl}api/${AppConfig.endPoints.lookupSkipTheseLifecycles}`).subscribe(
+      (res: ConfigData[]) => this.skipTheseLifecycles = res
+    );
   }
 
-  getSkipTheseAssetSources(): Observable<any> {
-    return this.http.get(`${AppConfig.baseUrl}api/${AppConfig.endPoints.lookupSkipTheseAssetSources}`);
+  getSkipTheseAssetSources(): void {
+    this.http.get(`${AppConfig.baseUrl}api/${AppConfig.endPoints.lookupSkipTheseAssetSources}`).subscribe(
+      (res: ConfigData[]) => this.skipTheseAssetSources = res
+    );
   }
 
-  getSkipTheseUnitClasses(): Observable<any> {
-    return this.http.get(`${AppConfig.baseUrl}api/${AppConfig.endPoints.lookupSkipTheseUnitClasses}`);
+  getSkipTheseUnitClasses(): void {
+    this.http.get(`${AppConfig.baseUrl}api/${AppConfig.endPoints.lookupSkipTheseUnitClasses}`).subscribe(
+      (res: ConfigData[]) => this.skipTheseUnitClasses = res
+    );
   }
 
   getAllModelConfigs(): Observable<ModelConfig[]> {
@@ -42,6 +55,5 @@ export class DoNothingService {
 
   onEditRow(data): void {
     this.editModel = data;
-    this.isOnEdit = true;    
   }
 }

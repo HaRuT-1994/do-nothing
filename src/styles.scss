@@ -18,5 +18,13 @@ p-paginator {
 .messgae {
   position: fixed;
   top: 10px;
-  right: 10px;
+  right: 60px;
+}
+
+.p-multiselect {
+  min-width: 12.5rem;
+}
+
+.p-dropdown .p-dropdown-label {
+  width: 160px;
 }

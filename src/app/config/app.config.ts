@@ -77,7 +77,9 @@ export const AppConfig: AppConfig = {
         lookupSkipTheseAssetSources: 'Lookup/LookupSkipTheseAssetSources',
         lookupSkipTheseUnitClasses: 'Lookup/LookupSkipTheseUnitClasses',
         lookupConfigScenarios: 'Lookup/LookupConfigScenarios',
-        lookupConfigCohorts : 'Lookup/LookupConfigCohorts'
+        lookupConfigCohorts : 'Lookup/LookupConfigCohorts',
+
+        budgetDetails: 'BudgetDetails/GetAllConfigBudgetPivotDetails'
     },
     routes: {
         projects: {
@@ -128,7 +130,7 @@ export const AppConfig: AppConfig = {
             budgetTable: "budget-table",
             interventionOptionsTable: "intervention-options-table",
             riskBasedDecisionTable: "risk-based-decision-table",
-            runHistory: "run-history-table"
+            runHistory: "run-history-table",
         }
         
     },

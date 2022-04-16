@@ -1,4 +1,3 @@
-import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ConfigBudgetService } from 'src/app/do-nothing/services/config-budget.service';
@@ -8,6 +7,7 @@ import { CommonService } from 'src/app/services/common.service';
 import { ConfigData } from 'src/app/models/configData.interface';
 import { ConfigScenariosService } from 'src/app/do-nothing/services/config-scenarios.service';
 import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
+import { DynamicDialogConfig } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-config-budget',
@@ -25,20 +25,16 @@ export class ConfigBudgetComponent implements OnInit {
                private budgetService: ConfigBudgetService,
                private commonService: CommonService,
                private scenariosService: ConfigScenariosService,
-               private location: Location) { }
+               private dialogConfig: DynamicDialogConfig) { }
 
   ngOnInit(): void {
     this.formInit();
-    this.scenariosService.getConfigScenarios().subscribe(
-      (res: ConfigData[]) => {
-        this.scenarioData = res;
-      }
-    )
+    this.isOnEdit = !this.dialogConfig.data?.add;
 
-    this.isOnEdit = this.budgetService.isOnEdit;
-    if(this.location.path().includes('add')) {
-      this.isOnEdit = false;
-    }
+    this.scenariosService.getConfigScenarios().subscribe(
+      (res: ConfigData[]) => this.scenarioData = res
+    );
+  
     if (this.isOnEdit) {
       this.commonService.updateForm(this.formGroup, this.budgetService.editBudget);
     }
@@ -46,7 +42,7 @@ export class ConfigBudgetComponent implements OnInit {
 
   formInit(): void {
     this.formGroup = new FormGroup({
-      scenarioId: new FormControl(0),
+      scenario: new FormControl(0),
       scenarioName: new FormControl(''),
       expLimit: new FormControl(0),
       year: new FormControl(0),
@@ -57,6 +53,7 @@ export class ConfigBudgetComponent implements OnInit {
 
   addConfig(): void {
     this.isLoading = true;
+    // this.changeToObj();
     this.budgetService.addConfigBudget(this.formGroup.value).subscribe(
       () => {
         this.isLoading = false;
@@ -87,10 +84,5 @@ export class ConfigBudgetComponent implements OnInit {
         this.commonService.deleteMsg(this);
       }
     );
-  }
-
-  goBack(): void {
-    this.location.back();
-    this.isOnEdit = false;
   }
 }

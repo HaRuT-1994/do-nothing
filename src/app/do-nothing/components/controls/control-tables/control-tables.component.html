@@ -1,32 +1,35 @@
-<div class="menu-tab" style="border-style:none">
-  <span routerLink="/Projects/Plans">Back to Projects</span>
+<div class="control">
+  <div class="menu-tab" style="border-style:none">
+    <span routerLink="/Projects/Plans">Back to Projects</span>
+  </div>
+  <div class="G-flex-center-between menu-tab">
+    <div>
+      <span class="selected">Scenario</span>
+      <span routerLink="/Data-Model">Data Models</span>
+    </div>
+    <div>
+      <h2>Sample Project Name</h2>
+    </div>
+  </div>
+  <section class="G-flex-center-between">
+    <div>
+      <button (click)="onAddConfig()">New</button>
+    </div>
+    <div>
+      <button>Copy</button>
+    </div>
+    <div *ngIf="needRun">
+      <button>Run</button>
+    </div>
+    <div class="G-flex-center-between">
+      <mat-form-field appearance="fill" class="dropdown">
+        <mat-label>{{label}}</mat-label>
+        <mat-select>
+          <mat-option *ngFor="let item of controlTables" routerLink="/{{item.routerLink}}">{{item.label}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </section>
 </div>
-<div class="G-flex-center-between menu-tab">
-  <div>
-    <span class="selected">Scenario</span>
-    <span routerLink="/Data-Model">Data Models</span>
-  </div>
-  <div>
-    <h2>Sample Project Name</h2>
-  </div>
-</div>
-<section class="G-flex-center-between">
-  <div>
-    <button (click)="onAddConfig()">New</button>
-  </div>
-  <div>
-    <button>Copy</button>
-  </div>
-  <div>
-    <button>Run</button>
-  </div>
-  <div class="G-flex-center-between">
-    <mat-form-field appearance="fill" class="dropdown">
-      <mat-label>Config</mat-label>
-      <mat-select>
-        <mat-option *ngFor="let item of controlTables" routerLink="/{{item.routerLink}}">{{item.label}}</mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-</section>
+<router-outlet></router-outlet>
 <p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000"></p-confirmDialog>

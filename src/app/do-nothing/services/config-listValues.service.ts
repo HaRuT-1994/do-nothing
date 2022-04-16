@@ -7,7 +7,6 @@ import { ListValuesModel } from '../models/listValuesData.interface';
 @Injectable()
 export class ConfigListValuesService {
   public editListValues: ListValuesModel[] = [];
-  public isOnEdit: boolean;
   
   constructor(private http: HttpClient) { }
 
@@ -30,6 +29,5 @@ export class ConfigListValuesService {
 
   onEditRow(data): void {
     this.editListValues = data;
-    this.isOnEdit = true;    
   }
 }
