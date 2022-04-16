@@ -23,7 +23,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let data of shownAllRiskBasedDecisions">
+      <tr *ngFor="let data of shownAllRiskBasedDecisions; let i = index">
         <td [attr.title]="data.scenario.value">{{data.scenario.value}}</td>
         <td [attr.title]="data.cohort.value">{{data.cohort.value}}</td>
         <td [attr.title]="data.poF">{{data.poF}}</td>
@@ -32,7 +32,7 @@
         <td [attr.title]="data.band">{{data.band}}</td>
         <td [attr.title]="data.intervention">{{data.intervention}}</td>
         <td [attr.title]="data.frequency">{{data.frequency}}</td>
-        <td class="buttonEffect" (click)=onEditRow(data)>
+        <td class="buttonEffect" (click)="onEditRow(data, i)">
           <span class="edit">Edit</span>
         </td>
         <td class="buttonEffect" (click)="onDeleteRow(data.decisionId)">

@@ -1,9 +1,9 @@
+import { ConfigData } from "src/app/models/configData.interface";
+
 export interface RiskBasedDecisionModel {
   decisionId?: number,
-  scenarioId: number,
-  scenarioName: string,
-  cohortId: number,
-  cohortName: string,
+  scenario: ConfigData,
+  cohort: ConfigData,
   poF: number,
   coF: number,
   risk: number,

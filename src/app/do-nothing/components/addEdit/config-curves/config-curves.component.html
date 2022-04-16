@@ -9,23 +9,11 @@
     <div class="G-flex-justify-around">
       <div class="G-column gap">
         <div class="G-flex-center-between">
-          <label for="scenarioId" class="label-for-select">Scenario Id</label>
-          <!-- <mat-form-field appearance="fill" class="dropdown">
-            <mat-label>Scenario</mat-label>
-            <mat-select formControlName="scenarioId">
-              <mat-option *ngFor="let scenario of scenarioData" [value]="scenario.id">{{scenario.value}}</mat-option>
-            </mat-select>
-          </mat-form-field> -->
+          <label class="label-for-select">Scenario Id</label>
           <p-dropdown [options]="scenarioData"  optionLabel="value"  optionValue="id"  formControlName="scenario" editable="true" defaultLabel="Scenarios"></p-dropdown>
         </div>
         <div class="G-flex-center-between">
-          <label for="cohortId">Cohort Id</label>
-          <!-- <mat-form-field appearance="fill" class="dropdown">
-            <mat-label>Cohort</mat-label>
-            <mat-select formControlName="cohortId">
-              <mat-option *ngFor="let cohort of cohortData" [value]="cohort.id">{{cohort.value}}</mat-option>
-            </mat-select>
-          </mat-form-field> -->
+          <label>Cohort Id</label>
           <p-dropdown [options]="cohortData"  formControlName="cohort" optionLabel="value"  optionValue="id"  editable="true" defaultLabel="Cohorts"></p-dropdown>
         </div>
         <div class="G-flex-center-between">

@@ -22,7 +22,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let data of sohwnAllPoFBands">
+      <tr *ngFor="let data of sohwnAllPoFBands; let i = index">
         <td [attr.title]="data.scenario.value">{{data.scenario.value}}</td>
         <td [attr.title]="data.cohort.value">{{data.cohort.value}}</td>
         <td [attr.title]="data._1">{{data._1}}</td>
@@ -30,7 +30,7 @@
         <td [attr.title]="data._3">{{data._3}}</td>
         <td [attr.title]="data._4">{{data._4}}</td>
         <td [attr.title]="data._5">{{data._5}}</td>
-        <td class="buttonEffect" (click)=onEditRow(data)>
+        <td class="buttonEffect" (click)="onEditRow(data, i)">
           <span class="edit">Edit</span>
         </td>
         <td class="buttonEffect" (click)="onDeleteRow(data.id)">

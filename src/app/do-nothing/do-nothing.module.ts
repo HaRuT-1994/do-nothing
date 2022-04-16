@@ -60,6 +60,8 @@ import { DialogService } from 'primeng/dynamicdialog';
 import {MultiSelectModule} from 'primeng/multiselect';
 import {DropdownModule} from 'primeng/dropdown';
 import { ConfigBudgetYearComponent } from './components/addEdit/config-budget-year/config-budget-year.component';
+import { ConfigBudgetYearService } from './services/config-budget-year.service';
+import { LookupService } from './services/lookup.service';
 
 @NgModule({
   declarations: [
@@ -114,6 +116,7 @@ import { ConfigBudgetYearComponent } from './components/addEdit/config-budget-ye
     CohortService,
     PofBandsService,
     ConfigBudgetService,
+    ConfigBudgetYearService,
     ConfigCurvesService,
     ConfigFieldsService,
     ConfigInterventionOptionsService,
@@ -126,7 +129,8 @@ import { ConfigBudgetYearComponent } from './components/addEdit/config-budget-ye
     RiskLevelsService,
     RunHistoryService,
     ConfirmationService,
-    DialogService
+    DialogService,
+    LookupService
   ]
 })
 export class DoNothingModule { }

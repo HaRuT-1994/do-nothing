@@ -1,9 +1,9 @@
+import { ConfigData } from "src/app/models/configData.interface";
+
 export interface InterventionOptionsModel {
   interventionId?: number,
-  scenarioId: number,
-  scenarioName: string,
-  cohortId: number,
-  cohortName: string,
+  scenario: ConfigData,
+  cohort: ConfigData,
   intervention: string,
   available: boolean,
   reset: string,

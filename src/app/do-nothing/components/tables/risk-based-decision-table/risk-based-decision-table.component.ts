@@ -8,6 +8,8 @@ import { CommonService } from 'src/app/services/common.service';
 import { ConfirmationService } from 'primeng/api';
 import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { ConfigRiskBasedDecisionsComponent } from '../../addEdit/config-risk-based-decisions/config-risk-based-decisions.component';
+import { Subscription } from 'rxjs';
+import { LookupService } from 'src/app/do-nothing/services/lookup.service';
 
 @Component({
   selector: 'app-risk-based-decision-table',
@@ -18,29 +20,34 @@ export class RiskBasedDecisionTableComponent implements OnInit {
   public createPath = AppConfig.routes.add.configRiskBasedDecision;
   public isLoading: boolean;
   public msgDetails: MsgDetails;
-  public allRiskBasedDecisions: RiskBasedDecisionModel[] = [];
-  public shownAllRiskBasedDecisions: RiskBasedDecisionModel[] = [];
+  public allRiskBasedDecisions: RiskBasedDecisionModel[];
+  public shownAllRiskBasedDecisions: RiskBasedDecisionModel[];
   private currentPage = {first: 0, rows: 10};
+  private index = 0;
+  private sub$: Subscription;
 
   constructor( private riskBasedDecisionService: ConfigRiskBasedDecisionsService,
                private commonService: CommonService,
-               private confirmationService: ConfirmationService) { }
+               private confirmationService: ConfirmationService,
+               private lookup: LookupService) { }
 
    ngOnInit(): void {
      this.isLoading = true
-     this.riskBasedDecisionService.getAllRiskBasedDecisions().subscribe(
-      (res: RiskBasedDecisionModel[]) => {
-        this.allRiskBasedDecisions = res;
-        this.onPageChange(this.currentPage);
-        this.isLoading = false;
-      },
-      err => {
-        console.log(err);
+     this.getAllRiskBasedDecisions();
+
+     this.sub$ = this.commonService.getData().subscribe(res => {
+      if(res[1]) {
+        this.getAllRiskBasedDecisions();
+      } else {
+        this.allRiskBasedDecisions[this.index] = res[0]?.value;
+        this.shownAllRiskBasedDecisions[this.index] = res[0]?.value;
       }
-     );
+      
+    })
    }
 
-  onEditRow(data: RiskBasedDecisionModel): void {
+  onEditRow(data: RiskBasedDecisionModel, i: number): void {
+    this.index = i;
     this.confirmationService.confirm({
       message: 'Edit config?',
       header: 'Confirmation',
@@ -75,6 +82,19 @@ export class RiskBasedDecisionTableComponent implements OnInit {
         );
       }
     });
+  }
+
+  private getAllRiskBasedDecisions(): void {
+    this.riskBasedDecisionService.getAllRiskBasedDecisions().subscribe(
+      (res: RiskBasedDecisionModel[]) => {
+        this.allRiskBasedDecisions = res;
+        this.onPageChange(this.currentPage);
+        this.isLoading = false;
+      },
+      err => {
+        console.log(err);
+      }
+    );
   }
 
   onPageChange(ev): void {

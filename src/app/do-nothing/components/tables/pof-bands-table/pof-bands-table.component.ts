@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AppConfig } from 'src/app/config/app.config';
 import { Message } from 'src/app/enums/message.enum';
 import { Severity } from 'src/app/enums/severity.enum';
@@ -8,39 +8,46 @@ import { PofBandsService } from 'src/app/do-nothing/services/pof-bands.service';
 import { ConfirmationService } from 'primeng/api';
 import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { PofBandsComponent } from '../../addEdit/pof-bands/pof-bands.component';
+import { Subscription } from 'rxjs';
+import { LookupService } from 'src/app/do-nothing/services/lookup.service';
 
 @Component({
   selector: 'app-pof-bands-table',
   templateUrl: './pof-bands-table.component.html',
   styleUrls: ['./pof-bands-table.component.scss']
 })
-export class PoFBandsTableComponent implements OnInit {
+export class PoFBandsTableComponent implements OnInit, OnDestroy {
   public createPath = AppConfig.routes.add.pofBands;
   public isLoading: boolean;
   public msgDetails: MsgDetails;
   public allPoFBands: PoFBandsModel[] = [];
   public sohwnAllPoFBands: PoFBandsModel[] = [];
   private currentPage = {first: 0, rows: 10};
+  private index = 0;
+  private sub$: Subscription;
 
   constructor( private pofBandService: PofBandsService,
                private commonService: CommonService,
-               private confirmationService: ConfirmationService) { }
+               private confirmationService: ConfirmationService,
+               private lookup: LookupService) { }
 
   ngOnInit(): void {
     this.isLoading = true
-    this.pofBandService.getAllPoFBands().subscribe(
-      (res: PoFBandsModel[]) => {
-        this.allPoFBands = res;
-        this.onPageChange(this.currentPage);
-        this.isLoading = false;
-      },
-      err => {
-        console.log(err);
+    this.getAllPoFBands();
+
+    this.sub$ = this.commonService.getData().subscribe(res => {
+      if(res[1]) {
+        this.getAllPoFBands();
+      } else {
+        this.allPoFBands[this.index] = res[0]?.value;
+        this.sohwnAllPoFBands[this.index] = res[0]?.value;
       }
-    );
+      
+    })
   }
 
-  onEditRow(data: PoFBandsModel): void {
+  onEditRow(data: PoFBandsModel, i: number): void {
+    this.index = i;
     this.confirmationService.confirm({
       message: 'Edit config?',
       header: 'Confirmation',
@@ -76,6 +83,20 @@ export class PoFBandsTableComponent implements OnInit {
     });
   }
 
+  private getAllPoFBands(): void {
+    this.isLoading = true;
+    this.pofBandService.getAllPoFBands().subscribe(
+      (res: PoFBandsModel[]) => {
+        this.allPoFBands = res;
+        this.onPageChange(this.currentPage);
+        this.isLoading = false;
+      },
+      err => {
+        console.log(err);
+      }
+    );
+  }
+
   onPageChange(ev) {
     this.currentPage = ev;
     if(ev.page * ev.rows >= this.allPoFBands.length) {
@@ -99,5 +120,9 @@ export class PoFBandsTableComponent implements OnInit {
       this.sohwnAllPoFBands = this.allPoFBands;
       this.onPageChange(this.currentPage);
     }
+  }
+
+  ngOnDestroy() {
+    this.sub$.unsubscribe();
   }
 }

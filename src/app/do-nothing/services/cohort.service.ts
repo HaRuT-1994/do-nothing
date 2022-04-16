@@ -14,11 +14,7 @@ export class CohortService {
   addCohort(data: any): Observable<ConfigData[]> {
     return this.http.post<ConfigData[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.addConfigCohort}`, data);
   }
-
-  getConfigCohort(): Observable<ConfigData[]> {
-    return this.http.get<ConfigData[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.lookupConfigCohorts}`);
-  }
-
+  
   getAllCohorts(): Observable<any> {
     return this.http.get<CohortModel[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.getAllCohorts}`);
   }

@@ -25,7 +25,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let data of shownAllInterventionOptions">
+      <tr *ngFor="let data of shownAllInterventionOptions; let i = index">
         <td [attr.title]="data.scenario.value">{{data.scenario.value}}</td>
         <td [attr.title]="data.cohort.value">{{data.cohort.value}}</td>
         <td [attr.title]="data.intervention">{{data.intervention}}</td>
@@ -36,7 +36,7 @@
         <td [attr.title]="data.forceReplace">{{data.forceReplace}}</td>
         <td [attr.title]="data.whenAlc">{{data.whenAlc}}</td>
         <td [attr.title]="data.replaceWithCohortId">{{data.replaceWithCohortId}}</td>
-        <td class="buttonEffect" (click)=onEditRow(data)>
+        <td class="buttonEffect" (click)="onEditRow(data, i)">
           <span class="edit">Edit</span>
         </td>
         <td class="buttonEffect" (click)="onDeleteRow(data.interventionId)">

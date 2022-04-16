@@ -1,15 +1,14 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ConfigCurvesService } from 'src/app/do-nothing/services/config-curves.service';
 import { Severity } from 'src/app/enums/severity.enum';
 import { Message } from 'src/app/enums/message.enum';
 import { CommonService } from 'src/app/services/common.service';
-import { CohortService } from 'src/app/do-nothing/services/cohort.service';
 import { ConfigData } from 'src/app/models/configData.interface';
-import { ConfigScenariosService } from 'src/app/do-nothing/services/config-scenarios.service';
 import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { CurveModel } from 'src/app/do-nothing/models/curveData.interface';
+import { LookupService } from 'src/app/do-nothing/services/lookup.service';
 
 @Component({
   selector: 'app-config-curves',
@@ -17,30 +16,21 @@ import { CurveModel } from 'src/app/do-nothing/models/curveData.interface';
   styleUrls: ['./config-curves.component.scss']
 })
 export class ConfigCurvesComponent implements OnInit {
- public  formGroup: FormGroup;
+  public formGroup: FormGroup;
   public isOnEdit: boolean;
   public isLoading: boolean;
   public msgDetails: MsgDetails;
-  public cohortData: ConfigData[] = [];
-  public scenarioData: ConfigData[] = [];
-  public editCurves: CurveModel[] = [];
-  // private selectedScenario = this.editCurves['scenario'].id;
+  public cohortData: ConfigData[];
+  public scenarioData: ConfigData[];
+  private editCurves: CurveModel[];
 
   constructor(private curvesService: ConfigCurvesService, private commonService: CommonService,
-    private cohortService: CohortService, private configScenariosService: ConfigScenariosService, private dialogConfig: DynamicDialogConfig, private formBuilder: FormBuilder, private cdRef: ChangeDetectorRef) { }
+    private lookupService: LookupService, private dialogConfig: DynamicDialogConfig, private fb: FormBuilder) { }
 
   ngOnInit() {
     this.formInit();
-    this.cohortService.getConfigCohort().subscribe(
-      (res: ConfigData[]) => {
-        this.cohortData = res;
-      }
-    )
-    this.configScenariosService.getConfigScenarios().subscribe(
-      (res: ConfigData[]) => {
-        this.scenarioData = res;
-      }
-    )
+    this.cohortData = this.lookupService.configCohortData;
+    this.scenarioData = this.lookupService.configScenariosData;
     this.isOnEdit = !this.dialogConfig.data?.add;
 
     if (this.isOnEdit) {
@@ -50,7 +40,7 @@ export class ConfigCurvesComponent implements OnInit {
   }
 
   formInit(): void {
-    this.formGroup = this.formBuilder.group({
+    this.formGroup = this.fb.group({
       scenario: [''],
       cohort: [''],
       calculation: [''],
@@ -71,7 +61,7 @@ export class ConfigCurvesComponent implements OnInit {
         this.isLoading = false;
         this.msgDetails = {msg: 'Curve Form ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         this.commonService.deleteMsg(this);
-        this.commonService.updateData(this.formGroup, true)
+        this.commonService.updateData(this.formGroup, true);
         this.editCurves = this.formGroup.value;
         this.commonService.updateForm(this.formGroup, this.editCurves);
       },

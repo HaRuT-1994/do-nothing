@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { PofBandsService } from 'src/app/do-nothing/services/pof-bands.service';
 import { Severity } from 'src/app/enums/severity.enum';
 import { Message } from 'src/app/enums/message.enum';
 import { CommonService } from 'src/app/services/common.service';
 import { ConfigData } from 'src/app/models/configData.interface';
-import { ConfigScenariosService } from 'src/app/do-nothing/services/config-scenarios.service';
-import { CohortService } from 'src/app/do-nothing/services/cohort.service';
 import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { DynamicDialogConfig } from 'primeng/dynamicdialog';
+import { LookupService } from 'src/app/do-nothing/services/lookup.service';
+import { PoFBandsModel } from 'src/app/do-nothing/models/pofBandData.interface';
 
 @Component({
   selector: 'app-pof-bands',
@@ -20,58 +20,53 @@ export class PofBandsComponent {
   public msgDetails: MsgDetails;
   public isOnEdit: boolean;
   public isLoading: boolean;
-  public cohortData: ConfigData[] = [];
-  public scenarioData: ConfigData[] = [];
+  public cohortData: ConfigData[];
+  public scenarioData: ConfigData[];
+  private editPofBand: PoFBandsModel[];
 
   constructor(private pofBandsService: PofBandsService,
               private commonService: CommonService,
-              private cohortService: CohortService,
-              private configScenariosService: ConfigScenariosService,
-              private dialogConfig: DynamicDialogConfig) { }
+              private lookupService: LookupService,
+              private dialogConfig: DynamicDialogConfig,
+              private fb: FormBuilder) { }
 
   ngOnInit() {
     this.formInit();
-    this.cohortService.getConfigCohort().subscribe(
-      (res: ConfigData[]) => {
-        this.cohortData = res;
-      }
-    )
-    this.configScenariosService.getConfigScenarios().subscribe(
-      (res: ConfigData[]) => this.scenarioData = res
-    );
+    this.cohortData = this.lookupService.configCohortData;
+    this.scenarioData = this.lookupService.configScenariosData;
     this.isOnEdit = !this.dialogConfig.data?.add;
 
     if (this.isOnEdit) {
-      
-      this.commonService.updateForm(this.formGroup, this.pofBandsService.editPofBand);
+      this.editPofBand = this.pofBandsService.editPofBand;
+      this.commonService.updateForm(this.formGroup, this.editPofBand);
     }
   }
 
   formInit(): void {
-    this.formGroup = new FormGroup({
-      scenario: new FormControl(0),
-      cohort: new FormControl(0),
-      _1: new FormControl(0),
-      _2: new FormControl(0),
-      _3: new FormControl(0),
-      _4: new FormControl(0),
-      _5: new FormControl(0)
+    this.formGroup = this.fb.group({
+      scenario: [''],
+      cohort: [''],
+      _1: [0],
+      _2: [0],
+      _3: [0],
+      _4: [0],
+      _5: [0]
     });
   }
 
   addConfig(): void {
     this.isLoading = true;
-    this.changeToObj();
+    this.commonService.changeToObj(this.formGroup, this.scenarioData, this.cohortData);
     this.pofBandsService.addPofBands(this.formGroup.value).subscribe(
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: 'PoF Bands Form ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         this.commonService.deleteMsg(this);
-        this.formGroup.reset();
-        this.formInit();
+        this.commonService.updateData(this.formGroup, true)
+        this.editPofBand = this.formGroup.value;
+        this.commonService.updateForm(this.formGroup, this.editPofBand);
       },
-      err => { 
-        console.log(err);
+      err => {
         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
         this.commonService.deleteMsg(this);
         this.isLoading = false;
@@ -81,11 +76,15 @@ export class PofBandsComponent {
 
   editConfig(): void {
     this.isLoading = true;
+    this.commonService.changeToObj(this.formGroup, this.scenarioData, this.cohortData);
     this.pofBandsService.onEditPoFBand(this.formGroup.value).subscribe(
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: 'PoF Bands Form ' +  Message.EDIT_SUCCESS_MSG, severity: Severity.SUCCESS};
         this.commonService.deleteMsg(this);
+        this.commonService.updateData(this.formGroup);
+        this.editPofBand = this.formGroup.value;
+        this.commonService.updateForm(this.formGroup, this.editPofBand);
       },
       () => {
         this.isLoading = false;
@@ -98,14 +97,4 @@ export class PofBandsComponent {
   // private arrToString(data: string[]) {
   //   data.forEach(i => this.formGroup.value[i] = this.formGroup.value[i].toString());
   // }
-
-  private changeToObj() {
-    let scenario = this.scenarioData.filter(item => item.id === this.formGroup.get('scenario').value);
-    let cohort = this.cohortData.filter(item => item.id === this.formGroup.get('cohort').value);
-
-    this.formGroup.patchValue({
-      scenario: scenario[0],
-      cohort: cohort[0]
-    })
-  }
 }

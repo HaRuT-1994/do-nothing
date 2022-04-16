@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AppConfig } from '../config/app.config';
 
 import { CohortComponent } from './components/addEdit/cohort/cohort.component';
+import { ConfigBudgetYearComponent } from './components/addEdit/config-budget-year/config-budget-year.component';
 import { ConfigBudgetComponent } from './components/addEdit/config-budget/config-budget.component';
 import { ConfigCurvesComponent } from './components/addEdit/config-curves/config-curves.component';
 import { ConfigFieldsComponent } from './components/addEdit/config-fields/config-fields.component';
@@ -58,6 +59,9 @@ const routes: Routes = [
 
   { path: route.add.configBudget, component: ConfigBudgetComponent},
   { path: route.edit.configBudget, component: ConfigBudgetComponent},
+
+  { path: route.add.configBudgetYear, component: ConfigBudgetYearComponent},
+  { path: route.edit.configBudgetYear, component: ConfigBudgetYearComponent},
 
   { path: route.add.configInterventionOptions, component: ConfigInterventionOptionsComponent },
   { path: route.edit.configInterventionOptions, component: ConfigInterventionOptionsComponent },

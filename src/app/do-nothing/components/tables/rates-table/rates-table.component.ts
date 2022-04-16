@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AppConfig } from 'src/app/config/app.config';
 import { RatesModel } from 'src/app/do-nothing/models/ratesData.interface';
 import { ConfigRatesService } from 'src/app/do-nothing/services/config-rates.service';
@@ -8,39 +8,46 @@ import { CommonService } from 'src/app/services/common.service';
 import { ConfirmationService } from 'primeng/api';
 import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { ConfigRatesComponent } from '../../addEdit/config-rates/config-rates.component';
+import { Subscription } from 'rxjs';
+import { LookupService } from 'src/app/do-nothing/services/lookup.service';
 
 @Component({
   selector: 'app-rates-table',
   templateUrl: './rates-table.component.html',
   styleUrls: ['./rates-table.component.scss']
 })
-export class RatesTableComponent implements OnInit {
+export class RatesTableComponent implements OnInit, OnDestroy {
   public createPath = AppConfig.routes.add.configRates;
   public isLoading: boolean;
   public msgDetails: MsgDetails;
-  public allRates: RatesModel[] = [];
-  public shownAllRates: RatesModel[] = [];
+  public allRates: RatesModel[];
+  public shownAllRates: RatesModel[];
   private currentPage = {first: 0, rows: 10};
+  private index = 0;
+  private sub$: Subscription;
 
   constructor( private rateService: ConfigRatesService,
                private commonService: CommonService,
-               private confirmationService: ConfirmationService) { }
+               private confirmationService: ConfirmationService,
+               private lookup: LookupService) { }
 
    ngOnInit(): void {
     this.isLoading = true
-    this.rateService.getAllRates().subscribe(
-      (res: RatesModel[]) => {
-        this.allRates = res;
-        this.onPageChange(this.currentPage);
-        this.isLoading = false;
-      },
-      err => {
-        console.log(err);
+    this.getAllRates();
+
+    this.sub$ = this.commonService.getData().subscribe(res => {
+      if(res[1]) {
+        this.getAllRates();
+      } else {
+        this.allRates[this.index] = res[0]?.value;
+        this.shownAllRates[this.index] = res[0]?.value;
       }
-    );
+      
+    })
    }
 
-  onEditRow(data: RatesModel): void {
+  onEditRow(data: RatesModel, i: number): void {
+    this.index = i;
     this.confirmationService.confirm({
       message: 'Edit config?',
       header: 'Confirmation',
@@ -77,6 +84,21 @@ export class RatesTableComponent implements OnInit {
     });
    }
 
+   private getAllRates(): void{
+     this.isLoading = true;
+     this.rateService.getAllRates().subscribe(
+      (res: RatesModel[]) => {
+        this.allRates = res;
+        this.onPageChange(this.currentPage);
+        this.isLoading = false;
+      },
+      err => {
+        console.log(err);
+      }
+     );
+   }
+   
+
   onPageChange(ev): void {
     this.currentPage = ev;
     if(ev.page * ev.rows >= this.allRates.length) {
@@ -99,5 +121,9 @@ export class RatesTableComponent implements OnInit {
       this.shownAllRates = this.allRates;
       this.onPageChange(this.currentPage);
     }
+  }
+
+  ngOnDestroy() {
+    this.sub$.unsubscribe();
   }
 }

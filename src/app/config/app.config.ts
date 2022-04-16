@@ -46,6 +46,11 @@ export const AppConfig: AppConfig = {
         updateBudget: 'ConfigBudget/UpdateConfigBudget',
         deleteBudget: 'ConfigBudget/DeleteConfigBudget',
 
+        addConfigBudgetYear: 'ConfigBudgetYear/AddConfigBudgetYear',
+        getAllBudgetYears: 'ConfigBudgetYear/GetAllConfigBudgetYear',
+        updateBudgetYear: 'ConfigBudgetYear/UpdateConfigBudgetYear',
+        deleteBudgetYear: 'ConfigBudgetYear/DeleteConfigBudgetYear',
+
         addConfigInterventionOptions: 'ConfigInterventionOptions/AddConfigInterventionOptions',
         getAllInterventionOptions: 'ConfigInterventionOptions/GetAllConfigInterventionOptions',
         updateInterventionOption: 'ConfigInterventionOptions/UpdateConfigInterventionOptions',
@@ -95,6 +100,7 @@ export const AppConfig: AppConfig = {
             configCurves: "add-config-curves",
             pofBands: "add-config-pof-bands",
             configBudget: "add-config-budget",
+            configBudgetYear: "add-config-budget-year",
             configInterventionOptions: "add-config-interventionOptions",
             configRates: "add-config-rates",
             configRiskBasedDecision: "add-config-riskBasedDecision",
@@ -110,6 +116,7 @@ export const AppConfig: AppConfig = {
             configCurves: "edit-config-curves",
             pofBands: "edit-config-pof-bands",
             configBudget: "edit-config-budget",
+            configBudgetYear: "edit-config-budget-year",
             configInterventionOptions: "edit-config-interventionOptions",
             configRates: "edit-config-rates",
             configRiskBasedDecision: "edit-config-riskBasedDecision",

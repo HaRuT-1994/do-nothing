@@ -23,7 +23,7 @@ export class CommonService {
     return this.siblingData.asObservable();
   }
  
-  public updateData(data: any, isAdd?: boolean): void {
+  public updateData(data?: any, isAdd?: boolean): void {
     this.siblingData.next([data, isAdd]);
   }
 

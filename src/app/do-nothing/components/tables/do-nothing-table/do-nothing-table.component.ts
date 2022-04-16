@@ -8,6 +8,7 @@ import { DoNothingService } from 'src/app/do-nothing/services/do-nothing.service
 import {ConfirmationService} from 'primeng/api';
 import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { DoNothingComponent } from '../../addEdit/do-nothing/do-nothing.component';
+import { LookupService } from 'src/app/do-nothing/services/lookup.service';
 
 @Component({
   selector: 'app-do-nothing-table',
@@ -26,7 +27,8 @@ export class DoNothingTableComponent implements OnInit {
 
   constructor( private doNothingService: DoNothingService,
                private commonService: CommonService,
-               private confirmationService: ConfirmationService) { }
+               private confirmationService: ConfirmationService,
+               private lookupService: LookupService) { }
 
   ngOnInit(): void {
     this.isLoading = true;

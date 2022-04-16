@@ -16,10 +16,6 @@ export class ConfigScenariosService {
     return this.http.post<ConfigData[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.addConfigScenario}`, data);
   }
 
-  getConfigScenarios(): Observable<ConfigData[]>{
-    return this.http.get<ConfigData[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.lookupConfigScenarios}`)
-  }
-
   getAllScenarios(): Observable<ScenarioModel[]> {
     return this.http.get<ScenarioModel[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.getAllScenarios}`);
   }

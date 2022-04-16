@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Message } from 'src/app/enums/message.enum';
 import { Severity } from 'src/app/enums/severity.enum';
 import { ConfigData } from 'src/app/models/configData.interface';
-import { CohortService } from 'src/app/do-nothing/services/cohort.service';
 import { CommonService } from 'src/app/services/common.service';
-import { ConfigScenariosService } from 'src/app/do-nothing/services/config-scenarios.service';
 import { ConfigInterventionOptionsService } from 'src/app/do-nothing/services/config-InterventionOptions.service';
 import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { DynamicDialogConfig } from 'primeng/dynamicdialog';
+import { LookupService } from 'src/app/do-nothing/services/lookup.service';
+import { InterventionOptionsModel } from 'src/app/do-nothing/models/interventionOptionsData.interface';
 
 @Component({
   selector: 'app-config-intervention-options',
@@ -17,62 +17,58 @@ import { DynamicDialogConfig } from 'primeng/dynamicdialog';
 })
 export class ConfigInterventionOptionsComponent implements OnInit {
   public formGroup: FormGroup;
-  public scenarioData: ConfigData[] = [];
-  public cohortData: ConfigData[] = [];
   public msgDetails: MsgDetails;
   public isOnEdit: boolean;
   public isLoading: boolean;
+  public scenarioData: ConfigData[];
+  public cohortData: ConfigData[];
+  private editInterventionOptions: InterventionOptionsModel[];
   
   constructor( 
                private interventionOptionsService: ConfigInterventionOptionsService,
                private commonService: CommonService,
-               private cohortService: CohortService,
-               private scenariosService: ConfigScenariosService,
-               private dialogConfig: DynamicDialogConfig) { }
+               private lookupService: LookupService,
+               private dialogConfig: DynamicDialogConfig,
+               private fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.formInit();
-    this.cohortService.getConfigCohort().subscribe(
-      (res: ConfigData[]) => {
-        this.cohortData = res;
-      }
-    )
-    this.scenariosService.getConfigScenarios().subscribe(
-      (res: ConfigData[]) => this.scenarioData = res
-    );
-
+    this.scenarioData = this.lookupService.configScenariosData;
+    this.cohortData = this.lookupService.configCohortData;
     this.isOnEdit = !this.dialogConfig.data?.add;
 
     if (this.isOnEdit) {
-      this.commonService.updateForm(this.formGroup, this.interventionOptionsService.editInterventionOptions);
+      this.editInterventionOptions = this.interventionOptionsService.editInterventionOptions;
+      this.commonService.updateForm(this.formGroup, this.editInterventionOptions);
     }
   }
 
   formInit(): void {
-    this.formGroup = new FormGroup({
-      scenario: new FormControl(0),
-      cohort: new FormControl(0),
-      intervention: new FormControl(''),
-      available: new FormControl(true),
-      reset: new FormControl(''),
-      applyWhenMlc: new FormControl(0),
-      excludeIfCrc: new FormControl(''),
-      forceReplace: new FormControl(true),
-      whenAlc: new FormControl(0),
-      replaceWithCohortId: new FormControl(0)
+    this.formGroup = this.fb.group({
+      scenario: [''],
+      cohort: [''],
+      intervention: [''],
+      available: [true],
+      reset: [''],
+      applyWhenMlc: [0],
+      excludeIfCrc: [''],
+      forceReplace: [true],
+      whenAlc: [0],
+      replaceWithCohortId: [0]
     })
   }
 
   addConfig(): void {
     this.isLoading = true;
-    this.changeToObj();
+    this.commonService.changeToObj(this.formGroup, this.scenarioData, this.cohortData);
     this.interventionOptionsService.addConfigInterventionOptions(this.formGroup.value).subscribe(
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: 'Config Intervention Options Form ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         this.commonService.deleteMsg(this);
-        this.formGroup.reset();
-        this.formInit();
+        this.commonService.updateData(this.formGroup, true)
+        this.editInterventionOptions = this.formGroup.value;
+        this.commonService.updateForm(this.formGroup, this.editInterventionOptions);
       },
       () => {
         this.isLoading = false;
@@ -84,11 +80,15 @@ export class ConfigInterventionOptionsComponent implements OnInit {
 
   editConfig(): void {
     this.isLoading = true;
+    this.commonService.changeToObj(this.formGroup, this.scenarioData, this.cohortData);
     this.interventionOptionsService.onEditInterventionOption(this.formGroup.value).subscribe(
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: 'Intervention Options Form ' +  Message.EDIT_SUCCESS_MSG, severity: Severity.SUCCESS};
         this.commonService.deleteMsg(this);
+        this.commonService.updateData(this.formGroup);
+        this.editInterventionOptions = this.formGroup.value;
+        this.commonService.updateForm(this.formGroup, this.editInterventionOptions);
       },
       () => {
         this.isLoading = false;
@@ -96,15 +96,5 @@ export class ConfigInterventionOptionsComponent implements OnInit {
         this.commonService.deleteMsg(this);
       }
     );
-  }
-
-  private changeToObj() {
-    let scenario = this.scenarioData.filter(item => item.id === this.formGroup.get('scenario').value);
-    let cohort = this.cohortData.filter(item => item.id === this.formGroup.get('cohort').value);
-
-    this.formGroup.patchValue({
-      scenario: scenario[0],
-      cohort: cohort[0]
-    })
   }
 }

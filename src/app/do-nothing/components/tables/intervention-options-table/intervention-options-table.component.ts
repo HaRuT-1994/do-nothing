@@ -8,6 +8,8 @@ import { CommonService } from 'src/app/services/common.service';
 import { ConfirmationService } from 'primeng/api';
 import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { ConfigInterventionOptionsComponent } from '../../addEdit/config-intervention-options/config-intervention-options.component';
+import { Subscription } from 'rxjs';
+import { LookupService } from 'src/app/do-nothing/services/lookup.service';
 
 @Component({
   selector: 'app-intervention-options-table',
@@ -21,26 +23,31 @@ export class InterventionOptionsTableComponent implements OnInit {
   public allInterventionOptions: InterventionOptionsModel[] = [];
   public shownAllInterventionOptions: InterventionOptionsModel[] = [];
   private currentPage = {first: 0, rows: 10};
+  private index = 0;
+  private sub$: Subscription;
 
   constructor( private interventionOptionsService: ConfigInterventionOptionsService,
                private commonService: CommonService,
-               private confirmationService: ConfirmationService) { }
+               private confirmationService: ConfirmationService,
+               private lookup: LookupService) { }
 
    ngOnInit(): void {
     this.isLoading = true
-    this.interventionOptionsService.getAllInterventionOptions().subscribe(
-      (res: InterventionOptionsModel[]) => {
-        this.allInterventionOptions = res;
-        this.onPageChange(this.currentPage);
-        this.isLoading = false;
-      },
-      err => {
-        console.log(err);
+    this.getAllInterventionOptions();
+
+    this.sub$ = this.commonService.getData().subscribe(res => {
+      if(res[1]){
+        this.getAllInterventionOptions();
+      } else {
+        this.allInterventionOptions[this.index] = res[0]?.value;
+        this.shownAllInterventionOptions[this.index] = res[0]?.value;
       }
-    );
+      
+    })
    }
 
-  onEditRow(data: InterventionOptionsModel): void {
+  onEditRow(data: InterventionOptionsModel, i: number): void {
+    this.index = i;
     this.confirmationService.confirm({
       message: 'Edit config?',
       header: 'Confirmation',
@@ -77,6 +84,19 @@ export class InterventionOptionsTableComponent implements OnInit {
     });
   }
 
+  private getAllInterventionOptions() {
+    this.interventionOptionsService.getAllInterventionOptions().subscribe(
+      (res: InterventionOptionsModel[]) => {
+        this.allInterventionOptions = res;
+        this.onPageChange(this.currentPage);
+        this.isLoading = false;
+      },
+      err => {
+        console.log(err);
+      }
+    );
+  }
+
   onPageChange(ev): void {
     this.currentPage = ev;
     if(ev.page * ev.rows >= this.allInterventionOptions.length) {
@@ -99,5 +119,9 @@ export class InterventionOptionsTableComponent implements OnInit {
       this.shownAllInterventionOptions = this.allInterventionOptions;
       this.onPageChange(this.currentPage);
     }
+  }
+
+  ngOnDestroy() {
+    this.sub$.unsubscribe();
   }
 }

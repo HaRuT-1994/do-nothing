@@ -9,6 +9,7 @@ import {ConfirmationService} from 'primeng/api';
 import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { ConfigCurvesComponent } from '../../addEdit/config-curves/config-curves.component';
 import { Subscription } from 'rxjs';
+import { LookupService } from 'src/app/do-nothing/services/lookup.service';
 
 @Component({
   selector: 'app-curves-table',
@@ -27,27 +28,21 @@ export class CurvesTableComponent implements OnInit, OnDestroy {
 
   constructor( private curvesService: ConfigCurvesService, 
                private commonService: CommonService,
-               private confirmationService: ConfirmationService) { }
+               private confirmationService: ConfirmationService,
+               private lookup: LookupService) { }
 
   ngOnInit(): void {
     this.isLoading = true
-    this.curvesService.getAllCurves().subscribe(
-      (res: CurveModel[]) => {
-        this.allCurves = res;
-        this.index = res.length;
-        this.onPageChange(this.currentPage);
-        this.isLoading = false;
-      },
-      err => {
-        console.log(err);
-      }
-    );
+    this.getAllCurves();
 
-  this.sub$ = this.commonService.getData().subscribe(res => {
-    if(res[1]) this.index = this.allCurves.length;
-    this.allCurves[this.index] = res[0]?.value;
-    this.shownAllCurves[this.index] = res[0]?.value;
-  })
+    this.sub$ = this.commonService.getData().subscribe(res => {
+      if(res[1]) {
+        this.getAllCurves();
+      } else {
+        this.allCurves[this.index] = res[0]?.value;
+        this.shownAllCurves[this.index] = res[0]?.value;
+      }
+    })
   }
 
   onEditRow(data: CurveModel, i: number): void {
@@ -86,6 +81,20 @@ export class CurvesTableComponent implements OnInit, OnDestroy {
         );
       }
     });
+  }
+
+  private getAllCurves(): void {
+    this.isLoading = true;
+    this.curvesService.getAllCurves().subscribe(
+      (res: CurveModel[]) => {
+        this.allCurves = res;
+        this.onPageChange(this.currentPage);
+        this.isLoading = false;
+      },
+      err => {
+        console.log(err);
+      }
+    );
   }
 
   onPageChange(ev): void {

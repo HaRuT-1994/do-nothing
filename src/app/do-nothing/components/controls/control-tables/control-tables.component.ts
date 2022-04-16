@@ -19,7 +19,7 @@ import { ConfigRatesComponent } from '../../addEdit/config-rates/config-rates.co
 import { ConfigRiskBasedDecisionsComponent } from '../../addEdit/config-risk-based-decisions/config-risk-based-decisions.component';
 import { ConfigListsComponent } from '../../addEdit/config-lists/config-lists.component';
 import { ConfigListValuesComponent } from '../../addEdit/config-list-values/config-list-values.component';
-import { CommonService } from 'src/app/services/common.service';
+import { ConfigBudgetYearComponent } from '../../addEdit/config-budget-year/config-budget-year.component';
 
 @Component({
   selector: 'app-control-tables',
@@ -46,14 +46,13 @@ export class ControlTablesComponent implements OnInit, OnDestroy {
     { label: 'Risk Based Decision', routerLink: AppConfig.routes.view.riskBasedDecisionTable },
     { label: 'Lists', routerLink: AppConfig.routes.view.listsTable },
     { label: 'List Values', routerLink: AppConfig.routes.view.listValuesTable },
-    { label: 'Run History', routerLink: AppConfig.routes.view.runHistory }
+    { label: 'Run History', routerLink: AppConfig.routes.view.runHistory },
   ];
   public label = '';
 
   constructor( private confirmationService: ConfirmationService,
                private dialogService: DialogService,
-               private location: Location,
-               private commonService: CommonService ) { }
+               private location: Location) { }
 
   ngOnInit(): void {
     this.getComponentName();
@@ -123,7 +122,7 @@ export class ControlTablesComponent implements OnInit, OnDestroy {
         this.label = this.controlTables[6].label;
         break;
       case 'budget-table':
-        this.component = ConfigBudgetComponent;
+        this.component = ConfigBudgetYearComponent;
         this.label = this.controlTables[7].label;
         break;
       case 'intervention-options-table':

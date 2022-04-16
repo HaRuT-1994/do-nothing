@@ -5,9 +5,9 @@ import { Message } from 'src/app/enums/message.enum';
 import { Severity } from 'src/app/enums/severity.enum';
 import { CommonService } from 'src/app/services/common.service';
 import { ConfigData } from 'src/app/models/configData.interface';
-import { ConfigScenariosService } from 'src/app/do-nothing/services/config-scenarios.service';
 import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { DynamicDialogConfig } from 'primeng/dynamicdialog';
+import { LookupService } from 'src/app/do-nothing/services/lookup.service';
 
 @Component({
   selector: 'app-config-budget',
@@ -24,16 +24,13 @@ export class ConfigBudgetComponent implements OnInit {
   constructor( 
                private budgetService: ConfigBudgetService,
                private commonService: CommonService,
-               private scenariosService: ConfigScenariosService,
+               private lookupService: LookupService,
                private dialogConfig: DynamicDialogConfig) { }
 
   ngOnInit(): void {
     this.formInit();
     this.isOnEdit = !this.dialogConfig.data?.add;
-
-    this.scenariosService.getConfigScenarios().subscribe(
-      (res: ConfigData[]) => this.scenarioData = res
-    );
+    this.scenarioData = this.lookupService.configScenariosData;
   
     if (this.isOnEdit) {
       this.commonService.updateForm(this.formGroup, this.budgetService.editBudget);
@@ -43,10 +40,9 @@ export class ConfigBudgetComponent implements OnInit {
   formInit(): void {
     this.formGroup = new FormGroup({
       scenario: new FormControl(0),
-      scenarioName: new FormControl(''),
-      expLimit: new FormControl(0),
+      exceedanceAllowance: new FormControl(0),
       year: new FormControl(0),
-      budget: new FormControl(0),
+      budgetName: new FormControl(0),
       budgetSource: new FormControl('')
     })
   }

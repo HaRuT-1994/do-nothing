@@ -1,9 +1,9 @@
+import { ConfigData } from "src/app/models/configData.interface";
+
 export interface RatesModel {
   ratesId?: number,
-  scenarioId: number,
-  scenarioName: string,
-  cohortId: number,
-  cohortName: string,
+  scenario: ConfigData,
+  cohort: ConfigData,
   intervention: string,
   geography: string,
   budgetSource: string,

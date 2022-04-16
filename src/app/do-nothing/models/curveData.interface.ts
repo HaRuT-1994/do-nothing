@@ -1,9 +1,9 @@
+import { ConfigData } from "src/app/models/configData.interface";
+
 export interface CurveModel {
     id?: number,
-    scenarioId: number,
-    scenarioName: string,
-    cohortId: number,
-    cohortName: string,
+    scenario: ConfigData,
+    cohort: ConfigData,
     calculation: string,
     poFCurve: number,
     poFNav: number,

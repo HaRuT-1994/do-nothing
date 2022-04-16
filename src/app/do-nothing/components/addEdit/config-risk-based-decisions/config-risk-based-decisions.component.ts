@@ -3,12 +3,12 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { Message } from 'src/app/enums/message.enum';
 import { Severity } from 'src/app/enums/severity.enum';
 import { ConfigData } from 'src/app/models/configData.interface';
-import { CohortService } from 'src/app/do-nothing/services/cohort.service';
 import { CommonService } from 'src/app/services/common.service';
-import { ConfigScenariosService } from 'src/app/do-nothing/services/config-scenarios.service';
 import { ConfigRiskBasedDecisionsService } from 'src/app/do-nothing/services/config-RiskBasedDecisions.service';
 import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { DynamicDialogConfig } from 'primeng/dynamicdialog';
+import { LookupService } from 'src/app/do-nothing/services/lookup.service';
+import { RiskBasedDecisionModel } from 'src/app/do-nothing/models/riskBasedDecisionData.interface';
 
 @Component({
   selector: 'app-config-risk-based-decisions',
@@ -22,29 +22,23 @@ export class ConfigRiskBasedDecisionsComponent implements OnInit {
   public msgDetails: MsgDetails;
   public isOnEdit: boolean;
   public isLoading: boolean;
+  private editRiskBasedDecision: RiskBasedDecisionModel[];
   
   constructor(
               private riskBasedDecisionService: ConfigRiskBasedDecisionsService,
               private commonService: CommonService,
-              private configScenariosService: ConfigScenariosService,
-              private cohortService: CohortService,
+              private lookupService: LookupService,
               private dialogConfig: DynamicDialogConfig) { }
 
   ngOnInit(): void {
     this.formInit();
+    this.scenarioData = this.lookupService.configScenariosData;
+    this.cohortData = this.lookupService.configCohortData;
     this.isOnEdit = !this.dialogConfig.data?.add;
-
-    this.configScenariosService.getConfigScenarios().subscribe(
-      (res: ConfigData[]) => this.scenarioData = res
-    );
-    this.cohortService.getConfigCohort().subscribe(
-      (res: ConfigData[]) => {
-        this.cohortData = res;
-      }
-    )
-
+    
     if (this.isOnEdit) {
-      this.commonService.updateForm(this.formGroup, this.riskBasedDecisionService.editRiskBasedDecision);
+      this.editRiskBasedDecision = this.riskBasedDecisionService.editRiskBasedDecision
+      this.commonService.updateForm(this.formGroup, this.editRiskBasedDecision);
     }
   }
 
@@ -63,14 +57,15 @@ export class ConfigRiskBasedDecisionsComponent implements OnInit {
   
   addConfig(): void {
     this.isLoading = true;
-    this.changeToObj();
+    this.commonService.changeToObj(this.formGroup, this.scenarioData, this.cohortData);
     this.riskBasedDecisionService.addConfigRiskBasedDecision(this.formGroup.value).subscribe(
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: 'Config Risk Based Decisions Form ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         this.commonService.deleteMsg(this);
-        this.formGroup.reset();
-        this.formInit();
+        this.commonService.updateData(this.formGroup, true);
+        this.editRiskBasedDecision = this.formGroup.value;
+        this.commonService.updateForm(this.formGroup, this.editRiskBasedDecision);
       },
       () => {
         this.isLoading = false;
@@ -82,11 +77,15 @@ export class ConfigRiskBasedDecisionsComponent implements OnInit {
 
   editConfig(): void {
     this.isLoading = true;
+    this.commonService.changeToObj(this.formGroup, this.scenarioData, this.cohortData);
     this.riskBasedDecisionService.onEditRiskBasedDecision(this.formGroup.value).subscribe(
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: 'Risk Based Decision Form ' +  Message.EDIT_SUCCESS_MSG, severity: Severity.SUCCESS};
         this.commonService.deleteMsg(this);
+        this.commonService.updateData(this.formGroup);
+        this.editRiskBasedDecision = this.formGroup.value;
+        this.commonService.updateForm(this.formGroup, this.editRiskBasedDecision);
       },
       () => {
         this.isLoading = false;
@@ -94,15 +93,5 @@ export class ConfigRiskBasedDecisionsComponent implements OnInit {
         this.commonService.deleteMsg(this);
       }
     );
-  }
-
-  private changeToObj() {
-    let scenario = this.scenarioData.filter(item => item.id === this.formGroup.get('scenario').value);
-    let cohort = this.cohortData.filter(item => item.id === this.formGroup.get('cohort').value);
-
-    this.formGroup.patchValue({
-      scenario: scenario[0],
-      cohort: cohort[0]
-    })
   }
 }

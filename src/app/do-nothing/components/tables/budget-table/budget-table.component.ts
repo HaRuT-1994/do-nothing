@@ -8,6 +8,7 @@ import { CommonService } from 'src/app/services/common.service';
 import { ConfirmationService } from 'primeng/api';
 import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { ConfigBudgetComponent } from '../../addEdit/config-budget/config-budget.component';
+import { ConfigBudgetYearComponent } from '../../addEdit/config-budget-year/config-budget-year.component';
 
 @Component({
   selector: 'app-budget-table',
@@ -15,7 +16,7 @@ import { ConfigBudgetComponent } from '../../addEdit/config-budget/config-budget
   styleUrls: ['./budget-table.component.scss']
 })
 export class BudgetTableComponent implements OnInit {
-  public createPath = AppConfig.routes.add.configBudget;
+  public createPath = AppConfig.routes.add.configBudgetYear;
   public isLoading: boolean;
   public msgDetails: MsgDetails;
   public allBudgets: BudgetModel[] = [];
@@ -30,8 +31,6 @@ export class BudgetTableComponent implements OnInit {
     this.isLoading = true
     this.budgetService.getAllBudgets().subscribe(
       (res: BudgetModel[]) => {
-        console.log(res);
-        
         this.allBudgets = res;
         this.onPageChange(this.currentPage);
         this.isLoading = false;
@@ -49,7 +48,7 @@ export class BudgetTableComponent implements OnInit {
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.budgetService.onEditRow(data);
-        this.commonService.show(ConfigBudgetComponent);
+        this.commonService.show(ConfigBudgetYearComponent);
       }
     });
   }

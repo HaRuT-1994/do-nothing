@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DoNothingService } from 'src/app/do-nothing/services/do-nothing.service';
 import { Severity } from 'src/app/enums/severity.enum';
 import { Message } from 'src/app/enums/message.enum';
 import { CommonService } from 'src/app/services/common.service';
 import { ConfigData } from 'src/app/models/configData.interface';
-import { ConfigScenariosService } from 'src/app/do-nothing/services/config-scenarios.service';
 import { ModelConfig } from 'src/app/do-nothing/models/modelConfig.interface';
 import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { DynamicDialogConfig } from 'primeng/dynamicdialog';
+import { LookupService } from 'src/app/do-nothing/services/lookup.service';
 
 @Component({
   selector: 'app-do-nothing',
@@ -24,41 +24,33 @@ export class DoNothingComponent implements OnInit {
   private selectedLifecycles: number[];
   public skipTheseAssetSources: ConfigData[] = [];
   public skipTheseUnitClasses: ConfigData[] = [];
-  public scenariosToRun = []; 
+  public scenarioData: ConfigData[] = [];
   public conditionRange = ['1 to 5', '1 to 10'];
   private editModel: ModelConfig[] = [];
 
   constructor( private doNothingService: DoNothingService,
                private commonService: CommonService,
-               private configScenariosService: ConfigScenariosService,
+               private lookupService: LookupService,
                private dialogConfig: DynamicDialogConfig,
                private formBuilder: FormBuilder) { }
 
   ngOnInit() {
     this.selectedLifecycles = this.separateIdfromObj(this.skipTheseLifecycles);
-    console.log(this.selectedLifecycles);
-    
     this.formInit();
     this.isOnEdit = !this.dialogConfig.data?.add;
-    this.skipTheseLifecycles = this.doNothingService.skipTheseLifecycles;
-    this.skipTheseAssetSources = this.doNothingService.skipTheseAssetSources;
-    this.skipTheseUnitClasses = this.doNothingService.skipTheseUnitClasses;
-    
-    
-    this.configScenariosService.getConfigScenarios().subscribe(
-      (res: ConfigData[]) => this.scenariosToRun = res
-      );
-      
+    this.skipTheseLifecycles = this.lookupService.skipTheseLifecycles;
+    this.skipTheseAssetSources = this.lookupService.skipTheseAssetSources;
+    this.skipTheseUnitClasses = this.lookupService.skipTheseUnitClasses;
+    this.scenarioData = this.lookupService.configScenariosData;
 
-      //console.log(this.skipTheseAssetSources, )
-      if (this.isOnEdit) {
-        this.editModel = this.doNothingService.editModel;
-        //this.skipTheseLifecycles = [{id: 1856486, value: 'Disposed'}]
-        //this.strToArray(['skipTheseLifecycle', 'skipTheseAssetSources', 'skipTheseUnitClasses' ]);
-        //this.separateIdfromObj(this.skipTheseLifecycles)
-        this.editModel['skipTheseLifecycle'] = this.selectedLifecycles;
-        console.log(this.formGroup, this.editModel, this.skipTheseLifecycles, this.separateIdfromObj(this.skipTheseLifecycles));
-       //this.commonService.updateForm(this.formGroup, this.editModel);
+    if (this.isOnEdit) {
+      this.editModel = this.doNothingService.editModel;
+      //this.skipTheseLifecycles = [{id: 1856486, value: 'Disposed'}]
+      //this.strToArray(['skipTheseLifecycle', 'skipTheseAssetSources', 'skipTheseUnitClasses' ]);
+      //this.separateIdfromObj(this.skipTheseLifecycles)
+      this.editModel['skipTheseLifecycle'] = this.selectedLifecycles;
+      console.log(this.formGroup, this.editModel, this.skipTheseLifecycles, this.separateIdfromObj(this.skipTheseLifecycles));
+      //this.commonService.updateForm(this.formGroup, this.editModel);
     }
   }
 

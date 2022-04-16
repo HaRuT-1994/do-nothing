@@ -3,12 +3,12 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { Message } from 'src/app/enums/message.enum';
 import { Severity } from 'src/app/enums/severity.enum';
 import { ConfigData } from 'src/app/models/configData.interface';
-import { CohortService } from 'src/app/do-nothing/services/cohort.service';
 import { CommonService } from 'src/app/services/common.service';
-import { ConfigScenariosService } from 'src/app/do-nothing/services/config-scenarios.service';
 import { ConfigRatesService } from 'src/app/do-nothing/services/config-rates.service';
 import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { DynamicDialogConfig } from 'primeng/dynamicdialog';
+import { LookupService } from 'src/app/do-nothing/services/lookup.service';
+import { RatesModel } from 'src/app/do-nothing/models/ratesData.interface';
 
 @Component({
   selector: 'app-config-rates',
@@ -17,34 +17,28 @@ import { DynamicDialogConfig } from 'primeng/dynamicdialog';
 })
 export class ConfigRatesComponent implements OnInit {
   public formGroup: FormGroup;
-  public scenarioData: ConfigData[] = [];
-  public cohortData: ConfigData[] = [];
+  public scenarioData: ConfigData[];
+  public cohortData: ConfigData[];
   public msgDetails: MsgDetails;
   public isOnEdit: boolean;
   public isLoading: boolean;
+  private editRates: RatesModel[];
   
   constructor( 
                private ratesService: ConfigRatesService,
                private commonService: CommonService,
-               private cohortService: CohortService,
-               private scenariosService: ConfigScenariosService,
+               private lookupService: LookupService,
                private dialogConfig: DynamicDialogConfig) { }
 
   ngOnInit(): void {
     this.formInit();
-    this.cohortService.getConfigCohort().subscribe(
-      (res: ConfigData[]) => {        
-        this.cohortData = res;
-      }
-    )
-    this.scenariosService.getConfigScenarios().subscribe(
-      (res: ConfigData[]) => this.scenarioData = res
-    );
-    
+    this.scenarioData = this.lookupService.configScenariosData;
+    this.cohortData = this.lookupService.configCohortData;
     this.isOnEdit = !this.dialogConfig.data?.add;
-
+    
     if (this.isOnEdit) {
-      this.commonService.updateForm(this.formGroup, this.ratesService.editRates);
+      this.editRates = this.ratesService.editRates;
+      this.commonService.updateForm(this.formGroup, this.editRates);
     }
   }
 
@@ -68,14 +62,15 @@ export class ConfigRatesComponent implements OnInit {
 
   addConfig(): void {
     this.isLoading = true;
-    this.changeToObj();
+    this.commonService.changeToObj(this.formGroup, this.scenarioData, this.cohortData);
     this.ratesService.addConfigRates(this.formGroup.value).subscribe(
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: 'Config Rates Form ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         this.commonService.deleteMsg(this);
-        this.formGroup.reset();
-        this.formInit();
+        this.commonService.updateData(this.formGroup, true);
+        this.editRates = this.formGroup.value;
+        this.commonService.updateForm(this.formGroup, this.editRates);
       },
       () => {
         this.isLoading = false;
@@ -87,11 +82,15 @@ export class ConfigRatesComponent implements OnInit {
 
   editConfig(): void {
     this.isLoading = true;
+    this.commonService.changeToObj(this.formGroup, this.scenarioData, this.cohortData);
     this.ratesService.onEditRate(this.formGroup.value).subscribe(
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: 'Rate Form ' +  Message.EDIT_SUCCESS_MSG, severity: Severity.SUCCESS};
         this.commonService.deleteMsg(this);
+        this.commonService.updateData(this.formGroup);
+        this.editRates = this.formGroup.value;
+        this.commonService.updateForm(this.formGroup, this.editRates);
       },
       () => {
         this.isLoading = false;
@@ -99,15 +98,5 @@ export class ConfigRatesComponent implements OnInit {
         this.commonService.deleteMsg(this);
       }
     );
-  }
-
-  private changeToObj() {
-    let scenario = this.scenarioData.filter(item => item.id === this.formGroup.get('scenario').value);
-    let cohort = this.cohortData.filter(item => item.id === this.formGroup.get('cohort').value);
-
-    this.formGroup.patchValue({
-      scenario: scenario[0],
-      cohort: cohort[0]
-    })
   }
 }
