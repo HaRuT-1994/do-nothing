@@ -2,32 +2,33 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AppConfig } from '../../config/app.config';
-import { BudgetModel } from '../models/budgetData.interface';
+import { BudgetPivotDetails } from '../models/budgetPivotDetails.interface';
+import { BudgetYearsModel } from '../models/budgetYearsData.interface';
 
 @Injectable()
 export class ConfigBudgetYearService {
-  public editBudget: BudgetModel[] = [];
+  public editBudgetYears: BudgetYearsModel[];
 
   constructor(private http: HttpClient) { }
 
-  addConfigBudget(data: any): Observable<BudgetModel[]> {
-    return this.http.post<BudgetModel[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.addConfigBudget}`, data);
+  addConfigBudgetYear(data: any): Observable<BudgetYearsModel[]> {
+    return this.http.post<BudgetYearsModel[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.addConfigBudgetYear}`, data);
   }
 
-  getAllBudgets(): Observable<BudgetModel[]> {
-    return this.http.get<BudgetModel[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.budgetDetails}`);
+  getAllBudgetYears(): Observable<BudgetPivotDetails[]> {
+    return this.http.get<BudgetPivotDetails[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.budgetPivotDetails}`);
   }
   
-  deleteBudget(id: number): Observable<any> {
-    return this.http.delete(`${AppConfig.baseUrl}api/${AppConfig.endPoints.deleteBudget}/${id}`);
+  deleteBudgetYear(id: number): Observable<any> {
+    return this.http.delete(`${AppConfig.baseUrl}api/${AppConfig.endPoints.deleteBudgetYear}/${id}`);
   }
    
-  onEditBudget(data: BudgetModel): Observable<any> {
-    data.budgetId = this.editBudget['budgetId'];
-    return this.http.put(`${AppConfig.baseUrl}api/${AppConfig.endPoints.updateBudget}`, data);
+  onEditBudgetYear(data: BudgetYearsModel): Observable<any> {
+    data.budgetId = this.editBudgetYears['budgetId'];
+    return this.http.put(`${AppConfig.baseUrl}api/${AppConfig.endPoints.updateBudgetYear}`, data);
   }
 
   onEditRow(data): void {
-    this.editBudget = data;
+    this.editBudgetYears = data;
   }
 }

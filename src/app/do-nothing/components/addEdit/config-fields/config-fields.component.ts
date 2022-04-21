@@ -6,6 +6,7 @@ import { ConfigFieldsService } from 'src/app/do-nothing/services/config-fields.s
 import { CommonService } from 'src/app/services/common.service';
 import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { DynamicDialogConfig } from 'primeng/dynamicdialog';
+import { FieldModel } from 'src/app/do-nothing/models/fieldData.interface';
 
 @Component({
   selector: 'app-config-fields',
@@ -17,6 +18,7 @@ export class ConfigFieldsComponent implements OnInit {
   public msgDetails: MsgDetails;
   public isOnEdit: boolean;
   public isLoading: boolean;
+  private editFields: FieldModel[];
 
   constructor( private fieldsService: ConfigFieldsService,
                private commonService: CommonService,
@@ -25,8 +27,10 @@ export class ConfigFieldsComponent implements OnInit {
   ngOnInit(): void {
     this.formInit();
     this.isOnEdit = !this.dialogConfig.data?.add;
+
     if (this.isOnEdit) {
-      this.commonService.updateForm(this.formGroup, this.fieldsService.editFields);
+      this.editFields = this.fieldsService.editFields;
+      this.commonService.updateForm(this.formGroup, this.editFields);
     }
 }
 
@@ -47,8 +51,8 @@ formInit(): void {
         this.isLoading = false;
         this.msgDetails = {msg: 'Fields Form ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         this.commonService.deleteMsg(this);
-        this.formGroup.reset();
         this.formInit();
+        this.commonService.updateData(true);
       },
       err => { 
         console.log(err);
@@ -66,6 +70,9 @@ formInit(): void {
         this.isLoading = false;
         this.msgDetails = {msg: 'Fields Form ' +  Message.EDIT_SUCCESS_MSG, severity: Severity.SUCCESS};
         this.commonService.deleteMsg(this);
+        this.commonService.updateData(this.formGroup);
+        this.editFields = this.formGroup.value;
+        this.commonService.updateForm(this.formGroup, this.editFields);
       },
       () => {
         this.isLoading = false;

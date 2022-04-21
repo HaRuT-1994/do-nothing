@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AppConfig } from 'src/app/config/app.config';
 import { Message } from 'src/app/enums/message.enum';
 import { Severity } from 'src/app/enums/severity.enum';
@@ -8,48 +8,52 @@ import { ConfigFieldsService } from 'src/app/do-nothing/services/config-fields.s
 import { ConfirmationService } from 'primeng/api';
 import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { ConfigFieldsComponent } from '../../addEdit/config-fields/config-fields.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-fields-table',
   templateUrl: './fields-table.component.html',
   styleUrls: ['./fields-table.component.scss']
 })
-export class FieldsTableComponent implements OnInit {
+export class FieldsTableComponent implements OnInit, OnDestroy {
   public createPath = AppConfig.routes.add.configFields;
   public isLoading: boolean;
   public msgDetails: MsgDetails;
   public allFields: FieldModel[] = [];
   public shownAllFields: FieldModel[] = [];
   private currentPage = {first: 0, rows: 10};
+  private index = 0;
+  private sub$: Subscription;
+
 
   constructor( private fieldService: ConfigFieldsService,
                private commonService: CommonService,
                private confirmationService: ConfirmationService) {}
 
   ngOnInit(): void {
-    this.isLoading = true
-    this.fieldService.getAllFields().subscribe(
-      (res: FieldModel[]) => {
-        this.allFields = res;
-        this.onPageChange(this.currentPage);
-        this.isLoading = false;
-      },
-      err => {
-        console.log(err);
+    this.getAllFields();
+
+    this.sub$ = this.commonService.getData().subscribe(res => {
+      if(typeof res === 'boolean') {
+        this.getAllFields();
+      } else {
+        this.allFields[this.index] = res.value;
+        this.shownAllFields[this.index] = res.value;
       }
-    );
+    })
   }
 
-  onEditRow(data: FieldModel): void {
-    this.confirmationService.confirm({
-      message: 'Edit config?',
-      header: 'Confirmation',
-      icon: 'pi pi-exclamation-triangle',
-      accept: () => {
+  onEditRow(data: FieldModel, i: number): void {
+    this.index = i;
+    // this.confirmationService.confirm({
+    //   message: 'Edit config?',
+    //   header: 'Confirmation',
+    //   icon: 'pi pi-exclamation-triangle',
+    //   accept: () => {
         this.fieldService.onEditRow(data);
         this.commonService.show(ConfigFieldsComponent);
-      }
-    });
+    //   }
+    // });
   }
 
   onDeleteRow(id: number): void {
@@ -77,6 +81,20 @@ export class FieldsTableComponent implements OnInit {
     });
   }
 
+  private getAllFields(): void {
+    this.isLoading = true;
+    this.fieldService.getAllFields().subscribe(
+      (res: FieldModel[]) => {
+        this.allFields = res;
+        this.onPageChange(this.currentPage);
+        this.isLoading = false;
+      },
+      err => {
+        console.log(err);
+      }
+    );
+  }
+
   onPageChange(ev) {
     this.currentPage = ev;
     if(ev.page * ev.rows >= this.allFields.length) {
@@ -101,5 +119,9 @@ export class FieldsTableComponent implements OnInit {
       this.shownAllFields = this.allFields;
       this.onPageChange(this.currentPage);
     }
+  }
+
+  ngOnDestroy() {
+    this.sub$.unsubscribe();
   }
 }

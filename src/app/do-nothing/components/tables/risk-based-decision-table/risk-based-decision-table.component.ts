@@ -36,27 +36,26 @@ export class RiskBasedDecisionTableComponent implements OnInit {
      this.getAllRiskBasedDecisions();
 
      this.sub$ = this.commonService.getData().subscribe(res => {
-      if(res[1]) {
+      if(typeof res === 'boolean') {
         this.getAllRiskBasedDecisions();
       } else {
-        this.allRiskBasedDecisions[this.index] = res[0]?.value;
-        this.shownAllRiskBasedDecisions[this.index] = res[0]?.value;
+        this.allRiskBasedDecisions[this.index] = res.value;
+        this.shownAllRiskBasedDecisions[this.index] = res.value;
       }
-      
     })
    }
 
   onEditRow(data: RiskBasedDecisionModel, i: number): void {
     this.index = i;
-    this.confirmationService.confirm({
-      message: 'Edit config?',
-      header: 'Confirmation',
-      icon: 'pi pi-exclamation-triangle',
-      accept: () => {
+    // this.confirmationService.confirm({
+    //   message: 'Edit config?',
+    //   header: 'Confirmation',
+    //   icon: 'pi pi-exclamation-triangle',
+    //   accept: () => {
         this.riskBasedDecisionService.onEditRow(data);
         this.commonService.show(ConfigRiskBasedDecisionsComponent);
-      }
-    });
+    //   }
+    // });
   }
 
   onDeleteRow(id: number): void {

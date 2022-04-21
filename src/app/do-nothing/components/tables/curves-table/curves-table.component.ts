@@ -32,30 +32,29 @@ export class CurvesTableComponent implements OnInit, OnDestroy {
                private lookup: LookupService) { }
 
   ngOnInit(): void {
-    this.isLoading = true
     this.getAllCurves();
 
     this.sub$ = this.commonService.getData().subscribe(res => {
-      if(res[1]) {
+      if(typeof res === 'boolean') {
         this.getAllCurves();
       } else {
-        this.allCurves[this.index] = res[0]?.value;
-        this.shownAllCurves[this.index] = res[0]?.value;
+        this.allCurves[this.index] = res.value;
+        this.shownAllCurves[this.index] = res.value;
       }
     })
   }
 
   onEditRow(data: CurveModel, i: number): void {
     this.index = i;
-    this.confirmationService.confirm({
-      message: 'Edit config?',
-      header: 'Confirmation',
-      icon: 'pi pi-exclamation-triangle',
-      accept: () => {
+    // this.confirmationService.confirm({
+    //   message: 'Edit config?',
+    //   header: 'Confirmation',
+    //   icon: 'pi pi-exclamation-triangle',
+    //   accept: () => {
         this.curvesService.onEditRow(data);
         this.commonService.show(ConfigCurvesComponent);
-      }
-    });
+    //   }
+    // });
   }
 
   onDeleteRow(id: number): void {

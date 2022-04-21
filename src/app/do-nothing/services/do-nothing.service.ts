@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { ConfigData } from 'src/app/models/configData.interface';
 import { AppConfig } from '../../config/app.config';
 import { ModelConfig } from '../models/modelConfig.interface';
+import { RunModelHistory } from '../models/runModelHistory.interface';
 
 @Injectable()
 export class DoNothingService {
@@ -11,8 +12,15 @@ export class DoNothingService {
   public skipTheseLifecycles: ConfigData[] = [];
   public skipTheseAssetSources: ConfigData[] = [];
   public skipTheseUnitClasses: ConfigData[] = [];
+  public checkedData = { scenarioIds: [] };
   
   constructor(private http: HttpClient) { }
+ 
+  public runModel(): Observable<any> {
+    if(this.checkedData.scenarioIds.length) {
+      return this.http.post<any>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.modelRun}`, this.checkedData);
+    }
+  }
 
   addDoNothing(data: any): Observable<any> {
     return this.http.post(`${AppConfig.baseUrl}api/${AppConfig.endPoints.addModelConfig}`, data);

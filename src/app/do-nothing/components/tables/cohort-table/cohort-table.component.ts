@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AppConfig } from 'src/app/config/app.config';
 import { CohortService } from 'src/app/do-nothing/services/cohort.service';
 import { Severity } from 'src/app/enums/severity.enum';
@@ -8,49 +8,51 @@ import { CohortModel } from 'src/app/do-nothing/models/cohortData.interface';
 import {ConfirmationService} from 'primeng/api';
 import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { CohortComponent } from '../../addEdit/cohort/cohort.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-cohort-table',
   templateUrl: './cohort-table.component.html',
   styleUrls: ['./cohort-table.component.scss']
 })
-export class CohortTableComponent implements OnInit {
+export class CohortTableComponent implements OnInit, OnDestroy {
   public createPath = AppConfig.routes.add.cohort;
   public isLoading: boolean;
   public msgDetails: MsgDetails;
   public allCohorts: CohortModel[] = [];
   public shownAllCohorts: CohortModel[] = [];
   private currentPage = {first: 0, rows: 10};
+  private index = 0;
+  private sub$: Subscription;
 
   constructor( private cohortService: CohortService,
                private commonService: CommonService,
                private confirmationService: ConfirmationService) { }
 
   ngOnInit(): void {
-    this.isLoading = true
-    this.cohortService.getAllCohorts().subscribe(
-      (res: CohortModel[]) => {
-        this.allCohorts = res;
-        this.onPageChange(this.currentPage);
-        this.isLoading = false;
-      },
-      err => {
-        console.log(err);
-      }
-    );
+    this.getAllCohorts();
 
+    this.sub$ = this.commonService.getData().subscribe(res => {
+      if(typeof res === 'boolean') {
+        this.getAllCohorts();
+      } else {
+        this.allCohorts[this.index] = res.value;
+        this.shownAllCohorts[this.index] = res.value;
+      }
+    })
   }
 
-  onEditRow(data: CohortModel): void {
-    this.confirmationService.confirm({
-      message: 'Edit config?',
-      header: 'Confirmation',
-      icon: 'pi pi-exclamation-triangle',
-      accept: () => {
+  onEditRow(data: CohortModel, i: number): void {
+    this.index = i;
+    // this.confirmationService.confirm({
+    //   message: 'Edit config?',
+    //   header: 'Confirmation',
+    //   icon: 'pi pi-exclamation-triangle',
+    //   accept: () => {
         this.cohortService.onEditRow(data);
         this.commonService.show(CohortComponent);
-      }
-    });
+    //   }
+    // });
   }
 
   onDeleteRow(id: number): void {
@@ -78,6 +80,20 @@ export class CohortTableComponent implements OnInit {
     });
   }
 
+private getAllCohorts(): void {
+  this.isLoading = true;
+  this.cohortService.getAllCohorts().subscribe(
+    (res: CohortModel[]) => {
+      this.allCohorts = res;
+      this.onPageChange(this.currentPage);
+      this.isLoading = false;
+    },
+    err => {
+      console.log(err);
+    }
+  );
+}
+
   onPageChange(ev): void {
     this.currentPage = ev;
     if(ev.page * ev.rows >= this.allCohorts.length) {
@@ -101,5 +117,9 @@ export class CohortTableComponent implements OnInit {
       this.shownAllCohorts = this.allCohorts;
       this.onPageChange(this.currentPage);
     }
+  }
+
+  ngOnDestroy() {
+    this.sub$.unsubscribe();
   }
 }

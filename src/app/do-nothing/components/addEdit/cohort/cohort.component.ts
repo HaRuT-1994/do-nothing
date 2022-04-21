@@ -6,6 +6,7 @@ import { Message } from 'src/app/enums/message.enum';
 import { CommonService } from 'src/app/services/common.service';
 import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { DynamicDialogConfig } from 'primeng/dynamicdialog';
+import { CohortModel } from 'src/app/do-nothing/models/cohortData.interface';
 
 @Component({
   selector: 'app-cohort',
@@ -17,6 +18,7 @@ export class CohortComponent implements OnInit {
   public msgDetails: MsgDetails;
   public isOnEdit: boolean;
   public isLoading: boolean;
+  private editCohort: CohortModel[];
   
   constructor( private cohortService: CohortService,
                private commonService: CommonService,
@@ -27,7 +29,8 @@ export class CohortComponent implements OnInit {
     this.isOnEdit = !this.dialogConfig.data?.add;
     
     if (this.isOnEdit) {
-      this.commonService.updateForm(this.formGroup, this.cohortService.editCohort);
+      this.editCohort = this.cohortService.editCohort;
+      this.commonService.updateForm(this.formGroup, this.editCohort);
     }
   }
 
@@ -45,8 +48,8 @@ export class CohortComponent implements OnInit {
         this.isLoading = false;
         this.msgDetails = {msg: 'Cohort Form ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         this.commonService.deleteMsg(this);
-        this.formGroup.reset();
         this.formInit();
+        this.commonService.updateData(true);
       },
       () => {
         this.isLoading = false;
@@ -63,6 +66,9 @@ export class CohortComponent implements OnInit {
         this.isLoading = false;
         this.msgDetails = {msg: 'Cohort Form ' +  Message.EDIT_SUCCESS_MSG, severity: Severity.SUCCESS};
         this.commonService.deleteMsg(this);
+        this.commonService.updateData(this.formGroup);
+        this.editCohort = this.formGroup.value;
+        this.commonService.updateForm(this.formGroup, this.editCohort);
       },
       () => {
         this.isLoading = false;

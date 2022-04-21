@@ -12,17 +12,19 @@
         <th>Scenario Name</th>
         <th>Validated Option</th>
         <th>Restrict To Budget</th>
+        <th>Run</th>
         <th colspan="3">
           <input type="text" placeholder="Search" (input)="filterData($event.target.value)">
         </th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let data of shownAllScenarios">
+      <tr *ngFor="let data of shownAllScenarios; let i = index">
         <td [attr.title]="data.scenario">{{data.scenario}}</td>
         <td [attr.title]="data.validatedOption">{{data.validatedOption}}</td>
         <td [attr.title]="data.restrictToBudget">{{data.restrictToBudget}}</td>
-        <td class="buttonEffect" (click)=onEditRow(data)>
+        <td [attr.title]="data.run">{{data.run}}</td>
+        <td class="buttonEffect" (click)="onEditRow(data, i)">
           <span class="edit">Edit</span>
         </td>
         <td class="buttonEffect" (click)="onDeleteRow(data.scenarioId)">

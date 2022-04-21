@@ -53,3 +53,19 @@ table {
 .delete {
  color: #c40808;
 }
+
+.fixedColumn {
+  position: sticky;
+  right: 0;
+}
+
+.fixedColumnEdit {
+  position: sticky;
+  right: 110px;
+}
+
+.fixedColumnDelete {
+  position: sticky;
+  right: 54px;
+}
+

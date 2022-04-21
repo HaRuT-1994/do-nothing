@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { DynamicDialogConfig } from 'primeng/dynamicdialog';
+import { ListsModel } from 'src/app/do-nothing/models/listsData.interface';
 import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { ConfigListsService } from 'src/app/do-nothing/services/config-lists.service';
 import { Message } from 'src/app/enums/message.enum';
@@ -17,6 +18,7 @@ export class ConfigListsComponent implements OnInit {
   public msgDetails: MsgDetails;
   public isOnEdit: boolean;
   public isLoading: boolean;
+  private editLists: ListsModel[];
   
   constructor( 
               private listService: ConfigListsService,
@@ -28,7 +30,8 @@ export class ConfigListsComponent implements OnInit {
     this.isOnEdit = !this.dialogConfig.data?.add;
     
     if (this.isOnEdit) {
-      this.commonService.updateForm(this.formGroup, this.listService.editLists);
+      this.editLists = this.listService.editLists;
+      this.commonService.updateForm(this.formGroup, this.editLists);
     }
   }
 
@@ -45,8 +48,8 @@ export class ConfigListsComponent implements OnInit {
         this.isLoading = false;
         this.msgDetails = {msg: 'Config List Form ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         this.commonService.deleteMsg(this);
-        this.formGroup.reset();
         this.formInit();
+        this.commonService.updateData(true);
       },
       () => {
         this.isLoading = false;
@@ -63,6 +66,9 @@ export class ConfigListsComponent implements OnInit {
         this.isLoading = false;
         this.msgDetails = {msg: 'List Form ' +  Message.EDIT_SUCCESS_MSG, severity: Severity.SUCCESS};
         this.commonService.deleteMsg(this);
+        this.commonService.updateData(this.formGroup);
+        this.editLists = this.formGroup.value;
+        this.commonService.updateForm(this.formGroup, this.editLists);
       },
       () => {
         this.isLoading = false;

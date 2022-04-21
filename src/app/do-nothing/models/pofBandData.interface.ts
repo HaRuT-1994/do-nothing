@@ -1,9 +1,9 @@
+import { ConfigData } from "src/app/models/configData.interface";
+
 export interface PoFBandsModel {
   id?: number,
-  scenarioId: number,
-  scenarioName: string,
-  cohortId: number,
-  cohortName: string,
+  scenario: ConfigData,
+  cohort: ConfigData,
   _1: number,
   _2: number,
   _3: number,

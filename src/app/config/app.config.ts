@@ -84,7 +84,8 @@ export const AppConfig: AppConfig = {
         lookupConfigScenarios: 'Lookup/LookupConfigScenarios',
         lookupConfigCohorts : 'Lookup/LookupConfigCohorts',
 
-        budgetDetails: 'BudgetDetails/GetAllConfigBudgetPivotDetails'
+        budgetPivotDetails: 'BudgetDetails/GetAllConfigBudgetPivotDetails',
+        modelRun: 'RunHistory/AddModelConfigurationRunHistory'
     },
     routes: {
         projects: {
@@ -135,6 +136,7 @@ export const AppConfig: AppConfig = {
             listValuesTable: "list-values-table",
             ratesTable: "rates-table",
             budgetTable: "budget-table",
+            budgetYearsTable: "budget-years-table",
             interventionOptionsTable: "intervention-options-table",
             riskBasedDecisionTable: "risk-based-decision-table",
             runHistory: "run-history-table",

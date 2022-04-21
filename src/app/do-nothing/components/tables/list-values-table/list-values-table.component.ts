@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AppConfig } from 'src/app/config/app.config';
 import { ListValuesModel } from 'src/app/do-nothing/models/listValuesData.interface';
 import { ConfigListValuesService } from 'src/app/do-nothing/services/config-listValues.service';
@@ -8,48 +8,51 @@ import { CommonService } from 'src/app/services/common.service';
 import { ConfirmationService } from 'primeng/api';
 import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { ConfigListValuesComponent } from '../../addEdit/config-list-values/config-list-values.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-list-values-table',
   templateUrl: './list-values-table.component.html',
   styleUrls: ['./list-values-table.component.scss']
 })
-export class ListValuesTableComponent implements OnInit {
+export class ListValuesTableComponent implements OnInit, OnDestroy {
   public createPath = AppConfig.routes.add.configListValues;
   public isLoading: boolean;
   public msgDetails: MsgDetails;
   public allListValues: ListValuesModel[] = [];
   public shownAllListValues: ListValuesModel[] = [];
   private currentPage = {first: 0, rows: 10};
+  private index = 0;
+  private sub$: Subscription;
 
   constructor( private listValluesService: ConfigListValuesService,
                private commonService: CommonService,
                private confirmationService: ConfirmationService) { }
 
    ngOnInit(): void {
-    this.isLoading = true
-    this.listValluesService.getAllListValues().subscribe(
-      (res: ListValuesModel[]) => {
-        this.allListValues = res;
-        this.onPageChange(this.currentPage);
-        this.isLoading = false;
-      },
-      err => {
-        console.log(err);
+    this.getAllListValues();
+
+    this.sub$ = this.commonService.getData().subscribe(res => {
+      if(typeof res === 'boolean') {
+        this.getAllListValues();
+      } else {
+        this.allListValues[this.index] = res.value;
+        this.shownAllListValues[this.index] = res.value;
       }
-    );
+    })
    }
 
-  onEditRow(data: ListValuesModel): void {
-    this.confirmationService.confirm({
-      message: 'Edit config?',
-      header: 'Confirmation',
-      icon: 'pi pi-exclamation-triangle',
-      accept: () => {
+  onEditRow(data: ListValuesModel, i: number): void {
+    this.index = i;
+    // this.confirmationService.confirm({
+    //   message: 'Edit config?',
+    //   header: 'Confirmation',
+    //   icon: 'pi pi-exclamation-triangle',
+    //   accept: () => {
         this.listValluesService.onEditRow(data);
         this.commonService.show(ConfigListValuesComponent);
-      }
-    });
+    //   }
+    // });
   }
 
   onDeleteRow(id: number): void {
@@ -77,6 +80,20 @@ export class ListValuesTableComponent implements OnInit {
     });
   }
 
+  private getAllListValues(): void {
+    this.isLoading = true;
+    this.listValluesService.getAllListValues().subscribe(
+      (res: ListValuesModel[]) => {
+        this.allListValues = res;
+        this.onPageChange(this.currentPage);
+        this.isLoading = false;
+      },
+      err => {
+        console.log(err);
+      }
+    );
+  }
+
   onPageChange(ev): void {
     this.currentPage = ev;
     if(ev.page * ev.rows >= this.allListValues.length) {
@@ -99,5 +116,9 @@ export class ListValuesTableComponent implements OnInit {
       this.shownAllListValues = this.allListValues;
       this.onPageChange(this.currentPage);
     }
+  }
+
+  ngOnDestroy() {
+    this.sub$.unsubscribe();
   }
 }

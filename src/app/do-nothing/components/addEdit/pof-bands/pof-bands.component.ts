@@ -62,9 +62,8 @@ export class PofBandsComponent {
         this.isLoading = false;
         this.msgDetails = {msg: 'PoF Bands Form ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         this.commonService.deleteMsg(this);
-        this.commonService.updateData(this.formGroup, true)
-        this.editPofBand = this.formGroup.value;
-        this.commonService.updateForm(this.formGroup, this.editPofBand);
+        this.commonService.updateData(true)
+        this.formInit();
       },
       err => {
         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};

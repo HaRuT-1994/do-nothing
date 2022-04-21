@@ -66,9 +66,8 @@ export class ConfigInterventionOptionsComponent implements OnInit {
         this.isLoading = false;
         this.msgDetails = {msg: 'Config Intervention Options Form ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         this.commonService.deleteMsg(this);
-        this.commonService.updateData(this.formGroup, true)
-        this.editInterventionOptions = this.formGroup.value;
-        this.commonService.updateForm(this.formGroup, this.editInterventionOptions);
+        this.commonService.updateData(true)
+        this.formInit();
       },
       () => {
         this.isLoading = false;

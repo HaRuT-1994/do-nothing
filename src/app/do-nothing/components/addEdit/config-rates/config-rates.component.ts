@@ -68,9 +68,8 @@ export class ConfigRatesComponent implements OnInit {
         this.isLoading = false;
         this.msgDetails = {msg: 'Config Rates Form ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         this.commonService.deleteMsg(this);
-        this.commonService.updateData(this.formGroup, true);
-        this.editRates = this.formGroup.value;
-        this.commonService.updateForm(this.formGroup, this.editRates);
+        this.commonService.updateData(true)
+        this.formInit();
       },
       () => {
         this.isLoading = false;

@@ -8,6 +8,7 @@ import { ConfigData } from 'src/app/models/configData.interface';
 import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { LookupService } from 'src/app/do-nothing/services/lookup.service';
+import { BudgetModel } from 'src/app/do-nothing/models/budgetData.interface';
 
 @Component({
   selector: 'app-config-budget',
@@ -16,10 +17,11 @@ import { LookupService } from 'src/app/do-nothing/services/lookup.service';
 })
 export class ConfigBudgetComponent implements OnInit {
   public formGroup: FormGroup;
-  public scenarioData: ConfigData[] = [];
+  public scenarioData: ConfigData[];
   public msgDetails: MsgDetails;
   public isOnEdit: boolean;
   public isLoading: boolean;
+  private editBudget: BudgetModel[];
   
   constructor( 
                private budgetService: ConfigBudgetService,
@@ -33,29 +35,29 @@ export class ConfigBudgetComponent implements OnInit {
     this.scenarioData = this.lookupService.configScenariosData;
   
     if (this.isOnEdit) {
-      this.commonService.updateForm(this.formGroup, this.budgetService.editBudget);
+      this.editBudget = this.budgetService.editBudget;
+      this.commonService.updateForm(this.formGroup, this.editBudget);
     }
   }
 
   formInit(): void {
     this.formGroup = new FormGroup({
-      scenario: new FormControl(0),
+      scenario: new FormControl(''),
+      budgetName: new FormControl(''),
       exceedanceAllowance: new FormControl(0),
-      year: new FormControl(0),
-      budgetName: new FormControl(0),
       budgetSource: new FormControl('')
     })
   }
 
   addConfig(): void {
     this.isLoading = true;
-    // this.changeToObj();
+    this.commonService.changeToObj(this.formGroup, this.scenarioData);
     this.budgetService.addConfigBudget(this.formGroup.value).subscribe(
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: 'Config Budget Form ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         this.commonService.deleteMsg(this);
-        this.formGroup.reset();
+        this.commonService.updateData(true)
         this.formInit();
       },
       () => {
@@ -68,11 +70,15 @@ export class ConfigBudgetComponent implements OnInit {
 
   editConfig(): void {
     this.isLoading = true;
+    this.commonService.changeToObj(this.formGroup, this.scenarioData);
     this.budgetService.onEditBudget(this.formGroup.value).subscribe(
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: 'Config Budget Form ' +  Message.EDIT_SUCCESS_MSG, severity: Severity.SUCCESS};
         this.commonService.deleteMsg(this);
+        this.commonService.updateData(this.formGroup);
+        this.editBudget = this.formGroup.value;
+        this.commonService.updateForm(this.formGroup, this.editBudget);
       },
       () => {
         this.isLoading = false;

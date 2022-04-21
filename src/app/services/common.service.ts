@@ -24,12 +24,12 @@ export class CommonService {
   }
  
   public updateData(data?: any, isAdd?: boolean): void {
-    this.siblingData.next([data, isAdd]);
+    data ? this.siblingData.next(data): this.siblingData.next(isAdd);
   }
 
   public updateForm(formGroup, newData): void {
     return Object.keys(formGroup.controls).forEach( (controlName) => {
-            if(controlName === 'cohort' || controlName === 'scenario') {
+            if(controlName === 'cohort' || controlName === 'scenario' || controlName === 'ScenarioName') {
               formGroup.controls[controlName].patchValue(newData[controlName].value);
             }
             else {
@@ -52,18 +52,21 @@ export class CommonService {
     });
   }
 
-  public changeToObj(data: FormGroup, scenarioData: ConfigData[], cohortData: ConfigData[]) {
-    let scenario = scenarioData.filter(item => (
-      item.id === data.controls['scenario'].value ||
-      item.value === data.controls['scenario'].value))
+  public changeToObj(form: FormGroup, scenarioData?: ConfigData[], cohortData?: ConfigData[]) {
+    if(scenarioData) {
+      const scenario = scenarioData.filter(item => (
+          item.id === form.controls['scenario'].value ||
+          item.value === form.controls['scenario'].value));
+      
+      form.patchValue({ scenario: scenario[0] });
+    }
     
-    let cohort = cohortData.filter(item => (
-      item.id === data.controls['cohort'].value ||
-      item.value === data.controls['cohort'].value))
-    
-      data.patchValue({
-      scenario: scenario[0],
-      cohort: cohort[0]
-    })
+    if(cohortData) {
+      const cohort = cohortData.filter(item => (
+          item.id === form.controls['cohort'].value ||
+          item.value === form.controls['cohort'].value));
+
+      form.patchValue({ cohort: cohort[0] })
+    }
   }
 }

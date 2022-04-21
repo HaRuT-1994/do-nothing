@@ -32,15 +32,14 @@ export class InterventionOptionsTableComponent implements OnInit {
                private lookup: LookupService) { }
 
    ngOnInit(): void {
-    this.isLoading = true
     this.getAllInterventionOptions();
 
     this.sub$ = this.commonService.getData().subscribe(res => {
-      if(res[1]){
+      if(typeof res === 'boolean') {
         this.getAllInterventionOptions();
       } else {
-        this.allInterventionOptions[this.index] = res[0]?.value;
-        this.shownAllInterventionOptions[this.index] = res[0]?.value;
+        this.allInterventionOptions[this.index] = res.value;
+        this.shownAllInterventionOptions[this.index] = res.value;
       }
       
     })
@@ -48,15 +47,15 @@ export class InterventionOptionsTableComponent implements OnInit {
 
   onEditRow(data: InterventionOptionsModel, i: number): void {
     this.index = i;
-    this.confirmationService.confirm({
-      message: 'Edit config?',
-      header: 'Confirmation',
-      icon: 'pi pi-exclamation-triangle',
-      accept: () => {
+    // this.confirmationService.confirm({
+    //   message: 'Edit config?',
+    //   header: 'Confirmation',
+    //   icon: 'pi pi-exclamation-triangle',
+    //   accept: () => {
         this.interventionOptionsService.onEditRow(data);
         this.commonService.show(ConfigInterventionOptionsComponent);
-      }
-    });
+    //   }
+    // });
   }
 
   onDeleteRow(id: number): void {
@@ -84,7 +83,8 @@ export class InterventionOptionsTableComponent implements OnInit {
     });
   }
 
-  private getAllInterventionOptions() {
+  private getAllInterventionOptions(): void {
+    this.isLoading = true;
     this.interventionOptionsService.getAllInterventionOptions().subscribe(
       (res: InterventionOptionsModel[]) => {
         this.allInterventionOptions = res;

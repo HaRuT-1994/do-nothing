@@ -4,7 +4,7 @@
 <p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000"></p-confirmDialog>
 <app-loading *ngIf="isLoading"></app-loading>
 <main>
-  <app-control-tables [path]="createPath" [needRun]="true"></app-control-tables>
+  <app-control-tables [path]="createPath" [needRun]="true" (runTriggered)="runModel()"></app-control-tables>
   <div class="display-mod">
     <div class="G-flex-center-start model">
       <h2>Model</h2>
@@ -41,7 +41,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let data of shownAllModels; index as i">
+        <tr *ngFor="let data of shownAllModels; let i = index">
           <td [attr.title]="data.modelName">{{data.modelName}}</td>
           <td [attr.title]="data.baseYear">{{data.baseYear}}</td>
           <td [attr.title]="data.yearsToRun">{{data.yearsToRun}}</td>
@@ -54,7 +54,7 @@
           <td [attr.title]="data.allowOverwriteToExceedBudget">{{data.allowOverwriteToExceedBudget}}</td>
           <td [attr.title]="data.skipTheseAssetSources">{{data.skipTheseAssetSources}}</td>
           <td [attr.title]="data.conditionRange">{{data.conditionRange}}</td>
-          <td *ngIf="!runDate" class="buttonEffect" (click)="onEditRow(data)">
+          <td *ngIf="!runDate" class="buttonEffect" (click)="onEditRow(data, i)">
             <span class="edit">Edit</span>
           </td>
           <td class="buttonEffect" (click)="onDeleteRow(data.id)">

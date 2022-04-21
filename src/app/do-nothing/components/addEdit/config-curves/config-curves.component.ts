@@ -59,11 +59,10 @@ export class ConfigCurvesComponent implements OnInit {
     this.curvesService.addConfigCurves(this.formGroup.value).subscribe(
       () => {
         this.isLoading = false;
-        this.msgDetails = {msg: 'Curve Form ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
+        this.msgDetails = {msg: 'Curve Form ' + Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         this.commonService.deleteMsg(this);
-        this.commonService.updateData(this.formGroup, true);
-        this.editCurves = this.formGroup.value;
-        this.commonService.updateForm(this.formGroup, this.editCurves);
+        this.commonService.updateData(true);
+        this.formInit();
       },
       () => {
         this.isLoading = false;

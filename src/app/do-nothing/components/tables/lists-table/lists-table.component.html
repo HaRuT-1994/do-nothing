@@ -16,9 +16,9 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let data of shownAllListss">
+      <tr *ngFor="let data of shownAllLists; let i = index">
         <td [attr.title]="data.listName">{{data.listName}}</td>
-        <td class="buttonEffect" (click)=onEditRow(data)>
+        <td class="buttonEffect" (click)="onEditRow(data, i)">
           <span class="edit">Edit</span>
         </td>
         <td class="buttonEffect" (click)="onDeleteRow(data.listId)">

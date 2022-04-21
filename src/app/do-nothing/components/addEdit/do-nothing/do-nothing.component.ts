@@ -21,7 +21,6 @@ export class DoNothingComponent implements OnInit {
   public isOnEdit: boolean;
   public isLoading: boolean;
   public skipTheseLifecycles: ConfigData[] = [];
-  private selectedLifecycles: number[];
   public skipTheseAssetSources: ConfigData[] = [];
   public skipTheseUnitClasses: ConfigData[] = [];
   public scenarioData: ConfigData[] = [];
@@ -35,34 +34,38 @@ export class DoNothingComponent implements OnInit {
                private formBuilder: FormBuilder) { }
 
   ngOnInit() {
-    this.selectedLifecycles = this.separateIdfromObj(this.skipTheseLifecycles);
     this.formInit();
-    this.isOnEdit = !this.dialogConfig.data?.add;
     this.skipTheseLifecycles = this.lookupService.skipTheseLifecycles;
     this.skipTheseAssetSources = this.lookupService.skipTheseAssetSources;
     this.skipTheseUnitClasses = this.lookupService.skipTheseUnitClasses;
     this.scenarioData = this.lookupService.configScenariosData;
+    this.isOnEdit = !this.dialogConfig.data?.add;
+   //this.selectedLifecycles = this.separateIdfromObj(this.skipTheseLifecycles);
 
     if (this.isOnEdit) {
       this.editModel = this.doNothingService.editModel;
       //this.skipTheseLifecycles = [{id: 1856486, value: 'Disposed'}]
       //this.strToArray(['skipTheseLifecycle', 'skipTheseAssetSources', 'skipTheseUnitClasses' ]);
       //this.separateIdfromObj(this.skipTheseLifecycles)
-      this.editModel['skipTheseLifecycle'] = this.selectedLifecycles;
-      console.log(this.formGroup, this.editModel, this.skipTheseLifecycles, this.separateIdfromObj(this.skipTheseLifecycles));
-      //this.commonService.updateForm(this.formGroup, this.editModel);
+      //this.editModel['skipTheseLifecycle'] = this.selectedLifecycles;
+      this.commonService.updateForm(this.formGroup, this.editModel);
+      const scenarios = this.strToArray(this.editModel['scenariosToRun']);
+      
+      this.formGroup.patchValue({
+        scenariosToRun: scenarios
+      })
     }
   }
 
   formInit(): void {
     this.formGroup = this.formBuilder.group({
-      modelName: ['WTP', Validators.required],
-      baseYear: [2021, Validators.required],
-      yearsToRun: [20, Validators.required],
-      skipTheseLifecycle: [this.selectedLifecycles],
+      modelName: ['', Validators.required],
+      baseYear: [0, Validators.required],
+      yearsToRun: [0, Validators.required],
+      skipTheseLifecycle: [''],
       skipTheseAssetSources: [''],
       skipTheseUnitClasses: [''],
-      scenariosToRun: [[1]],
+      scenariosToRun: ['', Validators.required],
       conditionRange: [''],
       dataModelOutputTemplate: [''],
       nrModelColumns: [0],
@@ -78,13 +81,13 @@ export class DoNothingComponent implements OnInit {
     if(this.formGroup.valid) {
       this.isLoading = true;
       this.arrToString(['skipTheseLifecycle', 'skipTheseAssetSources', 'skipTheseUnitClasses', 'scenariosToRun']);
-      
+    
       this.doNothingService.addDoNothing(this.formGroup.value).subscribe(
         () => {
           this.isLoading = false;
           this.msgDetails = {msg: 'Model Configuration Form ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
           this.commonService.deleteMsg(this);
-          this.formGroup.reset();
+          this.commonService.updateData(true);
           this.formInit();
         },
         err => {
@@ -101,12 +104,14 @@ export class DoNothingComponent implements OnInit {
     if(this.formGroup.valid) {
       this.isLoading = true;
       this.arrToString(['skipTheseLifecycle', 'skipTheseAssetSources', 'skipTheseUnitClasses', 'scenariosToRun', 'conditionRange']);
-
       this.doNothingService.onEditModelConfig(this.formGroup.value).subscribe(
         () => {
           this.isLoading = false;
           this.msgDetails = {msg: 'Model Configurarion Form ' +  Message.EDIT_SUCCESS_MSG, severity: Severity.SUCCESS};
           this.commonService.deleteMsg(this);
+          this.commonService.updateData(true);
+          this.editConfig = this.formGroup.value;
+          this.commonService.updateForm(this.formGroup, this.editConfig);
         },
         () => {
           this.isLoading = false;
@@ -121,8 +126,10 @@ export class DoNothingComponent implements OnInit {
     data.forEach(i => this.formGroup.value[i] = this.formGroup.value[i].toString());
   }
 
-  private strToArray(data: string[]) {
-    data.forEach(i => this.editModel[i] = this.editModel[i].split(",") );
+  private strToArray(data: string): number[] {
+    let arr = [];
+    data.split(',').map(i => arr.push(+i));
+    return arr;
   }
 
   private separateIdfromObj(data: ConfigData[]): number[] {
@@ -131,7 +138,7 @@ export class DoNothingComponent implements OnInit {
     data.forEach(obj => {
       
       
-      this.editModel['skipTheseLifecycle'].split(',').forEach(item => {
+      this.editModel['scenariosToRun'].split(',').forEach(item => {
         if(item === obj.value) {
           arr.push(obj.id);
         }

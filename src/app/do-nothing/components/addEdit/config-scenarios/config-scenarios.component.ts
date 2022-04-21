@@ -4,9 +4,9 @@ import { ConfigScenariosService } from 'src/app/do-nothing/services/config-scena
 import { Severity } from 'src/app/enums/severity.enum';
 import { Message } from 'src/app/enums/message.enum';
 import { CommonService } from 'src/app/services/common.service';
-import { ConfigData } from 'src/app/models/configData.interface';
 import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { DynamicDialogConfig } from 'primeng/dynamicdialog';
+import { ScenarioModel } from 'src/app/do-nothing/models/scenarioData.interface';
 
 @Component({
   selector: 'app-config-scenarios',
@@ -18,7 +18,7 @@ export class ConfigScenariosComponent implements OnInit {
   public msgDetails: MsgDetails;
   public isOnEdit: boolean;
   public isLoading: boolean;
-  public scenarioData: ConfigData[] = [];
+  private editScenario: ScenarioModel[];
 
   constructor( private sccenariosService: ConfigScenariosService,
                private commonService: CommonService,
@@ -29,7 +29,8 @@ export class ConfigScenariosComponent implements OnInit {
     this.isOnEdit = !this.dialogConfig.data?.add;
     
     if (this.isOnEdit) {
-      this.commonService.updateForm(this.formGroup, this.sccenariosService.editScenario);
+      this.editScenario = this.sccenariosService.editScenario;
+      this.updateForm(this.formGroup, this.editScenario);
     }
   }
 
@@ -44,15 +45,13 @@ export class ConfigScenariosComponent implements OnInit {
 
   addConfig(): void {
     this.isLoading = true;
-    console.log(this.formGroup.value);
-    
     this.sccenariosService.addConfigScenarios(this.formGroup.value).subscribe(
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: 'Scenarios Form ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         this.commonService.deleteMsg(this);
-        this.formGroup.reset();
         this.formInit();
+        this.commonService.updateData(true);
       },
       err => { 
         console.log(err);
@@ -70,6 +69,11 @@ export class ConfigScenariosComponent implements OnInit {
         this.isLoading = false;
         this.msgDetails = {msg: 'Scenario Form ' +  Message.EDIT_SUCCESS_MSG, severity: Severity.SUCCESS};
         this.commonService.deleteMsg(this);
+        console.log(this.formGroup);
+        
+        this.commonService.updateData(this.formGroup);
+        this.editScenario = this.formGroup.value;
+        this.updateForm(this.formGroup, this.editScenario);
       },
       () => {
         this.isLoading = false;
@@ -77,5 +81,11 @@ export class ConfigScenariosComponent implements OnInit {
         this.commonService.deleteMsg(this);
       }
     );
+  }
+
+  private updateForm(formGroup, newData)  {
+    return Object.keys(formGroup.controls).forEach( (controlName) => {
+          formGroup.controls[controlName].patchValue(newData[controlName]);
+    })
   }
 }

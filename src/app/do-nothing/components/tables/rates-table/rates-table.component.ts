@@ -20,8 +20,8 @@ export class RatesTableComponent implements OnInit, OnDestroy {
   public createPath = AppConfig.routes.add.configRates;
   public isLoading: boolean;
   public msgDetails: MsgDetails;
-  public allRates: RatesModel[];
-  public shownAllRates: RatesModel[];
+  public allRates: RatesModel[] = [];
+  public shownAllRates: RatesModel[] = [];
   private currentPage = {first: 0, rows: 10};
   private index = 0;
   private sub$: Subscription;
@@ -36,11 +36,11 @@ export class RatesTableComponent implements OnInit, OnDestroy {
     this.getAllRates();
 
     this.sub$ = this.commonService.getData().subscribe(res => {
-      if(res[1]) {
+      if(typeof res === 'boolean') {
         this.getAllRates();
       } else {
-        this.allRates[this.index] = res[0]?.value;
-        this.shownAllRates[this.index] = res[0]?.value;
+        this.allRates[this.index] = res.value;
+        this.shownAllRates[this.index] = res.value;
       }
       
     })
@@ -48,15 +48,15 @@ export class RatesTableComponent implements OnInit, OnDestroy {
 
   onEditRow(data: RatesModel, i: number): void {
     this.index = i;
-    this.confirmationService.confirm({
-      message: 'Edit config?',
-      header: 'Confirmation',
-      icon: 'pi pi-exclamation-triangle',
-      accept: () => {
+    // this.confirmationService.confirm({
+    //   message: 'Edit config?',
+    //   header: 'Confirmation',
+    //   icon: 'pi pi-exclamation-triangle',
+    //   accept: () => {
         this.rateService.onEditRow(data);
         this.commonService.show(ConfigRatesComponent);
-      }
-    });
+    //   }
+    // });
   }
 
   onDeleteRow(id: number): void {

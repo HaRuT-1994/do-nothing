@@ -59,9 +59,10 @@ import { RunHistoryService } from './services/runHistroy.service';
 import { DialogService } from 'primeng/dynamicdialog';
 import {MultiSelectModule} from 'primeng/multiselect';
 import {DropdownModule} from 'primeng/dropdown';
-import { ConfigBudgetYearComponent } from './components/addEdit/config-budget-year/config-budget-year.component';
 import { ConfigBudgetYearService } from './services/config-budget-year.service';
 import { LookupService } from './services/lookup.service';
+import { BudgetYearsComponent } from './components/addEdit/config-budget-year/config-budget-year.component';
+import { BudgetYearsTableComponent } from './components/tables/budget-years-table/budget-years-table.component';
 
 @NgModule({
   declarations: [
@@ -94,7 +95,8 @@ import { LookupService } from './services/lookup.service';
     RunHistoryTableComponent,
     ControlTablesComponent,
     DataModelComponent,
-    ConfigBudgetYearComponent
+    BudgetYearsComponent,
+    BudgetYearsTableComponent
   ],
   imports: [
     CommonModule,

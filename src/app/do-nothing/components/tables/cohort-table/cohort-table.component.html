@@ -17,10 +17,10 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let data of shownAllCohorts">
+      <tr *ngFor="let data of shownAllCohorts; let i = index">
         <td [attr.title]="data.cohorts">{{data.cohorts}}</td>
         <td [attr.title]="data.description">{{data.description}}</td>
-        <td class="buttonEffect" (click)=onEditRow(data)>
+        <td class="buttonEffect" (click)="onEditRow(data, i)">
           <span class="edit">Edit</span>
         </td>
         <td class="buttonEffect" (click)="onDeleteRow(data.cohortId)">

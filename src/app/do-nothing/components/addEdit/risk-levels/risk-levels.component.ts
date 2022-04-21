@@ -6,6 +6,7 @@ import { Message } from 'src/app/enums/message.enum';
 import { CommonService } from 'src/app/services/common.service';
 import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { DynamicDialogConfig } from 'primeng/dynamicdialog';
+import { RiskLevelsModel } from 'src/app/do-nothing/models/riskLevelData.interface';
 
 @Component({
   selector: 'app-risk-levels',
@@ -17,6 +18,7 @@ export class RiskLevelsComponent implements OnInit {
   public msgDetails: MsgDetails;
   public isOnEdit: boolean;
   public isLoading: boolean;
+  private editRiskLvl: RiskLevelsModel[];
 
   constructor( private riskLvlService: RiskLevelsService,
                private commonService: CommonService,
@@ -27,7 +29,8 @@ export class RiskLevelsComponent implements OnInit {
     this.isOnEdit = !this.dialogConfig.data?.add;
 
     if (this.isOnEdit) {
-      this.commonService.updateForm(this.formGroup, this.riskLvlService.editRiskLvl);
+      this.editRiskLvl = this.riskLvlService.editRiskLvl;
+      this.commonService.updateForm(this.formGroup, this.editRiskLvl);
     }
   }
 
@@ -47,8 +50,8 @@ export class RiskLevelsComponent implements OnInit {
         this.isLoading = false;
         this.msgDetails = {msg: 'Risk Levels Form ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         this.commonService.deleteMsg(this);
-        this.formGroup.reset();
         this.formInit();
+        this.commonService.updateData(true);
       },
       err => {
         console.log(err);
@@ -66,6 +69,9 @@ export class RiskLevelsComponent implements OnInit {
         this.isLoading = false;
         this.msgDetails = {msg: 'Risk Level Form ' +  Message.EDIT_SUCCESS_MSG, severity: Severity.SUCCESS};
         this.commonService.deleteMsg(this);
+        this.commonService.updateData(this.formGroup);
+        this.editRiskLvl = this.formGroup.value;
+        this.commonService.updateForm(this.formGroup, this.editRiskLvl);
       },
       () => {
         this.isLoading = false;4

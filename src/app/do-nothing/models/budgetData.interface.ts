@@ -1,9 +1,9 @@
+import { ConfigData } from "src/app/models/configData.interface"
+
 export interface BudgetModel {
   budgetId?: number,
-  scenarioId: number,
-  scenarioName: string,
-  expLimit: number,
-  year: number,
-  budget: number,
+  scenario: ConfigData,
+  exceedanceAllowance: number,
+  budgetName: string,
   budgetSource: string
 }

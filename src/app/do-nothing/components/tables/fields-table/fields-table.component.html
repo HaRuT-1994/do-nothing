@@ -20,13 +20,13 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let data of shownAllFields">
+      <tr *ngFor="let data of shownAllFields; let i = index">
         <td [attr.title]="data.tab">{{data.tab}}</td>
         <td [attr.title]="data.internalFieldReference">{{data.internalFieldReference}}</td>
         <td [attr.title]="data.fieldNameInSheet">{{data.fieldNameInSheet}}</td>
         <td [attr.title]="data.column">{{data.column}}</td>
         <td [attr.title]="data.mandatoryForModel">{{data.mandatoryForModel}}</td>
-        <td class="buttonEffect" (click)=onEditRow(data)>
+        <td class="buttonEffect" (click)="onEditRow(data, i)">
           <span class="edit">Edit</span>
         </td>
         <td class="buttonEffect" (click)="onDeleteRow(data.id)">

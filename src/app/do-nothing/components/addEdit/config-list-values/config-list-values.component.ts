@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { DynamicDialogConfig } from 'primeng/dynamicdialog';
+import { ListValuesModel } from 'src/app/do-nothing/models/listValuesData.interface';
 import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { ConfigListValuesService } from 'src/app/do-nothing/services/config-listValues.service';
 import { Message } from 'src/app/enums/message.enum';
@@ -17,6 +18,7 @@ export class ConfigListValuesComponent implements OnInit {
   public msgDetails: MsgDetails;
   public isOnEdit: boolean;
   public isLoading: boolean;
+  private editListValues: ListValuesModel[];  
   
   constructor( 
                private listValuesService: ConfigListValuesService,
@@ -28,7 +30,8 @@ export class ConfigListValuesComponent implements OnInit {
     this.isOnEdit = !this.dialogConfig.data?.add;
     
     if (this.isOnEdit) {
-      this.commonService.updateForm(this.formGroup, this.listValuesService.editListValues);
+      this.editListValues = this.listValuesService.editListValues;
+      this.commonService.updateForm(this.formGroup, this.editListValues);
     }
   }
 
@@ -47,8 +50,8 @@ export class ConfigListValuesComponent implements OnInit {
         this.isLoading = false;
         this.msgDetails = {msg: 'Config List Value Form ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         this.commonService.deleteMsg(this);
-        this.formGroup.reset();
         this.formInit();
+        this.commonService.updateData(true);
       },
       () => {
         this.isLoading = false;
@@ -65,6 +68,9 @@ export class ConfigListValuesComponent implements OnInit {
         this.isLoading = false;
         this.msgDetails = {msg: 'List Value Form ' +  Message.EDIT_SUCCESS_MSG, severity: Severity.SUCCESS};
         this.commonService.deleteMsg(this);
+        this.commonService.updateData(this.formGroup);
+        this.editListValues = this.formGroup.value;
+        this.commonService.updateForm(this.formGroup, this.editListValues);
       },
       () => {
         this.isLoading = false;

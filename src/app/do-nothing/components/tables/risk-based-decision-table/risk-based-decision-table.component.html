@@ -42,9 +42,9 @@
           <input class="checkbox" type="checkbox" (change)="onChecked(data)">
         </td>
       </tr>
-      <tr *ngIf="allRiskBasedDecisions.length > 10">
+      <tr *ngIf="allRiskBasedDecisions?.length > 10">
         <td colspan="10">
-          <p-paginator [rows]="10" [totalRecords]="allRiskBasedDecisions.length" [rowsPerPageOptions]="[10,20,30]"
+          <p-paginator [rows]="10" [totalRecords]="allRiskBasedDecisions?.length" [rowsPerPageOptions]="[10,20,30]"
           (onPageChange)="onPageChange($event)"></p-paginator>
         </td>
       </tr>

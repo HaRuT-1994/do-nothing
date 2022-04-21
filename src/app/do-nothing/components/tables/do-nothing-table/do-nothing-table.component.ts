@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AppConfig } from 'src/app/config/app.config';
 import { Message } from 'src/app/enums/message.enum';
 import { Severity } from 'src/app/enums/severity.enum';
@@ -9,13 +9,16 @@ import {ConfirmationService} from 'primeng/api';
 import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { DoNothingComponent } from '../../addEdit/do-nothing/do-nothing.component';
 import { LookupService } from 'src/app/do-nothing/services/lookup.service';
+import { Subscription } from 'rxjs';
+import { RunModelHistory } from 'src/app/do-nothing/models/runModelHistory.interface';
+import {strToArray} from 'src/app/shared/helper';
 
 @Component({
   selector: 'app-do-nothing-table',
   templateUrl: './do-nothing-table.component.html',
   styleUrls: ['./do-nothing-table.component.scss']
 })
-export class DoNothingTableComponent implements OnInit {
+export class DoNothingTableComponent implements OnInit, OnDestroy {
   public createPath = AppConfig.routes.add.doNothing;
   public isLoading: boolean;
   public msgDetails: MsgDetails;
@@ -23,7 +26,9 @@ export class DoNothingTableComponent implements OnInit {
   public shownAllModels: ModelConfig[] = [];
   public models: string[] = [];
   private currentPage = {first: 0, rows: 10};
-  private checkedData: ModelConfig[] = [];
+  private checkedData = [];
+  private index = 0;
+  private sub$: Subscription;
 
   constructor( private doNothingService: DoNothingService,
                private commonService: CommonService,
@@ -31,33 +36,29 @@ export class DoNothingTableComponent implements OnInit {
                private lookupService: LookupService) { }
 
   ngOnInit(): void {
-    this.isLoading = true;
-    this.doNothingService.getAllModelConfigs().subscribe(
-      (res: ModelConfig[]) => {
-        this.allModels = res;
-        this.onPageChange(this.currentPage);
-        this.allModels.forEach(el => {
-          this.models?.push(el.modelName)
-        })
-        
-        this.isLoading = false;
-      },
-      err => {
-        console.log(err);
+    this.getAllModelConfigs();
+    this.sub$ = this.commonService.getData().subscribe(res => {
+      if(typeof res === 'boolean') {
+        this.getAllModelConfigs();
+      } else {
+        console.log(res)
+        this.allModels[this.index] = res.value;
+        this.shownAllModels[this.index] = res.value;
       }
-    );
+    })
   }
 
-  onEditRow(data: ModelConfig): void {
-    this.confirmationService.confirm({
-      message: 'Edit config?',
-      header: 'Confirmation',
-      icon: 'pi pi-exclamation-triangle',
-      accept: () => {
+  onEditRow(data: ModelConfig, i: number): void {
+    this.index = i;
+    // this.confirmationService.confirm({
+    //   message: 'Edit config?',
+    //   header: 'Confirmation',
+    //   icon: 'pi pi-exclamation-triangle',
+    //   accept: () => {
         this.doNothingService.onEditRow(data);
         this.commonService.show(DoNothingComponent);
-      }
-    });
+    //   }
+    // });
   }
 
   onDeleteRow(id: number): void {
@@ -85,6 +86,40 @@ export class DoNothingTableComponent implements OnInit {
     });
   }
 
+  runModel(): void {
+    this.isLoading = true;
+    this.doNothingService.runModel().subscribe(
+      res => {
+        this.isLoading = false;
+        this.msgDetails = {msg: 'Run Model ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
+        this.commonService.deleteMsg(this);
+      },
+      err => {
+        this.isLoading = false;
+        this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
+        this.commonService.deleteMsg(this);
+      }
+    )
+  }
+
+  private getAllModelConfigs(): void {
+    this.isLoading = true;
+    this.doNothingService.getAllModelConfigs().subscribe(
+      (res: ModelConfig[]) => {
+        this.allModels = res;
+        this.isLoading = false;
+        this.onPageChange(this.currentPage);
+        this.allModels.forEach(el => {
+          this.models?.push(el.modelName)
+        })
+      },
+      err => {
+        this.isLoading = false;
+        console.log(err);
+      }
+    );
+  }
+  
   onPageChange(ev): void {
     this.currentPage = ev;
     if(ev.page * ev.rows >= this.allModels.length) {
@@ -120,8 +155,15 @@ export class DoNothingTableComponent implements OnInit {
   }
 
   onChecked(item: ModelConfig) {
-    this.checkedData.push(item);
-    console.log(this.checkedData);
-    
+    console.log(item)
+    const data = strToArray(item['scenariosToRun']);
+    if(data.length) {
+      this.checkedData.push(...data);
+      this.doNothingService.checkedData.scenarioIds = this.checkedData;
+    }
+  }
+
+  ngOnDestroy() {
+    this.sub$.unsubscribe();
   }
 }

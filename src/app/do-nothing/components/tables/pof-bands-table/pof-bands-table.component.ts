@@ -36,11 +36,11 @@ export class PoFBandsTableComponent implements OnInit, OnDestroy {
     this.getAllPoFBands();
 
     this.sub$ = this.commonService.getData().subscribe(res => {
-      if(res[1]) {
+      if(typeof res === 'boolean') {
         this.getAllPoFBands();
       } else {
-        this.allPoFBands[this.index] = res[0]?.value;
-        this.sohwnAllPoFBands[this.index] = res[0]?.value;
+        this.allPoFBands[this.index] = res.value;
+        this.sohwnAllPoFBands[this.index] = res.value;
       }
       
     })
@@ -48,15 +48,15 @@ export class PoFBandsTableComponent implements OnInit, OnDestroy {
 
   onEditRow(data: PoFBandsModel, i: number): void {
     this.index = i;
-    this.confirmationService.confirm({
-      message: 'Edit config?',
-      header: 'Confirmation',
-      icon: 'pi pi-exclamation-triangle',
-      accept: () => {
+    // this.confirmationService.confirm({
+    //   message: 'Edit config?',
+    //   header: 'Confirmation',
+    //   icon: 'pi pi-exclamation-triangle',
+    //   accept: () => {
         this.pofBandService.onEditRow(data);
         this.commonService.show(PofBandsComponent);
-      }
-    });
+    //   }
+    // });
   }
 
   onDeleteRow(id: number): void {
@@ -70,6 +70,7 @@ export class PoFBandsTableComponent implements OnInit, OnDestroy {
           () => {
             this.isLoading = false;
             this.allPoFBands = this.allPoFBands.filter( (val) => val['id'] !== id);
+            this.onPageChange(this.currentPage);
             this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
             this.commonService.deleteMsg(this);
           },

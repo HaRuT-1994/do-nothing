@@ -4,7 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AppConfig } from '../config/app.config';
 
 import { CohortComponent } from './components/addEdit/cohort/cohort.component';
-import { ConfigBudgetYearComponent } from './components/addEdit/config-budget-year/config-budget-year.component';
+import { BudgetYearsComponent } from './components/addEdit/config-budget-year/config-budget-year.component';
 import { ConfigBudgetComponent } from './components/addEdit/config-budget/config-budget.component';
 import { ConfigCurvesComponent } from './components/addEdit/config-curves/config-curves.component';
 import { ConfigFieldsComponent } from './components/addEdit/config-fields/config-fields.component';
@@ -19,6 +19,7 @@ import { PofBandsComponent } from './components/addEdit/pof-bands/pof-bands.comp
 import { RiskLevelsComponent } from './components/addEdit/risk-levels/risk-levels.component';
 import { DataModelComponent } from './components/data-model/data-model.component';
 import { BudgetTableComponent } from './components/tables/budget-table/budget-table.component';
+import { BudgetYearsTableComponent } from './components/tables/budget-years-table/budget-years-table.component';
 import { CohortTableComponent } from './components/tables/cohort-table/cohort-table.component';
 import { CurvesTableComponent } from './components/tables/curves-table/curves-table.component';
 import { DoNothingTableComponent } from './components/tables/do-nothing-table/do-nothing-table.component';
@@ -60,8 +61,8 @@ const routes: Routes = [
   { path: route.add.configBudget, component: ConfigBudgetComponent},
   { path: route.edit.configBudget, component: ConfigBudgetComponent},
 
-  { path: route.add.configBudgetYear, component: ConfigBudgetYearComponent},
-  { path: route.edit.configBudgetYear, component: ConfigBudgetYearComponent},
+  { path: route.add.configBudgetYear, component: BudgetYearsComponent},
+  { path: route.edit.configBudgetYear, component: BudgetYearsComponent},
 
   { path: route.add.configInterventionOptions, component: ConfigInterventionOptionsComponent },
   { path: route.edit.configInterventionOptions, component: ConfigInterventionOptionsComponent },
@@ -86,6 +87,7 @@ const routes: Routes = [
   { path: route.view.pofBandsTable, component: PoFBandsTableComponent },
   { path: route.view.doNothingTable, component: DoNothingTableComponent },
   { path: route.view.budgetTable, component: BudgetTableComponent },
+  { path: route.view.budgetYearsTable, component: BudgetYearsTableComponent },
   { path: route.view.listsTable, component: ListsTableComponent },
   { path: route.view.listValuesTable, component: ListValuesTableComponent },
   { path: route.view.ratesTable, component: RatesTableComponent },

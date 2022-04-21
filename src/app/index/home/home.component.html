@@ -9,6 +9,6 @@
   <div routerLink="/model-table" *ngFor="let project of projects">
     <img src="{{project.imgSrc}}" alt="project.project">
     <h3>{{project.label}}</h3>
-    <p>Last Modified</p>
+    <p>Last Modified: {{project.date}}</p>
   </div>
 </main>
