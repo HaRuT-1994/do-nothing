@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AppConfig } from 'src/app/config/app.config';
 import { CohortService } from 'src/app/do-nothing/services/cohort.service';
 import { Severity } from 'src/app/enums/severity.enum';
 import { Message } from 'src/app/enums/message.enum';
@@ -16,7 +15,6 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./cohort-table.component.scss']
 })
 export class CohortTableComponent implements OnInit, OnDestroy {
-  public createPath = AppConfig.routes.add.cohort;
   public isLoading: boolean;
   public msgDetails: MsgDetails;
   public allCohorts: CohortModel[] = [];
@@ -68,12 +66,10 @@ export class CohortTableComponent implements OnInit, OnDestroy {
             this.allCohorts = this.allCohorts.filter( (val) => val['cohortId'] !== id);
             this.onPageChange(this.currentPage);
             this.msgDetails = {msg: Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
-            this.commonService.deleteMsg(this);
           },
           () => {
             this.isLoading = false;
             this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
-            this.commonService.deleteMsg(this);
           }
         );
       }

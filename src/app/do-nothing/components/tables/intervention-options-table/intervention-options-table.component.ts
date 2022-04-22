@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { AppConfig } from 'src/app/config/app.config';
 import { InterventionOptionsModel } from 'src/app/do-nothing/models/interventionOptionsData.interface';
 import { ConfigInterventionOptionsService } from 'src/app/do-nothing/services/config-InterventionOptions.service';
 import { Message } from 'src/app/enums/message.enum';
@@ -17,7 +16,6 @@ import { LookupService } from 'src/app/do-nothing/services/lookup.service';
   styleUrls: ['./intervention-options-table.component.scss']
 })
 export class InterventionOptionsTableComponent implements OnInit {
-  public createPath = AppConfig.routes.add.configInterventionOptions;
   public isLoading: boolean;
   public msgDetails: MsgDetails;
   public allInterventionOptions: InterventionOptionsModel[] = [];
@@ -71,12 +69,10 @@ export class InterventionOptionsTableComponent implements OnInit {
             this.allInterventionOptions = this.allInterventionOptions.filter( (val) => val['interventionId'] !== id);
             this.onPageChange(this.currentPage);
             this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
-            this.commonService.deleteMsg(this);
           },
           () => {
             this.isLoading = false;
             this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
-            this.commonService.deleteMsg(this);
           }
         );
       }

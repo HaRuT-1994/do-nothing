@@ -22,12 +22,7 @@
       <button (click)="runModel()">Run</button>
     </div>
     <div class="G-flex-center-between">
-      <mat-form-field appearance="fill" class="dropdown">
-        <mat-label>{{label}}</mat-label>
-        <mat-select>
-          <mat-option *ngFor="let item of controlTables" routerLink="/{{item.routerLink}}">{{item.label}}</mat-option>
-        </mat-select>
-      </mat-form-field>
+      <p-dropdown [options]="controlTables" [(ngModel)]="selectedItem" (onChange)="selectConfig($event.value)"></p-dropdown>
     </div>
   </section>
 </div>

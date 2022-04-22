@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AppConfig } from 'src/app/config/app.config';
 import { ListsModel } from 'src/app/do-nothing/models/listsData.interface';
 import { ConfigListsService } from 'src/app/do-nothing/services/config-lists.service';
 import { Message } from 'src/app/enums/message.enum';
@@ -16,7 +15,6 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./lists-table.component.scss']
 })
 export class ListsTableComponent implements OnInit, OnDestroy {
-  public createPath = AppConfig.routes.add.configLists;
   public isLoading: boolean;
   public msgDetails: MsgDetails;
   public allLists: ListsModel[] = [];
@@ -68,12 +66,10 @@ export class ListsTableComponent implements OnInit, OnDestroy {
             this.allLists = this.allLists.filter( (val) => val['listId'] !== id);
             this.onPageChange(this.currentPage);
             this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
-            this.commonService.deleteMsg(this);
           },
           () => {
             this.isLoading = false;
             this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
-            this.commonService.deleteMsg(this);
           }
         );
       }

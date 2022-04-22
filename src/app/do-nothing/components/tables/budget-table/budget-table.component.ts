@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AppConfig } from 'src/app/config/app.config';
 import { BudgetModel } from 'src/app/do-nothing/models/budgetData.interface';
 import { ConfigBudgetService } from 'src/app/do-nothing/services/config-budget.service';
 import { Message } from 'src/app/enums/message.enum';
@@ -17,7 +16,6 @@ import { LookupService } from 'src/app/do-nothing/services/lookup.service';
   styleUrls: ['./budget-table.component.scss']
 })
 export class BudgetTableComponent implements OnInit, OnDestroy {
-  public createPath = AppConfig.routes.add.configBudgetYear;
   public isLoading: boolean;
   public msgDetails: MsgDetails;
   public allBudgets: BudgetModel[];
@@ -74,12 +72,10 @@ export class BudgetTableComponent implements OnInit, OnDestroy {
             this.allBudgets = this.allBudgets.filter( (val) => val['budgetId'] !== id);
             this.onPageChange(this.currentPage);
             this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
-            this.commonService.deleteMsg(this);
           },
           () => {
             this.isLoading = false;
             this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
-            this.commonService.deleteMsg(this);
           }
         );
       }

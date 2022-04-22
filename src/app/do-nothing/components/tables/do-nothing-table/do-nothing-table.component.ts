@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AppConfig } from 'src/app/config/app.config';
 import { Message } from 'src/app/enums/message.enum';
 import { Severity } from 'src/app/enums/severity.enum';
 import { ModelConfig } from 'src/app/do-nothing/models/modelConfig.interface';
@@ -10,7 +9,6 @@ import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { DoNothingComponent } from '../../addEdit/do-nothing/do-nothing.component';
 import { LookupService } from 'src/app/do-nothing/services/lookup.service';
 import { Subscription } from 'rxjs';
-import { RunModelHistory } from 'src/app/do-nothing/models/runModelHistory.interface';
 import {strToArray} from 'src/app/shared/helper';
 
 @Component({
@@ -19,14 +17,12 @@ import {strToArray} from 'src/app/shared/helper';
   styleUrls: ['./do-nothing-table.component.scss']
 })
 export class DoNothingTableComponent implements OnInit, OnDestroy {
-  public createPath = AppConfig.routes.add.doNothing;
   public isLoading: boolean;
   public msgDetails: MsgDetails;
   public allModels: ModelConfig[] = [];
   public shownAllModels: ModelConfig[] = [];
-  public models: string[] = [];
+  public models = [];
   private currentPage = {first: 0, rows: 10};
-  private checkedData = [];
   private index = 0;
   private sub$: Subscription;
 
@@ -74,12 +70,10 @@ export class DoNothingTableComponent implements OnInit, OnDestroy {
             this.allModels = this.allModels.filter( (val) => val['id'] !== id);
             this.onPageChange(this.currentPage);
             this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
-            this.commonService.deleteMsg(this);
           },
           () => {
             this.isLoading = false;
             this.msgDetails = {msg:  Message.ERROR_MSG, severity: Severity.ERROR};
-            this.commonService.deleteMsg(this);
           }
         );
       }
@@ -92,12 +86,10 @@ export class DoNothingTableComponent implements OnInit, OnDestroy {
       res => {
         this.isLoading = false;
         this.msgDetails = {msg: 'Run Model ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
-        this.commonService.deleteMsg(this);
       },
       err => {
         this.isLoading = false;
         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
-        this.commonService.deleteMsg(this);
       }
     )
   }
@@ -109,9 +101,12 @@ export class DoNothingTableComponent implements OnInit, OnDestroy {
         this.allModels = res;
         this.isLoading = false;
         this.onPageChange(this.currentPage);
+        let setModels = new Set();
         this.allModels.forEach(el => {
-          this.models?.push(el.modelName)
+          setModels.add(el.modelName)
         })
+        this.models = Array.from(setModels);
+        this.models.unshift('All');
       },
       err => {
         this.isLoading = false;
@@ -154,12 +149,15 @@ export class DoNothingTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  onChecked(item: ModelConfig) {
-    console.log(item)
+  onChecked(item: ModelConfig, ev) {
     const data = strToArray(item['scenariosToRun']);
-    if(data.length) {
-      this.checkedData.push(...data);
-      this.doNothingService.checkedData.scenarioIds = this.checkedData;
+    if(ev.target.checked) {
+      this.doNothingService.checkedData.push({
+        configurationId: item.id,
+        scenarioIds: data
+      })
+    } else {
+      this.doNothingService.checkedData = this.doNothingService.checkedData.filter(el => el.configurationId !== item.id)
     }
   }
 

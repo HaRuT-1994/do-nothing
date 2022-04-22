@@ -61,13 +61,11 @@ export class PofBandsComponent {
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: 'PoF Bands Form ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
-        this.commonService.deleteMsg(this);
         this.commonService.updateData(true)
         this.formInit();
       },
       err => {
         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
-        this.commonService.deleteMsg(this);
         this.isLoading = false;
       }
     );
@@ -80,7 +78,6 @@ export class PofBandsComponent {
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: 'PoF Bands Form ' +  Message.EDIT_SUCCESS_MSG, severity: Severity.SUCCESS};
-        this.commonService.deleteMsg(this);
         this.commonService.updateData(this.formGroup);
         this.editPofBand = this.formGroup.value;
         this.commonService.updateForm(this.formGroup, this.editPofBand);
@@ -88,12 +85,7 @@ export class PofBandsComponent {
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
-        this.commonService.deleteMsg(this);
       }
     );
   }
-
-  // private arrToString(data: string[]) {
-  //   data.forEach(i => this.formGroup.value[i] = this.formGroup.value[i].toString());
-  // }
 }

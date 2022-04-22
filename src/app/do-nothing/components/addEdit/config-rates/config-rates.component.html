@@ -1,6 +1,4 @@
-<div class="messgae">
-  <p-message severity="{{msgDetails?.severity}}" text="{{ msgDetails?.msg }}"></p-message>
-</div>
+<alert-message [msgDetails]="msgDetails"></alert-message>
 <app-loading *ngIf="isLoading"></app-loading>
 <main [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
   <h1>Config Rates</h1>

@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AppConfig } from 'src/app/config/app.config';
 import { ListValuesModel } from 'src/app/do-nothing/models/listValuesData.interface';
 import { ConfigListValuesService } from 'src/app/do-nothing/services/config-listValues.service';
 import { Message } from 'src/app/enums/message.enum';
@@ -16,7 +15,6 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./list-values-table.component.scss']
 })
 export class ListValuesTableComponent implements OnInit, OnDestroy {
-  public createPath = AppConfig.routes.add.configListValues;
   public isLoading: boolean;
   public msgDetails: MsgDetails;
   public allListValues: ListValuesModel[] = [];
@@ -68,12 +66,10 @@ export class ListValuesTableComponent implements OnInit, OnDestroy {
             this.allListValues = this.allListValues.filter( (val) => val['itemId'] !== id);
             this.onPageChange(this.currentPage);
             this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
-            this.commonService.deleteMsg(this);
           },
           () => {
             this.isLoading = false;
             this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
-            this.commonService.deleteMsg(this);
           }
         );
       }

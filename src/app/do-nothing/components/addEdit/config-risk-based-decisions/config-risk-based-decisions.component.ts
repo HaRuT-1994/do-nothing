@@ -62,14 +62,12 @@ export class ConfigRiskBasedDecisionsComponent implements OnInit {
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: 'Config Risk Based Decisions Form ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
-        this.commonService.deleteMsg(this);
-        this.commonService.updateData(true)
+        this.commonService.updateData(true);
         this.formInit();
       },
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
-        this.commonService.deleteMsg(this);
       }
     );
   }
@@ -81,7 +79,6 @@ export class ConfigRiskBasedDecisionsComponent implements OnInit {
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: 'Risk Based Decision Form ' +  Message.EDIT_SUCCESS_MSG, severity: Severity.SUCCESS};
-        this.commonService.deleteMsg(this);
         this.commonService.updateData(this.formGroup);
         this.editRiskBasedDecision = this.formGroup.value;
         this.commonService.updateForm(this.formGroup, this.editRiskBasedDecision);
@@ -89,7 +86,6 @@ export class ConfigRiskBasedDecisionsComponent implements OnInit {
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
-        this.commonService.deleteMsg(this);
       }
     );
   }

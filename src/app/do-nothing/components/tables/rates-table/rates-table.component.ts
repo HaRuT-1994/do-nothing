@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AppConfig } from 'src/app/config/app.config';
 import { RatesModel } from 'src/app/do-nothing/models/ratesData.interface';
 import { ConfigRatesService } from 'src/app/do-nothing/services/config-rates.service';
 import { Message } from 'src/app/enums/message.enum';
@@ -17,7 +16,6 @@ import { LookupService } from 'src/app/do-nothing/services/lookup.service';
   styleUrls: ['./rates-table.component.scss']
 })
 export class RatesTableComponent implements OnInit, OnDestroy {
-  public createPath = AppConfig.routes.add.configRates;
   public isLoading: boolean;
   public msgDetails: MsgDetails;
   public allRates: RatesModel[] = [];
@@ -72,12 +70,10 @@ export class RatesTableComponent implements OnInit, OnDestroy {
             this.allRates = this.allRates.filter( (val) => val['ratesId'] !== id);
             this.onPageChange(this.currentPage);
             this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
-            this.commonService.deleteMsg(this);
           },
           () => {
             this.isLoading = false;
             this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
-            this.commonService.deleteMsg(this);
           }
         );
       }

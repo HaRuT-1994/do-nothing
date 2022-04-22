@@ -49,14 +49,12 @@ export class ConfigScenariosComponent implements OnInit {
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: 'Scenarios Form ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
-        this.commonService.deleteMsg(this);
         this.formInit();
         this.commonService.updateData(true);
       },
       err => { 
         console.log(err);
         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
-        this.commonService.deleteMsg(this);
         this.isLoading = false;
       }
     );
@@ -68,9 +66,6 @@ export class ConfigScenariosComponent implements OnInit {
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: 'Scenario Form ' +  Message.EDIT_SUCCESS_MSG, severity: Severity.SUCCESS};
-        this.commonService.deleteMsg(this);
-        console.log(this.formGroup);
-        
         this.commonService.updateData(this.formGroup);
         this.editScenario = this.formGroup.value;
         this.updateForm(this.formGroup, this.editScenario);
@@ -78,7 +73,6 @@ export class ConfigScenariosComponent implements OnInit {
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
-        this.commonService.deleteMsg(this);
       }
     );
   }

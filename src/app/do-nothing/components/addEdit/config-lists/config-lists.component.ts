@@ -47,14 +47,12 @@ export class ConfigListsComponent implements OnInit {
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: 'Config List Form ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
-        this.commonService.deleteMsg(this);
         this.formInit();
         this.commonService.updateData(true);
       },
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
-        this.commonService.deleteMsg(this);
       }
     );
   }
@@ -65,7 +63,6 @@ export class ConfigListsComponent implements OnInit {
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: 'List Form ' +  Message.EDIT_SUCCESS_MSG, severity: Severity.SUCCESS};
-        this.commonService.deleteMsg(this);
         this.commonService.updateData(this.formGroup);
         this.editLists = this.formGroup.value;
         this.commonService.updateForm(this.formGroup, this.editLists);
@@ -73,7 +70,6 @@ export class ConfigListsComponent implements OnInit {
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
-        this.commonService.deleteMsg(this);
       }
     );
   }

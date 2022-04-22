@@ -1,5 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { AppConfig } from 'src/app/config/app.config';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Message } from 'src/app/enums/message.enum';
 import { Severity } from 'src/app/enums/severity.enum';
 import { CurveModel } from 'src/app/do-nothing/models/curveData.interface';
@@ -17,7 +16,6 @@ import { LookupService } from 'src/app/do-nothing/services/lookup.service';
   styleUrls: ['./curves-table.component.scss']
 })
 export class CurvesTableComponent implements OnInit, OnDestroy {
-  public createPath = AppConfig.routes.add.configCurves;
   public isLoading: boolean;
   public msgDetails: MsgDetails;
   public allCurves: CurveModel[] = [];
@@ -70,12 +68,10 @@ export class CurvesTableComponent implements OnInit, OnDestroy {
             this.allCurves = this.allCurves.filter( (val) => val['id'] !== id);
             this.onPageChange(this.currentPage);
             this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
-            this.commonService.deleteMsg(this);
           },
           () => {
             this.isLoading = false;
             this.msgDetails = {msg:  Message.ERROR_MSG, severity: Severity.ERROR};
-            this.commonService.deleteMsg(this);
           }
         );
       }

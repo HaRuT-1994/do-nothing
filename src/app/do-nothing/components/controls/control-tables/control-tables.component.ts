@@ -20,7 +20,7 @@ import { ConfigListsComponent } from '../../addEdit/config-lists/config-lists.co
 import { ConfigListValuesComponent } from '../../addEdit/config-list-values/config-list-values.component';
 import { BudgetYearsComponent } from '../../addEdit/config-budget-year/config-budget-year.component';
 import { ConfigBudgetComponent } from '../../addEdit/config-budget/config-budget.component';
-import { DoNothingService } from 'src/app/do-nothing/services/do-nothing.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-control-tables',
@@ -34,32 +34,37 @@ export class ControlTablesComponent implements OnInit, OnDestroy {
   private ref: DynamicDialogRef;
   private component: any;
   public controlTables = [
-    { label: 'Model Configuration', routerLink: AppConfig.routes.view.doNothingTable },
-    { label: 'Cohort', routerLink: AppConfig.routes.view.cohortTable },
-    { label: 'Fields', routerLink: AppConfig.routes.view.fieldsTable },
-    { label: 'Scenarios', routerLink: AppConfig.routes.view.scenariosTable },
-    { label: 'Curves', routerLink: AppConfig.routes.view.curvesTable },
-    { label: 'PoF Bands', routerLink: AppConfig.routes.view.pofBandsTable },
-    { label: 'Risk Levels', routerLink: AppConfig.routes.view.riskLevelsTable },
-    { label: 'Budget', routerLink: AppConfig.routes.view.budgetTable },
-    { label: 'Budget Years', routerLink: AppConfig.routes.view.budgetYearsTable },
-    { label: 'Intervention Options', routerLink: AppConfig.routes.view.interventionOptionsTable },
-    { label: 'Rates', routerLink: AppConfig.routes.view.ratesTable },
-    { label: 'Risk Based Decision', routerLink: AppConfig.routes.view.riskBasedDecisionTable },
-    { label: 'Lists', routerLink: AppConfig.routes.view.listsTable },
-    { label: 'List Values', routerLink: AppConfig.routes.view.listValuesTable },
+    { label: 'Model Configuration', routerLink: AppConfig.routes.view.doNothingTable, component: DoNothingComponent },
+    { label: 'Cohort', routerLink: AppConfig.routes.view.cohortTable, component: CohortComponent },
+    { label: 'Fields', routerLink: AppConfig.routes.view.fieldsTable, component: ConfigFieldsComponent },
+    { label: 'Scenarios', routerLink: AppConfig.routes.view.scenariosTable, component: ConfigScenariosComponent },
+    { label: 'Curves', routerLink: AppConfig.routes.view.curvesTable, component: ConfigCurvesComponent },
+    { label: 'PoF Bands', routerLink: AppConfig.routes.view.pofBandsTable, component: PofBandsComponent },
+    { label: 'Risk Levels', routerLink: AppConfig.routes.view.riskLevelsTable, component: RiskLevelsComponent },
+    { label: 'Budget', routerLink: AppConfig.routes.view.budgetTable, component: ConfigBudgetComponent },
+    { label: 'Budget Years', routerLink: AppConfig.routes.view.budgetYearsTable, component: BudgetYearsComponent },
+    { label: 'Intervention Options', routerLink: AppConfig.routes.view.interventionOptionsTable, component: ConfigInterventionOptionsComponent },
+    { label: 'Rates', routerLink: AppConfig.routes.view.ratesTable, component: ConfigRatesComponent },
+    { label: 'Risk Based Decision', routerLink: AppConfig.routes.view.riskBasedDecisionTable, component: ConfigRiskBasedDecisionsComponent },
+    { label: 'Lists', routerLink: AppConfig.routes.view.listsTable, component: ConfigListsComponent },
+    { label: 'List Values', routerLink: AppConfig.routes.view.listValuesTable, component: ConfigListValuesComponent },
     { label: 'Run History', routerLink: AppConfig.routes.view.runHistory },
   ];
-  public label = '';
+  public selectedItem = {};
   @Output() runTriggered = new EventEmitter<void>();
 
   constructor( private confirmationService: ConfirmationService,
                private dialogService: DialogService,
                private location: Location,
-               private doNothingService: DoNothingService) { }
+               private router: Router) { }
 
   ngOnInit(): void {
-    this.getComponentName();
+    this.getSelectedTable();
+  }
+
+  selectConfig(item: any): void {
+    this.component = item.component;
+    this.router.navigate([item.routerLink]);
   }
 
   onAddConfig(): void {
@@ -74,15 +79,12 @@ export class ControlTablesComponent implements OnInit, OnDestroy {
   }
 
   private show(): void {
-    this.getComponentName();
     this.ref = this.dialogService.open( this.component, {
         data: {add: true},
         width: '80%',
         contentStyle: {"max-height": "800px", "overflow": "auto"},
         baseZIndex: 10001,
     });
-
-    this.ref.onClose.subscribe((product: any) =>{ });
   }
 
   public runModel(): void {
@@ -96,75 +98,11 @@ export class ControlTablesComponent implements OnInit, OnDestroy {
     });
   }
 
-  private getComponentName(): void {
-    switch(this.location.path().split('/')[1]) {
-      case 'model-table':
-        this.component = DoNothingComponent;
-        this.label = this.controlTables[0].label;
-        break;
-      case 'cohort-table':
-        this.component = CohortComponent;
-        this.label = this.controlTables[1].label;
-        break;
-      case 'fields-table':
-        this.component = ConfigFieldsComponent;
-        this.label = this.controlTables[2].label;
-        break;
-      case 'scenarios-table':
-        this.component = ConfigScenariosComponent;
-        this.label = this.controlTables[3].label;
-        break;
-      case 'curves-table':
-        this.component = ConfigCurvesComponent;
-        this.label = this.controlTables[4].label;
-        break;
-      case 'pof-bands-table':
-        this.component = PofBandsComponent;
-        this.label = this.controlTables[5].label;
-        break;
-      case 'risk-levels-table':
-        this.component = RiskLevelsComponent;
-        this.label = this.controlTables[6].label;
-        break;
-      case 'budget-table':
-        this.component = ConfigBudgetComponent;
-        this.label = this.controlTables[7].label;
-        break;
-        case 'budget-years-table':
-          this.component = BudgetYearsComponent;
-          this.label = this.controlTables[8].label;
-          break;
-      case 'intervention-options-table':
-        this.component = ConfigInterventionOptionsComponent;
-        this.label = this.controlTables[9].label;
-        break;
-      case 'rates-table':
-        this.component = ConfigRatesComponent;
-        this.label = this.controlTables[10].label;
-        break;
-      case 'risk-based-decision-table':
-        this.component = ConfigRiskBasedDecisionsComponent;
-        this.label = this.controlTables[11].label;
-        break;
-      case 'lists-table':
-        this.component = ConfigListsComponent;
-        this.label = this.controlTables[12].label;
-        break;
-      case 'list-values-table':
-        this.component = ConfigListValuesComponent;
-        this.label = this.controlTables[13].label;
-        break;
-      case 'run-history-table':
-        this.label = this.controlTables[14].label;
-        break;
-      default:
-        this.component = DoNothingComponent;
-        this.label = this.controlTables[0].label;
-    }
-  }
-
-  goBack(): void{
-    this.location.back();
+  private getSelectedTable(): void {
+    const route =  this.location.path().split('/')[1];
+    const selectedTable = this.controlTables.filter( item => item.routerLink === route);
+    this.component = selectedTable[0].component;
+    this.selectedItem = selectedTable[0];
   }
 
   ngOnDestroy() {

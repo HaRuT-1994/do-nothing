@@ -68,12 +68,10 @@ export class ScenariosTableComponent implements OnInit, OnDestroy {
             this.allScenarios = this.allScenarios.filter( (val) => val['scenarioId'] !== id);
             this.onPageChange(this.currentPage);
             this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
-            this.commonService.deleteMsg(this);
           },
           () => {
             this.isLoading = false;
             this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
-            this.commonService.deleteMsg(this); 
           }
         );
       }

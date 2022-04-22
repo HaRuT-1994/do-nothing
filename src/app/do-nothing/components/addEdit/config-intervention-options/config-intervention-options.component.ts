@@ -65,14 +65,12 @@ export class ConfigInterventionOptionsComponent implements OnInit {
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: 'Config Intervention Options Form ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
-        this.commonService.deleteMsg(this);
         this.commonService.updateData(true)
         this.formInit();
       },
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
-        this.commonService.deleteMsg(this);
       }
     );
   }
@@ -84,7 +82,6 @@ export class ConfigInterventionOptionsComponent implements OnInit {
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: 'Intervention Options Form ' +  Message.EDIT_SUCCESS_MSG, severity: Severity.SUCCESS};
-        this.commonService.deleteMsg(this);
         this.commonService.updateData(this.formGroup);
         this.editInterventionOptions = this.formGroup.value;
         this.commonService.updateForm(this.formGroup, this.editInterventionOptions);
@@ -92,7 +89,6 @@ export class ConfigInterventionOptionsComponent implements OnInit {
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
-        this.commonService.deleteMsg(this);
       }
     );
   }

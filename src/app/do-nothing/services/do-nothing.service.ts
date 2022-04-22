@@ -12,12 +12,12 @@ export class DoNothingService {
   public skipTheseLifecycles: ConfigData[] = [];
   public skipTheseAssetSources: ConfigData[] = [];
   public skipTheseUnitClasses: ConfigData[] = [];
-  public checkedData = { scenarioIds: [] };
+  public checkedData: RunModelHistory[] = [];
   
   constructor(private http: HttpClient) { }
  
   public runModel(): Observable<any> {
-    if(this.checkedData.scenarioIds.length) {
+    if(this.checkedData.length) {
       return this.http.post<any>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.modelRun}`, this.checkedData);
     }
   }

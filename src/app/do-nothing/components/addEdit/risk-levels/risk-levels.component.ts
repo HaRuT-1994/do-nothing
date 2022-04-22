@@ -49,7 +49,6 @@ export class RiskLevelsComponent implements OnInit {
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: 'Risk Levels Form ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
-        this.commonService.deleteMsg(this);
         this.formInit();
         this.commonService.updateData(true);
       },
@@ -57,7 +56,6 @@ export class RiskLevelsComponent implements OnInit {
         console.log(err);
         this.isLoading = false;
         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
-        this.commonService.deleteMsg(this);
       }
     );
   }
@@ -68,7 +66,6 @@ export class RiskLevelsComponent implements OnInit {
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: 'Risk Level Form ' +  Message.EDIT_SUCCESS_MSG, severity: Severity.SUCCESS};
-        this.commonService.deleteMsg(this);
         this.commonService.updateData(this.formGroup);
         this.editRiskLvl = this.formGroup.value;
         this.commonService.updateForm(this.formGroup, this.editRiskLvl);
@@ -76,7 +73,6 @@ export class RiskLevelsComponent implements OnInit {
       () => {
         this.isLoading = false;4
         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
-        this.commonService.deleteMsg(this);
       }
     );
   }

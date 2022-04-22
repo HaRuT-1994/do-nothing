@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AppConfig } from 'src/app/config/app.config';
 import { Message } from 'src/app/enums/message.enum';
 import { Severity } from 'src/app/enums/severity.enum';
 import { PoFBandsModel } from 'src/app/do-nothing/models/pofBandData.interface';
@@ -17,7 +16,6 @@ import { LookupService } from 'src/app/do-nothing/services/lookup.service';
   styleUrls: ['./pof-bands-table.component.scss']
 })
 export class PoFBandsTableComponent implements OnInit, OnDestroy {
-  public createPath = AppConfig.routes.add.pofBands;
   public isLoading: boolean;
   public msgDetails: MsgDetails;
   public allPoFBands: PoFBandsModel[] = [];
@@ -72,12 +70,10 @@ export class PoFBandsTableComponent implements OnInit, OnDestroy {
             this.allPoFBands = this.allPoFBands.filter( (val) => val['id'] !== id);
             this.onPageChange(this.currentPage);
             this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
-            this.commonService.deleteMsg(this);
           },
           () => {
             this.isLoading = false;
             this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
-            this.commonService.deleteMsg(this);
           }
         );
       }

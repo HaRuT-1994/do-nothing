@@ -86,7 +86,6 @@ export class DoNothingComponent implements OnInit {
         () => {
           this.isLoading = false;
           this.msgDetails = {msg: 'Model Configuration Form ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
-          this.commonService.deleteMsg(this);
           this.commonService.updateData(true);
           this.formInit();
         },
@@ -94,7 +93,6 @@ export class DoNothingComponent implements OnInit {
           this.isLoading = false;
           console.log(err);
           this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
-          this.commonService.deleteMsg(this);
         }
       );
     }
@@ -108,7 +106,6 @@ export class DoNothingComponent implements OnInit {
         () => {
           this.isLoading = false;
           this.msgDetails = {msg: 'Model Configurarion Form ' +  Message.EDIT_SUCCESS_MSG, severity: Severity.SUCCESS};
-          this.commonService.deleteMsg(this);
           this.commonService.updateData(true);
           this.editConfig = this.formGroup.value;
           this.commonService.updateForm(this.formGroup, this.editConfig);
@@ -116,7 +113,6 @@ export class DoNothingComponent implements OnInit {
         () => {
           this.isLoading = false;
           this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
-          this.commonService.deleteMsg(this);
         }
       );
     }

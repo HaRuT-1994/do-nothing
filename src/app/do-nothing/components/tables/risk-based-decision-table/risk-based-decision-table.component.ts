@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { AppConfig } from 'src/app/config/app.config';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RiskBasedDecisionModel } from 'src/app/do-nothing/models/riskBasedDecisionData.interface';
 import { ConfigRiskBasedDecisionsService } from 'src/app/do-nothing/services/config-RiskBasedDecisions.service';
 import { Message } from 'src/app/enums/message.enum';
@@ -16,8 +15,7 @@ import { LookupService } from 'src/app/do-nothing/services/lookup.service';
   templateUrl: './risk-based-decision-table.component.html',
   styleUrls: ['./risk-based-decision-table.component.scss']
 })
-export class RiskBasedDecisionTableComponent implements OnInit {
-  public createPath = AppConfig.routes.add.configRiskBasedDecision;
+export class RiskBasedDecisionTableComponent implements OnInit, OnDestroy {
   public isLoading: boolean;
   public msgDetails: MsgDetails;
   public allRiskBasedDecisions: RiskBasedDecisionModel[];
@@ -71,12 +69,10 @@ export class RiskBasedDecisionTableComponent implements OnInit {
             this.allRiskBasedDecisions = this.allRiskBasedDecisions.filter( (val) => val['decisionId'] !== id);
             this.onPageChange(this.currentPage);
             this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
-            this.commonService.deleteMsg(this);
           },
           () => {
             this.isLoading = false;
             this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
-            this.commonService.deleteMsg(this);
           }
         );
       }
@@ -118,5 +114,9 @@ export class RiskBasedDecisionTableComponent implements OnInit {
       this.shownAllRiskBasedDecisions = this.allRiskBasedDecisions;
       this.onPageChange(this.currentPage);
     }
+  }
+
+  ngOnDestroy(): void {
+    this.sub$.unsubscribe();
   }
 }

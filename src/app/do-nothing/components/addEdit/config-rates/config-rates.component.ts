@@ -67,14 +67,12 @@ export class ConfigRatesComponent implements OnInit {
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: 'Config Rates Form ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
-        this.commonService.deleteMsg(this);
         this.commonService.updateData(true)
         this.formInit();
       },
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
-        this.commonService.deleteMsg(this);
       }
     );
   }
@@ -86,7 +84,6 @@ export class ConfigRatesComponent implements OnInit {
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: 'Rate Form ' +  Message.EDIT_SUCCESS_MSG, severity: Severity.SUCCESS};
-        this.commonService.deleteMsg(this);
         this.commonService.updateData(this.formGroup);
         this.editRates = this.formGroup.value;
         this.commonService.updateForm(this.formGroup, this.editRates);
@@ -94,7 +91,6 @@ export class ConfigRatesComponent implements OnInit {
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
-        this.commonService.deleteMsg(this);
       }
     );
   }
