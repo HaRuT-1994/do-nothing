@@ -16,9 +16,17 @@ export class DoNothingService {
   
   constructor(private http: HttpClient) { }
  
-  public runModel(): Observable<any> {
+  runModel(): Observable<any> {
     if(this.checkedData.length) {
-      return this.http.post<any>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.modelRun}`, this.checkedData);
+      return this.http.post<RunModelHistory[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.runModels}`, this.checkedData);
+    }
+  }
+
+  copyModel(): Observable<any> {
+    let data: number[] = [];
+    this.checkedData.forEach(item => data.push(item.configurationId))
+    if(this.checkedData.length) {
+      return this.http.post<number[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.copyModels}`, data);
     }
   }
 

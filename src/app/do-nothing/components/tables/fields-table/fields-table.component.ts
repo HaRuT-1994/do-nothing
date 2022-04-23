@@ -77,6 +77,28 @@ export class FieldsTableComponent implements OnInit, OnDestroy {
     });
   }
 
+  copyFields(): void {
+    this.isLoading = true;
+    this.fieldService.copyFields().subscribe(
+       res => {
+         this.isLoading = false;
+         this.msgDetails = {msg: 'Copy Fields ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
+       },
+       err => {
+         this.isLoading = false;
+         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
+       }
+    )
+  }
+
+  onChecked(item: FieldModel, ev): void{
+    if(ev.target.checked) {
+      this.fieldService.checkedData.push(item.id);
+    } else {
+      this.fieldService.checkedData = this.fieldService.checkedData.filter(el => el !== item.id)
+    }
+  }
+
   private getAllFields(): void {
     this.isLoading = true;
     this.fieldService.getAllFields().subscribe(

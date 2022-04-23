@@ -45,15 +45,8 @@ export class RiskBasedDecisionTableComponent implements OnInit, OnDestroy {
 
   onEditRow(data: RiskBasedDecisionModel, i: number): void {
     this.index = i;
-    // this.confirmationService.confirm({
-    //   message: 'Edit config?',
-    //   header: 'Confirmation',
-    //   icon: 'pi pi-exclamation-triangle',
-    //   accept: () => {
-        this.riskBasedDecisionService.onEditRow(data);
-        this.commonService.show(ConfigRiskBasedDecisionsComponent);
-    //   }
-    // });
+    this.riskBasedDecisionService.onEditRow(data);
+    this.commonService.show(ConfigRiskBasedDecisionsComponent);
   }
 
   onDeleteRow(id: number): void {
@@ -77,6 +70,28 @@ export class RiskBasedDecisionTableComponent implements OnInit, OnDestroy {
         );
       }
     });
+  }
+
+  copyRiskBasedDecisions(): void {
+    this.isLoading = true;
+    this.riskBasedDecisionService.copyRiskBasedDecisions().subscribe(
+       res => {
+         this.isLoading = false;
+         this.msgDetails = {msg: 'Copy Risk Based Decisions ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
+       },
+       err => {
+         this.isLoading = false;
+         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
+       }
+    )
+  }
+
+  onChecked(item: RiskBasedDecisionModel, ev): void{
+    if(ev.target.checked) {
+      this.riskBasedDecisionService.checkedData.push(item.decisionId);
+    } else {
+      this.riskBasedDecisionService.checkedData = this.riskBasedDecisionService.checkedData.filter(el => el !== item.decisionId)
+    }
   }
 
   private getAllRiskBasedDecisions(): void {

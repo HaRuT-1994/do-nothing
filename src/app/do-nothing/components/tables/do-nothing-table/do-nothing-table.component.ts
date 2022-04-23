@@ -94,6 +94,20 @@ export class DoNothingTableComponent implements OnInit, OnDestroy {
     )
   }
 
+  copyModel(): void {
+    this.isLoading = true;
+     this.doNothingService.copyModel().subscribe(
+        res => {
+          this.isLoading = false;
+          this.msgDetails = {msg: 'Copy Model ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
+        },
+        err => {
+          this.isLoading = false;
+          this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
+        }
+    )
+  }
+
   private getAllModelConfigs(): void {
     this.isLoading = true;
     this.doNothingService.getAllModelConfigs().subscribe(

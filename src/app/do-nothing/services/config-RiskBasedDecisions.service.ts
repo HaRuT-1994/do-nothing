@@ -7,8 +7,15 @@ import { RiskBasedDecisionModel } from '../models/riskBasedDecisionData.interfac
 @Injectable()
 export class ConfigRiskBasedDecisionsService {
   public editRiskBasedDecision: RiskBasedDecisionModel[] = [];
+  public checkedData: number[] = [];
   
   constructor(private http: HttpClient) { }
+
+  copyRiskBasedDecisions(): Observable<any> {
+    if(this.checkedData.length) {
+      return this.http.post<number[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.copyRiskBasedDecisions}`, this.checkedData);
+    }
+  }
 
   addConfigRiskBasedDecision(data: any): Observable<RiskBasedDecisionModel[]> {
     return this.http.post<RiskBasedDecisionModel[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.addConfigRiskBasedDecision}`, data);

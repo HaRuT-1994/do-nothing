@@ -46,15 +46,8 @@ export class RatesTableComponent implements OnInit, OnDestroy {
 
   onEditRow(data: RatesModel, i: number): void {
     this.index = i;
-    // this.confirmationService.confirm({
-    //   message: 'Edit config?',
-    //   header: 'Confirmation',
-    //   icon: 'pi pi-exclamation-triangle',
-    //   accept: () => {
-        this.rateService.onEditRow(data);
-        this.commonService.show(ConfigRatesComponent);
-    //   }
-    // });
+    this.rateService.onEditRow(data);
+    this.commonService.show(ConfigRatesComponent);
   }
 
   onDeleteRow(id: number): void {
@@ -79,6 +72,28 @@ export class RatesTableComponent implements OnInit, OnDestroy {
       }
     });
    }
+
+   copyRates(): void {
+    this.isLoading = true;
+    this.rateService.copyRates().subscribe(
+       res => {
+         this.isLoading = false;
+         this.msgDetails = {msg: 'Copy Rates ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
+       },
+       err => {
+         this.isLoading = false;
+         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
+       }
+    )
+  }
+
+  onChecked(item: RatesModel, ev): void{
+    if(ev.target.checked) {
+      this.rateService.checkedData.push(item.ratesId);
+    } else {
+      this.rateService.checkedData = this.rateService.checkedData.filter(el => el !== item.ratesId)
+    }
+  }
 
    private getAllRates(): void{
      this.isLoading = true;

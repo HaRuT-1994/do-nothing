@@ -10,71 +10,86 @@ export const AppConfig: AppConfig = {
         updateCohort: 'ConfigCohorts/UpdateConfigCohorts',
         getAllCohorts: 'ConfigCohorts/GetAllConfigCohorts',
         deleteCohort: 'ConfigCohorts/DeleteConfigCohorts',
+        copyCohorts: 'ConfigCohorts/CopyConfigCohorts',
 
         addConfigCurve: 'ConfigCurves/AddConfigCurves',
         getAllCurves: 'ConfigCurves/GetAllConfigCurves',
         updateCurve: 'ConfigCurves/UpdateConfigCurves',
         deleteCurve: 'ConfigCurves/DeleteConfigCurves',
+        copyCurves: 'ConfigCurves/CopyConfigCurves',
 
         addConfigField: 'ConfigFields/AddConfigFields',
         getAllFields: 'ConfigFields/GetAllConfigFields',
         updateField: 'ConfigFields/UpdateConfigFields',
         deleteField: 'ConfigFields/DeleteConfigFields',
+        copyFields: 'ConfigFields/CopyConfigFields',
 
         addConfigPoFBand: 'ConfigPoFBands/AddConfigPoFBands',
         getAllPoFBands: 'ConfigPoFBands/GetAllConfigPoFBands',
         updatePoFBand: 'ConfigPoFBands/UpdateConfigPoFBands',
         deletePoFBand: 'ConfigPoFBands/DeleteConfigPoFBands',
+        copyPoFBands: 'ConfigPoFBands/CopyConfigPoFBands',
 
         addConfigRiskLevel: 'ConfigRiskLevels/AddConfigRiskLevels',
         getAllRiskLevels: 'ConfigRiskLevels/GetAllConfigRiskLevels',
         updateRiskLevel: 'ConfigRiskLevels/UpdateConfigRiskLevels',
         deleteRiskLevel: 'ConfigRiskLevels/DeleteConfigRiskLevels',
+        copyRiskLevels: 'ConfigRiskLevels/CopyConfigRiskLevels',
 
         addConfigScenario: 'ConfigScenarios/AddConfigScenarios',
         getAllScenarios: 'ConfigScenarios/GetAllConfigScenarios',
         updateScenario: 'ConfigScenarios/UpdateConfigScenarios',
         deleteScenario: 'ConfigScenarios/DeleteConfigScenarios',
+        copyScenarios: 'ConfigScenarios/CopyConfigScenarios',
 
         addModelConfig: 'ModelConfiguration/AddModelConfiguration',
         getAllConfigs: 'ModelConfiguration/GetAllModelConfiguration',
         updateConfig: 'ModelConfiguration/UpdateModelConfiguration',
         deleteConfig: 'ModelConfiguration/DeleteModelConfiguration',
+        runModels: 'RunHistory/AddModelConfigurationRunHistory',
+        copyModels: 'ModelConfiguration/CopyModelConfiguration',
 
         addConfigBudget: 'ConfigBudget/AddConfigBudget',
         getAllBudgets: 'ConfigBudget/GetAllConfigBudget',
         updateBudget: 'ConfigBudget/UpdateConfigBudget',
         deleteBudget: 'ConfigBudget/DeleteConfigBudget',
+        copyBudgets: 'ConfigBudget/CopyConfigBudget',
 
         addConfigBudgetYear: 'ConfigBudgetYear/AddConfigBudgetYear',
         getAllBudgetYears: 'ConfigBudgetYear/GetAllConfigBudgetYear',
         updateBudgetYear: 'ConfigBudgetYear/UpdateConfigBudgetYear',
         deleteBudgetYear: 'ConfigBudgetYear/DeleteConfigBudgetYear',
+        copyBudgetYears: 'ConfigBudgetYear/CopyConfigBudgetYear',
 
         addConfigInterventionOptions: 'ConfigInterventionOptions/AddConfigInterventionOptions',
         getAllInterventionOptions: 'ConfigInterventionOptions/GetAllConfigInterventionOptions',
         updateInterventionOption: 'ConfigInterventionOptions/UpdateConfigInterventionOptions',
         deleteInterventionOption: 'ConfigInterventionOptions/DeleteConfigInterventionOptions',
+        copyInterventionOptions: 'ConfigInterventionOptions/CopyConfigInterventionOptions',
 
         addConfigRates: 'ConfigRates/AddConfigRates',
         getAllRates: 'ConfigRates/GetAllConfigRates',
         updateRate: 'ConfigRates/UpdateConfigRates',
         deleteRate: 'ConfigRates/DeleteConfigRates',
+        copyRates: 'ConfigRates/CopyConfigRates',
 
         addConfigRiskBasedDecision: 'ConfigRiskBasedDecisions/AddConfigRiskBasedDecisions',
         getAllRiskBasedDecisions: 'ConfigRiskBasedDecisions/GetAllConfigRiskBasedDecisions',
         updateRiskBasedDecision: 'ConfigRiskBasedDecisions/UpdateConfigRiskBasedDecisions',
         deleteRiskBasedDecision: 'ConfigRiskBasedDecisions/DeleteConfigRiskBasedDecisions',
+        copyRiskBasedDecisions: 'ConfigRiskBasedDecisions/CopyConfigRiskBasedDecisions',
         
         addConfigLists: 'ConfigLists/AddConfigLists',
         getAllLists: 'ConfigLists/GetAllConfigLists',
         updateList: 'ConfigLists/UpdateConfigLists',
         deleteList: 'ConfigLists/DeleteConfigLists',
+        copyLists: 'ConfigLists/CopyConfigLists',
 
         addConfigListValues: 'ConfigListValues/AddConfigListValues',
         getAllListValues: 'ConfigListValues/GetAllConfigListValues',
         updateListValue: 'ConfigListValues/UpdateConfigListValues',
         deleteListValue: 'ConfigListValues/DeleteConfigListValues',
+        copyListValues: 'ConfigListValues/CopyConfigListValues',
 
         getAllRunHistory: 'RunHistory/GetAllRunHistory',
 
@@ -85,7 +100,6 @@ export const AppConfig: AppConfig = {
         lookupConfigCohorts : 'Lookup/LookupConfigCohorts',
 
         budgetPivotDetails: 'BudgetDetails/GetAllConfigBudgetPivotDetails',
-        modelRun: 'RunHistory/AddModelConfigurationRunHistory'
     },
     routes: {
         projects: {

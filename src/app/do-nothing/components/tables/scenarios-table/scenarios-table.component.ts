@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AppConfig } from 'src/app/config/app.config';
 import { Message } from 'src/app/enums/message.enum';
 import { Severity } from 'src/app/enums/severity.enum';
 import { ScenarioModel } from 'src/app/do-nothing/models/scenarioData.interface';
@@ -16,7 +15,6 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./scenarios-table.component.scss']
 })
 export class ScenariosTableComponent implements OnInit, OnDestroy {
-  public createPath = AppConfig.routes.add.configScenarios;
   public isLoading: boolean;
   public msgDetails: MsgDetails;
   public allScenarios: ScenarioModel[] = [];
@@ -44,15 +42,8 @@ export class ScenariosTableComponent implements OnInit, OnDestroy {
 
   onEditRow(data: ScenarioModel, i: number): void {
     this.index = i;
-    // this.confirmationService.confirm({
-    //   message: 'Edit config?',
-    //   header: 'Confirmation',
-    //   icon: 'pi pi-exclamation-triangle',
-    //   accept: () => {
-        this.scenarioService.onEditRow(data);
-        this.commonService.show(ConfigScenariosComponent);
-    //   }
-    // });
+    this.scenarioService.onEditRow(data);
+    this.commonService.show(ConfigScenariosComponent);
   }
 
   onDeleteRow(id: number): void {
@@ -76,6 +67,28 @@ export class ScenariosTableComponent implements OnInit, OnDestroy {
         );
       }
     });
+  }
+
+  copyScenarios(): void {
+    this.isLoading = true;
+    this.scenarioService.copyScenarios().subscribe(
+       res => {
+         this.isLoading = false;
+         this.msgDetails = {msg: 'Copy Scenarios ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
+       },
+       err => {
+         this.isLoading = false;
+         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
+       }
+    )
+  }
+
+  onChecked(item: ScenarioModel, ev): void{
+    if(ev.target.checked) {
+      this.scenarioService.checkedData.push(item.scenarioId);
+    } else {
+      this.scenarioService.checkedData = this.scenarioService.checkedData.filter(el => el !== item.scenarioId)
+    }
   }
 
   private getAllScenarios(): void {

@@ -2,7 +2,7 @@
 <p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000"></p-confirmDialog>
 <app-loading *ngIf="isLoading"></app-loading>
 <main>
-  <app-control-tables></app-control-tables>
+  <app-control-tables (copyTriggered)="copyRiskBasedDecisions()"></app-control-tables>
   <table [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
     <!-- <caption>Config - Risk Based Decisions</caption> -->
     <thead>
@@ -37,7 +37,7 @@
           <span class="delete">Delete</span>
         </td>
         <td>
-          <input class="checkbox" type="checkbox" (change)="onChecked(data)">
+          <input class="checkbox" type="checkbox" (change)="onChecked(data, $event)">
         </td>
       </tr>
       <tr *ngIf="allRiskBasedDecisions?.length > 10">

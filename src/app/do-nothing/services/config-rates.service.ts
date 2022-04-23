@@ -7,8 +7,15 @@ import { RatesModel } from '../models/ratesData.interface';
 @Injectable()
 export class ConfigRatesService {
   public editRates: RatesModel[] = [];
+  public checkedData: number[] = [];
   
   constructor(private http: HttpClient) { }
+
+  copyRates(): Observable<any> {
+    if(this.checkedData.length) {
+      return this.http.post<number[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.copyRates}`, this.checkedData);
+    }
+  }
 
   addConfigRates(data: any): Observable<RatesModel[]> {
     return this.http.post<RatesModel[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.addConfigRates}`, data);

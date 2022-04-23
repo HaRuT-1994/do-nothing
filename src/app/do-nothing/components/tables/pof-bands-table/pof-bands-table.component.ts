@@ -46,15 +46,8 @@ export class PoFBandsTableComponent implements OnInit, OnDestroy {
 
   onEditRow(data: PoFBandsModel, i: number): void {
     this.index = i;
-    // this.confirmationService.confirm({
-    //   message: 'Edit config?',
-    //   header: 'Confirmation',
-    //   icon: 'pi pi-exclamation-triangle',
-    //   accept: () => {
-        this.pofBandService.onEditRow(data);
-        this.commonService.show(PofBandsComponent);
-    //   }
-    // });
+    this.pofBandService.onEditRow(data);
+    this.commonService.show(PofBandsComponent);
   }
 
   onDeleteRow(id: number): void {
@@ -78,6 +71,28 @@ export class PoFBandsTableComponent implements OnInit, OnDestroy {
         );
       }
     });
+  }
+
+  copyPoFBands(): void {
+    this.isLoading = true;
+    this.pofBandService.copyPoFBands().subscribe(
+       res => {
+         this.isLoading = false;
+         this.msgDetails = {msg: 'Copy PoFBands ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
+       },
+       err => {
+         this.isLoading = false;
+         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
+       }
+    )
+  }
+
+  onChecked(item: PoFBandsModel, ev): void{
+    if(ev.target.checked) {
+      this.pofBandService.checkedData.push(item.id);
+    } else {
+      this.pofBandService.checkedData = this.pofBandService.checkedData.filter(el => el !== item.id)
+    }
   }
 
   private getAllPoFBands(): void {

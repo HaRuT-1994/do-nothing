@@ -8,6 +8,7 @@ import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { BudgetYearsComponent } from '../../addEdit/config-budget-year/config-budget-year.component';
 import { ConfigBudgetYearService } from 'src/app/do-nothing/services/config-budget-year.service';
 import { BudgetPivotDetails } from 'src/app/do-nothing/models/budgetPivotDetails.interface';
+import { BudgetYearsModel } from 'src/app/do-nothing/models/budgetYearsData.interface';
 
 @Component({
   selector: 'app-budget-table',
@@ -65,6 +66,28 @@ export class BudgetYearsTableComponent implements OnInit {
         );
        }
     });
+  }
+
+  copyBudgetYears(): void {
+    this.isLoading = true;
+    this.budgetYearsService.copyBudgetYears().subscribe(
+       res => {
+         this.isLoading = false;
+         this.msgDetails = {msg: 'Copy Budget Years ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
+       },
+       err => {
+         this.isLoading = false;
+         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
+       }
+    )
+  }
+
+  onChecked(item: BudgetYearsModel, ev): void {
+    if(ev.target.checked) {
+      this.budgetYearsService.checkedData.push(item.BudgetId);
+    } else {
+      this.budgetYearsService.checkedData = this.budgetYearsService.checkedData.filter(el => el !== item.BudgetId)
+    }
   }
 
   private getAllBudgetPivotYears(): void {

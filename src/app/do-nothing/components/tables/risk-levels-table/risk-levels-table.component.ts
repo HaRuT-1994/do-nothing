@@ -42,15 +42,8 @@ export class RiskLevelsTableComponent implements OnInit, OnDestroy {
 
   onEditRow(data: RiskLevelsModel, i: number): void {
     this.index = i;
-    // this.confirmationService.confirm({
-    //   message: 'Edit config?',
-    //   header: 'Confirmation',
-    //   icon: 'pi pi-exclamation-triangle',
-    //   accept: () => {
-        this.riskLvlService.onEditRow(data);
-        this.commonService.show(RiskLevelsComponent);
-    //   }
-    // });
+    this.riskLvlService.onEditRow(data);
+    this.commonService.show(RiskLevelsComponent);
   }
 
   onDeleteRow(id: number): void {
@@ -74,6 +67,28 @@ export class RiskLevelsTableComponent implements OnInit, OnDestroy {
         );
       }
     });
+  }
+
+  copyRiskLvls(): void {
+    this.isLoading = true;
+    this.riskLvlService.copyRiskLvls().subscribe(
+       res => {
+         this.isLoading = false;
+         this.msgDetails = {msg: 'Copy Risk Levels ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
+       },
+       err => {
+         this.isLoading = false;
+         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
+       }
+    )
+  }
+
+  onChecked(item: RiskLevelsModel, ev): void{
+    if(ev.target.checked) {
+      this.riskLvlService.checkedData.push(item.id);
+    } else {
+      this.riskLvlService.checkedData = this.riskLvlService.checkedData.filter(el => el !== item.id)
+    }
   }
 
 private getAllRiskLevels(): void {

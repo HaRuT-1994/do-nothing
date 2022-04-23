@@ -1,6 +1,6 @@
 export interface BudgetYearsModel {
   id?: number,
-  budgetId?: number,
+  BudgetId?: number,
   BudgetName?: string,
   ScenarioName?: string,
   BudgetSource?: string,

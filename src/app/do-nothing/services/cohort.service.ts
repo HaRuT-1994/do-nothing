@@ -8,8 +8,15 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class CohortService {
   public editCohort: CohortModel[] = [];
+  public checkedData: number[] = [];
   
   constructor(private http: HttpClient) { }
+
+  copyCohorts(): Observable<any> {
+    if(this.checkedData.length) {
+      return this.http.post<number[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.copyCohorts}`, this.checkedData);
+    }
+  }
 
   addCohort(data: any): Observable<ConfigData[]> {
     return this.http.post<ConfigData[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.addConfigCohort}`, data);

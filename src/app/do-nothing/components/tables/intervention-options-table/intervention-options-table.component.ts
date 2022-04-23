@@ -79,6 +79,30 @@ export class InterventionOptionsTableComponent implements OnInit {
     });
   }
 
+  copyIntOptions(): void {
+    this.isLoading = true;
+    this.interventionOptionsService.copyIntOptions().subscribe(
+       res => {
+         this.isLoading = false;
+         this.msgDetails = {msg: 'Copy Intervention Options ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
+       },
+       err => {
+         this.isLoading = false;
+         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
+       }
+    )
+  }
+
+  onChecked(item: InterventionOptionsModel, ev): void{
+    if(ev.target.checked) {
+      this.interventionOptionsService.checkedData.push(item.interventionId);
+    } else {
+      this.interventionOptionsService.checkedData = this.interventionOptionsService.checkedData
+        .filter(el => el !== item.interventionId)
+    }
+  }
+
+
   private getAllInterventionOptions(): void {
     this.isLoading = true;
     this.interventionOptionsService.getAllInterventionOptions().subscribe(

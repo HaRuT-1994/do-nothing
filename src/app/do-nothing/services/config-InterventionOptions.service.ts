@@ -7,8 +7,15 @@ import { InterventionOptionsModel } from '../models/interventionOptionsData.inte
 @Injectable()
 export class ConfigInterventionOptionsService {
   public editInterventionOptions: InterventionOptionsModel[] = [];
+  public checkedData: number[] = [];
   
   constructor(private http: HttpClient) { }
+
+  copyIntOptions(): Observable<any> {
+    if(this.checkedData.length) {
+      return this.http.post<number[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.copyInterventionOptions}`, this.checkedData);
+    }
+  }
 
   addConfigInterventionOptions(data: any): Observable<InterventionOptionsModel[]> {
     return this.http.post<InterventionOptionsModel[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.addConfigInterventionOptions}`, data);

@@ -7,8 +7,15 @@ import { ListValuesModel } from '../models/listValuesData.interface';
 @Injectable()
 export class ConfigListValuesService {
   public editListValues: ListValuesModel[] = [];
+  public checkedData: number[] = [];
   
   constructor(private http: HttpClient) { }
+
+  copyListValues(): Observable<any> {
+    if(this.checkedData.length) {
+      return this.http.post<number[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.copyListValues}`, this.checkedData);
+    }
+  }
 
   addConfigListValue(data: any): Observable<ListValuesModel[]> {
     return this.http.post<ListValuesModel[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.addConfigListValues}`, data);

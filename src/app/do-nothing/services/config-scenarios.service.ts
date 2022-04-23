@@ -8,9 +8,16 @@ import { ScenarioModel } from '../models/scenarioData.interface';
 @Injectable()
 export class ConfigScenariosService {
   public editScenario: ScenarioModel[] = [];
-  public scenariosToRun: ConfigData[] = []; 
+  public scenariosToRun: ConfigData[] = [];
+  public checkedData: number[] = [];
 
   constructor(private http: HttpClient) { }
+
+  copyScenarios(): Observable<any> {
+    if(this.checkedData.length) {
+      return this.http.post<number[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.copyScenarios}`, this.checkedData);
+    }
+  }
 
   addConfigScenarios(data: any): Observable<ConfigData[]> {
     return this.http.post<ConfigData[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.addConfigScenario}`, data);

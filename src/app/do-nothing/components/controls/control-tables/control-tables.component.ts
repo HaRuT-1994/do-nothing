@@ -52,6 +52,7 @@ export class ControlTablesComponent implements OnInit, OnDestroy {
   ];
   public selectedItem = {};
   @Output() runTriggered = new EventEmitter<void>();
+  @Output() copyTriggered = new EventEmitter<void>();
 
   constructor( private confirmationService: ConfirmationService,
                private dialogService: DialogService,
@@ -87,13 +88,24 @@ export class ControlTablesComponent implements OnInit, OnDestroy {
     });
   }
 
-  public runModel(): void {
+  runModel(): void {
     this.confirmationService.confirm({
       message: 'Run checked models?',
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.runTriggered.emit();
+      }
+    });
+  }
+
+  copyConfig(): void {
+    this.confirmationService.confirm({
+      message: 'Copy checked?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.copyTriggered.emit();
       }
     });
   }

@@ -76,6 +76,28 @@ export class CohortTableComponent implements OnInit, OnDestroy {
     });
   }
 
+  copyCohorts(): void {
+    this.isLoading = true;
+    this.cohortService.copyCohorts().subscribe(
+       res => {
+         this.isLoading = false;
+         this.msgDetails = {msg: 'Copy Cohorts ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
+       },
+       err => {
+         this.isLoading = false;
+         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
+       }
+    )
+  }
+
+  onChecked(item: CohortModel, ev): void{
+    if(ev.target.checked) {
+      this.cohortService.checkedData.push(item.cohortId);
+    } else {
+      this.cohortService.checkedData = this.cohortService.checkedData.filter(el => el !== item.cohortId)
+    }
+  }
+
 private getAllCohorts(): void {
   this.isLoading = true;
   this.cohortService.getAllCohorts().subscribe(

@@ -13,12 +13,6 @@ export class CommonService {
 
   constructor(private dialogService: DialogService) { }
 
-  public deleteMsg(context): void {
-    setTimeout(() => {
-       context.msgDetails.severity = '';
-    }, 3000)
-  }
-
   public getData(): Observable<any> {
     return this.siblingData.asObservable();
   }
@@ -44,12 +38,6 @@ export class CommonService {
         contentStyle: {"max-height": "800px", "overflow": "auto"},
         baseZIndex: 10000
     });
-
-    this.ref.onClose.subscribe(() =>{
-      // console.log(res);
-      
-      
-    });
   }
 
   public changeToObj(form: FormGroup, scenarioData?: ConfigData[], cohortData?: ConfigData[]) {
@@ -68,5 +56,9 @@ export class CommonService {
 
       form.patchValue({ cohort: cohort[0] })
     }
+  }
+
+  filterAlgorithm (item: any) {
+    console.log(item)
   }
 }

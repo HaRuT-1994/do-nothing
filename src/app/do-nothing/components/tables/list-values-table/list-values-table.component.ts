@@ -76,6 +76,29 @@ export class ListValuesTableComponent implements OnInit, OnDestroy {
     });
   }
 
+  copyListValues(): void {
+    this.isLoading = true;
+    this.listValluesService.copyListValues().subscribe(
+       res => {
+         this.isLoading = false;
+         this.msgDetails = {msg: 'Copy List Values ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
+       },
+       err => {
+         this.isLoading = false;
+         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
+       }
+    )
+  }
+
+  onChecked(item: ListValuesModel, ev): void{
+    if(ev.target.checked) {
+      this.listValluesService.checkedData.push(item.itemId);
+    } else {
+      this.listValluesService.checkedData = this.listValluesService.checkedData.filter(el => el !== item.itemId)
+    }
+  }
+
+
   private getAllListValues(): void {
     this.isLoading = true;
     this.listValluesService.getAllListValues().subscribe(

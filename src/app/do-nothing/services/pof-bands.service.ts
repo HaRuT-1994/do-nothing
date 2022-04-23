@@ -7,8 +7,15 @@ import { PoFBandsModel } from '../models/pofBandData.interface';
 @Injectable()
 export class PofBandsService {
   public editPofBand: PoFBandsModel[] = [];
+  public checkedData: number[] = [];
   
   constructor(private http: HttpClient) { }
+
+  copyPoFBands(): Observable<any> {
+    if(this.checkedData.length) {
+      return this.http.post<number[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.copyPoFBands}`, this.checkedData);
+    }
+  }
 
   addPofBands(data: any): Observable<any> {
     return this.http.post(`${AppConfig.baseUrl}api/${AppConfig.endPoints.addConfigPoFBand}`, data);

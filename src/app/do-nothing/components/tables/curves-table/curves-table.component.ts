@@ -78,6 +78,28 @@ export class CurvesTableComponent implements OnInit, OnDestroy {
     });
   }
 
+  copyCurves(): void {
+    this.isLoading = true;
+    this.curvesService.copyCurves().subscribe(
+       res => {
+         this.isLoading = false;
+         this.msgDetails = {msg: 'Copy Curves ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
+       },
+       err => {
+         this.isLoading = false;
+         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
+       }
+    )
+  }
+
+  onChecked(item: CurveModel, ev): void{
+    if(ev.target.checked) {
+      this.curvesService.checkedData.push(item.id);
+    } else {
+      this.curvesService.checkedData = this.curvesService.checkedData.filter(el => el !== item.id)
+    }
+  }
+
   private getAllCurves(): void {
     this.isLoading = true;
     this.curvesService.getAllCurves().subscribe(

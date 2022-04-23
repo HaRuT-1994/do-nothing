@@ -2,7 +2,7 @@
 <p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000"></p-confirmDialog>
 <app-loading *ngIf="isLoading"></app-loading>
 <main>
-  <app-control-tables [needRun]="true" (runTriggered)="runModel()"></app-control-tables>
+  <app-control-tables [needRun]="true" (runTriggered)="runModel()" (copyTriggered)="copyModel()"></app-control-tables>
   <div class="display-mod">
     <div class="G-flex-center-start model">
       <h2>Model</h2>

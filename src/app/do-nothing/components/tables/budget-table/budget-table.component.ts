@@ -47,19 +47,9 @@ export class BudgetTableComponent implements OnInit, OnDestroy {
     this.index = i;
     this.budgetService.onEditRow(data);
     this.commonService.show(ConfigBudgetComponent);
-    // this.confirmationService.confirm({
-    //   message: 'Edit config?',
-    //   header: 'Confirmation',
-    //   icon: 'pi pi-exclamation-triangle',
-    //   accept: () => {
-        
-    //   }
-    // });
   }
 
   onDeleteRow(id: number): void {
-    console.log(id);
-    
     this.confirmationService.confirm({
       message: 'Delete config?',
       header: 'Confirmation',
@@ -82,6 +72,28 @@ export class BudgetTableComponent implements OnInit, OnDestroy {
     });
   }
 
+  copyBudgets(): void {
+    this.isLoading = true;
+    this.budgetService.copyBudgets().subscribe(
+       res => {
+         this.isLoading = false;
+         this.msgDetails = {msg: 'Copy Budgets ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
+       },
+       err => {
+         this.isLoading = false;
+         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
+       }
+    )
+  }
+
+  onChecked(item: BudgetModel, ev): void{
+    if(ev.target.checked) {
+      this.budgetService.checkedData.push(item.budgetId);
+    } else {
+      this.budgetService.checkedData = this.budgetService.checkedData.filter(el => el !== item.budgetId)
+    }
+  }
+
   private getAllBudgets(): void {
     this.isLoading = true;
     this.budgetService.getAllBudgets().subscribe(
@@ -92,6 +104,7 @@ export class BudgetTableComponent implements OnInit, OnDestroy {
       },
       err => {
         console.log(err);
+        this.isLoading = false;
       }
     );
   }

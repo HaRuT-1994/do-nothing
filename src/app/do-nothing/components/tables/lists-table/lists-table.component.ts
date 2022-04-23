@@ -42,15 +42,8 @@ export class ListsTableComponent implements OnInit, OnDestroy {
 
   onEditRow(data: ListsModel, i: number): void {
     this.index = i;
-    // this.confirmationService.confirm({
-    //   message: 'Edit config?',
-    //   header: 'Confirmation',
-    //   icon: 'pi pi-exclamation-triangle',
-    //   accept: () => {
-        this.listsService.onEditRow(data);
-        this.commonService.show(ConfigListsComponent);
-    //   }
-    // });
+    this.listsService.onEditRow(data);
+    this.commonService.show(ConfigListsComponent);
   }
 
   onDeleteRow(id: number): void {
@@ -74,6 +67,28 @@ export class ListsTableComponent implements OnInit, OnDestroy {
         );
       }
     })
+  }
+
+  copyLists(): void {
+    this.isLoading = true;
+    this.listsService.copyLists().subscribe(
+       res => {
+         this.isLoading = false;
+         this.msgDetails = {msg: 'Copy Lists ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
+       },
+       err => {
+         this.isLoading = false;
+         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
+       }
+    )
+  }
+
+  onChecked(item: ListsModel, ev): void{
+    if(ev.target.checked) {
+      this.listsService.checkedData.push(item.listId);
+    } else {
+      this.listsService.checkedData = this.listsService.checkedData.filter(el => el !== item.listId)
+    }
   }
 
   private getAllLists(): void {
