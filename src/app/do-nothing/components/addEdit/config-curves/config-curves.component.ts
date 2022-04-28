@@ -9,6 +9,8 @@ import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { CurveModel } from 'src/app/do-nothing/models/curveData.interface';
 import { LookupService } from 'src/app/do-nothing/services/lookup.service';
+import { ConfigListValuesService } from 'src/app/do-nothing/services/config-listValues.service';
+import { ListId } from 'src/app/do-nothing/enums/listId.enum';
 
 @Component({
   selector: 'app-config-curves',
@@ -23,14 +25,17 @@ export class ConfigCurvesComponent implements OnInit {
   public cohortData: ConfigData[];
   public scenarioData: ConfigData[];
   private editCurves: CurveModel[];
+  public listValues: string[];
 
   constructor(private curvesService: ConfigCurvesService, private commonService: CommonService,
-    private lookupService: LookupService, private dialogConfig: DynamicDialogConfig, private fb: FormBuilder) { }
+    private lookupService: LookupService, private dialogConfig: DynamicDialogConfig, private fb: FormBuilder, private listValuesService: ConfigListValuesService) { }
 
   ngOnInit() {
     this.formInit();
     this.cohortData = this.lookupService.configCohortData;
     this.scenarioData = this.lookupService.configScenariosData;
+    this.listValuesService.getListValuesByListId(ListId.SEVEN).subscribe(res => this.listValues = res)
+    
     this.isOnEdit = !this.dialogConfig.data?.add;
 
     if (this.isOnEdit) {

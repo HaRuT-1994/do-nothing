@@ -36,22 +36,15 @@ export class FieldsTableComponent implements OnInit, OnDestroy {
         this.getAllFields();
       } else {
         this.allFields[this.index] = res.value;
-        this.shownAllFields[this.index] = res.value;
+        this.onPageChange(this.currentPage);
       }
     })
   }
 
   onEditRow(data: FieldModel, i: number): void {
-    this.index = i;
-    // this.confirmationService.confirm({
-    //   message: 'Edit config?',
-    //   header: 'Confirmation',
-    //   icon: 'pi pi-exclamation-triangle',
-    //   accept: () => {
-        this.fieldService.onEditRow(data);
-        this.commonService.show(ConfigFieldsComponent);
-    //   }
-    // });
+    this.index = this.currentPage['page'] * this.currentPage['rows'] + i || i;
+    this.fieldService.onEditRow(data);
+    this.commonService.show(ConfigFieldsComponent);
   }
 
   onDeleteRow(id: number): void {
@@ -108,7 +101,8 @@ export class FieldsTableComponent implements OnInit, OnDestroy {
         this.isLoading = false;
       },
       err => {
-        console.log(err);
+        this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
+        this.isLoading = false;
       }
     );
   }
@@ -123,16 +117,8 @@ export class FieldsTableComponent implements OnInit, OnDestroy {
   }
 
   filterData(search: string): void {
-    console.log();
-    
     if (search.length) {
-      this.shownAllFields = this.allFields.filter(item => {
-        for(let key in item) {
-          if( item[key] && key !== 'id' && item[key].toString().toLowerCase().includes(search.toLowerCase())) {
-            return item;
-          }
-        }
-      })
+      this.shownAllFields = this.commonService.filterAlgorithm(this.allFields, search);
     } else {
       this.shownAllFields = this.allFields;
       this.onPageChange(this.currentPage);

@@ -119,8 +119,8 @@ export class BudgetYearsComponent implements OnInit {
         this.configBudgets = res;
       },
       err => {
+        this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
         this.isLoading = false;
-        console.log(err);
       }
     )
   }

@@ -37,24 +37,16 @@ export class DoNothingTableComponent implements OnInit, OnDestroy {
       if(typeof res === 'boolean') {
         this.getAllModelConfigs();
       } else {
-        console.log(res)
         this.allModels[this.index] = res.value;
-        this.shownAllModels[this.index] = res.value;
+        this.onPageChange(this.currentPage);
       }
     })
   }
 
   onEditRow(data: ModelConfig, i: number): void {
-    this.index = i;
-    // this.confirmationService.confirm({
-    //   message: 'Edit config?',
-    //   header: 'Confirmation',
-    //   icon: 'pi pi-exclamation-triangle',
-    //   accept: () => {
-        this.doNothingService.onEditRow(data);
-        this.commonService.show(DoNothingComponent);
-    //   }
-    // });
+    this.index = this.currentPage['page'] * this.currentPage['rows'] + i || i;
+    this.doNothingService.onEditRow(data);
+    this.commonService.show(DoNothingComponent);
   }
 
   onDeleteRow(id: number): void {
@@ -123,8 +115,8 @@ export class DoNothingTableComponent implements OnInit, OnDestroy {
         this.models.unshift('All');
       },
       err => {
+        this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
         this.isLoading = false;
-        console.log(err);
       }
     );
   }
@@ -150,20 +142,14 @@ export class DoNothingTableComponent implements OnInit, OnDestroy {
 
   filterData(search: string): void {
     if (search.length) {
-      this.shownAllModels = this.allModels.filter(item => {
-        for(let key in item) {
-          if( item[key] && key !== 'id' && item[key].toString().toLowerCase().includes(search.toLowerCase())) {
-            return item;
-          }
-        }
-      })
+      this.shownAllModels = this.commonService.filterAlgorithm(this.allModels, search);
     } else {
       this.shownAllModels = this.allModels;
       this.onPageChange(this.currentPage);
     }
   }
 
-  onChecked(item: ModelConfig, ev) {
+  onChecked(item: ModelConfig, ev): void {
     const data = strToArray(item['scenariosToRun']);
     if(ev.target.checked) {
       this.doNothingService.checkedData.push({
@@ -175,7 +161,7 @@ export class DoNothingTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void{
     this.sub$.unsubscribe();
   }
 }

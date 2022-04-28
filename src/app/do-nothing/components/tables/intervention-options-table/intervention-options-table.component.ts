@@ -37,23 +37,16 @@ export class InterventionOptionsTableComponent implements OnInit {
         this.getAllInterventionOptions();
       } else {
         this.allInterventionOptions[this.index] = res.value;
-        this.shownAllInterventionOptions[this.index] = res.value;
+        this.onPageChange(this.currentPage);
       }
       
     })
    }
 
   onEditRow(data: InterventionOptionsModel, i: number): void {
-    this.index = i;
-    // this.confirmationService.confirm({
-    //   message: 'Edit config?',
-    //   header: 'Confirmation',
-    //   icon: 'pi pi-exclamation-triangle',
-    //   accept: () => {
-        this.interventionOptionsService.onEditRow(data);
-        this.commonService.show(ConfigInterventionOptionsComponent);
-    //   }
-    // });
+    this.index = this.currentPage['page'] * this.currentPage['rows'] + i || i;
+    this.interventionOptionsService.onEditRow(data);
+    this.commonService.show(ConfigInterventionOptionsComponent);
   }
 
   onDeleteRow(id: number): void {
@@ -102,7 +95,6 @@ export class InterventionOptionsTableComponent implements OnInit {
     }
   }
 
-
   private getAllInterventionOptions(): void {
     this.isLoading = true;
     this.interventionOptionsService.getAllInterventionOptions().subscribe(
@@ -112,7 +104,8 @@ export class InterventionOptionsTableComponent implements OnInit {
         this.isLoading = false;
       },
       err => {
-        console.log(err);
+        this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
+        this.isLoading = false;
       }
     );
   }
@@ -128,20 +121,14 @@ export class InterventionOptionsTableComponent implements OnInit {
 
   filterData(search: string): void {
     if (search.length) {
-      this.shownAllInterventionOptions = this.allInterventionOptions.filter(item => {
-        for(let key in item) {
-          if(item[key] && key !== 'interventionId' && item[key].toString().toLowerCase().includes(search.toLowerCase())) {
-            return item;
-          }
-        }
-      })
+      this.shownAllInterventionOptions = this.commonService.filterAlgorithm(this.allInterventionOptions, search);
     } else {
       this.shownAllInterventionOptions = this.allInterventionOptions;
       this.onPageChange(this.currentPage);
     }
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.sub$.unsubscribe();
   }
 }

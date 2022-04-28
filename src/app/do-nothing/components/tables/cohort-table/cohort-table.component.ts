@@ -35,22 +35,15 @@ export class CohortTableComponent implements OnInit, OnDestroy {
         this.getAllCohorts();
       } else {
         this.allCohorts[this.index] = res.value;
-        this.shownAllCohorts[this.index] = res.value;
+        this.onPageChange(this.currentPage);
       }
     })
   }
 
   onEditRow(data: CohortModel, i: number): void {
-    this.index = i;
-    // this.confirmationService.confirm({
-    //   message: 'Edit config?',
-    //   header: 'Confirmation',
-    //   icon: 'pi pi-exclamation-triangle',
-    //   accept: () => {
-        this.cohortService.onEditRow(data);
-        this.commonService.show(CohortComponent);
-    //   }
-    // });
+    this.index = this.currentPage['page'] * this.currentPage['rows'] + i || i;
+    this.cohortService.onEditRow(data);
+    this.commonService.show(CohortComponent);
   }
 
   onDeleteRow(id: number): void {
@@ -107,7 +100,8 @@ private getAllCohorts(): void {
       this.isLoading = false;
     },
     err => {
-      console.log(err);
+      this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
+      this.isLoading = false;
     }
   );
 }
@@ -123,21 +117,14 @@ private getAllCohorts(): void {
 
   filterData(search: string): void {
     if (search.length) {
-      this.shownAllCohorts = this.allCohorts.filter(item => {
-        for(let key in item) {
-          if( item[key] && key !== 'cohortId'
-          && item[key].toString().toLowerCase().includes(search.toLowerCase())) {
-            return item;
-          }
-        }
-      })
+      this.shownAllCohorts = this.commonService.filterAlgorithm(this.allCohorts, search);
     } else {
       this.shownAllCohorts = this.allCohorts;
       this.onPageChange(this.currentPage);
     }
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.sub$.unsubscribe();
   }
 }

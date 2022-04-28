@@ -90,6 +90,7 @@ export const AppConfig: AppConfig = {
         updateListValue: 'ConfigListValues/UpdateConfigListValues',
         deleteListValue: 'ConfigListValues/DeleteConfigListValues',
         copyListValues: 'ConfigListValues/CopyConfigListValues',
+        getListValuesByListId: 'ConfigListValues/GetConfigListValuesByListId',
 
         getAllRunHistory: 'RunHistory/GetAllRunHistory',
 

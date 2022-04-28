@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
 import { ConfigData } from 'src/app/models/configData.interface';
 import { AppConfig } from '../../config/app.config';
@@ -49,5 +50,17 @@ export class DoNothingService {
 
   onEditRow(data): void {
     this.editModel = data;
+  }
+
+  strToArray(data: string): number[] {
+    let arr = [];
+    data.split(',').forEach(i => !isNaN(+i) && arr.push(+i));
+    return arr;
+  }
+
+  arrToString(data: string[], form: FormGroup) {
+    data.forEach(i => {
+     form.value[i] = form.value[i] && form.value[i].filter(i => i).toString();
+    });
   }
 }

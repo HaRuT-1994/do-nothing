@@ -35,16 +35,15 @@ export class BudgetTableComponent implements OnInit, OnDestroy {
     this.sub$ = this.commonService.getData().subscribe(res => {
       if(typeof res === 'boolean') {
         this.getAllBudgets();
-        
       } else {
         this.allBudgets[this.index] = res.value;
-        this.shownAllBudgets[this.index] = res.value;
+        this.onPageChange(this.currentPage);
       }
     })
    }
 
   onEditRow(data: BudgetModel, i: number): void {
-    this.index = i;
+    this.index = this.currentPage['page'] * this.currentPage['rows'] + i || i;
     this.budgetService.onEditRow(data);
     this.commonService.show(ConfigBudgetComponent);
   }
@@ -59,6 +58,8 @@ export class BudgetTableComponent implements OnInit, OnDestroy {
         this.budgetService.deleteBudget(id).subscribe(
           () => {
             this.isLoading = false;
+            console.log(this.allBudgets);
+            
             this.allBudgets = this.allBudgets.filter( (val) => val['budgetId'] !== id);
             this.onPageChange(this.currentPage);
             this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
@@ -103,7 +104,7 @@ export class BudgetTableComponent implements OnInit, OnDestroy {
         this.isLoading = false;
       },
       err => {
-        console.log(err);
+        this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
         this.isLoading = false;
       }
     );
@@ -120,20 +121,14 @@ export class BudgetTableComponent implements OnInit, OnDestroy {
 
   filterData(search: string): void {
     if (search.length) {
-      this.shownAllBudgets = this.allBudgets.filter(item => {
-        for(let key in item) {
-          if(item[key] && key !== 'budgetId' && item[key].toString().toLowerCase().includes(search.toLowerCase())) {
-            return item;
-          }
-        }
-      })
+      this.shownAllBudgets = this.commonService.filterAlgorithm(this.allBudgets, search);
     } else {
       this.shownAllBudgets = this.allBudgets;
       this.onPageChange(this.currentPage);
     }
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.sub$.unsubscribe();
   }
 }

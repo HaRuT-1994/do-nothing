@@ -58,7 +58,18 @@ export class CommonService {
     }
   }
 
-  filterAlgorithm (item: any) {
-    console.log(item)
+  filterAlgorithm (data: any, search: string) {
+    const pattern = /Id|id/;
+    return data.filter(item => {
+      for(let key in item) {
+        if(!pattern.test(key) && item[key]) {
+          if(typeof item[key] === 'object' && item[key]['value'] && item[key]['value'].toLowerCase().includes(search.trim().toLowerCase())) {
+            return item;
+          } else if (item[key].toString().toLowerCase().includes(search.trim().toLowerCase())) {
+            return item;
+          }
+        }
+      }
+    })
   }
 }

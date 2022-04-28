@@ -35,13 +35,13 @@ export class RiskLevelsTableComponent implements OnInit, OnDestroy {
         this.getAllRiskLevels();
       } else {
         this.allRiskLevels[this.index] = res.value;
-        this.shownAllRiskLevels[this.index] = res.value;
+        this.onPageChange(this.currentPage);
       }
     })
   }
 
   onEditRow(data: RiskLevelsModel, i: number): void {
-    this.index = i;
+    this.index = this.currentPage['page'] * this.currentPage['rows'] + i || i;
     this.riskLvlService.onEditRow(data);
     this.commonService.show(RiskLevelsComponent);
   }
@@ -100,8 +100,8 @@ private getAllRiskLevels(): void {
       this.isLoading = false;
     },
     err => {
+      this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
       this.isLoading = false;
-      console.log(err);
     }
   );
 }
@@ -118,13 +118,7 @@ private getAllRiskLevels(): void {
 
   filterData(search: string): void {
     if (search.length) {
-      this.shownAllRiskLevels = this.allRiskLevels.filter(item => {
-        for(let key in item) {
-          if( item[key] && key !== 'id' && item[key].toString().toLowerCase().includes(search).toLowerCase()) {
-            return item;
-          }
-        }
-      })
+      this.shownAllRiskLevels = this.commonService.filterAlgorithm(this.allRiskLevels, search);
     } else {
       this.shownAllRiskLevels = this.allRiskLevels;
       this.onPageChange(this.currentPage);

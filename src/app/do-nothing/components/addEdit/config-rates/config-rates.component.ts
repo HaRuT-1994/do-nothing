@@ -9,6 +9,8 @@ import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { LookupService } from 'src/app/do-nothing/services/lookup.service';
 import { RatesModel } from 'src/app/do-nothing/models/ratesData.interface';
+import { ConfigListValuesService } from 'src/app/do-nothing/services/config-listValues.service';
+import { ListId } from 'src/app/do-nothing/enums/listId.enum';
 
 @Component({
   selector: 'app-config-rates',
@@ -22,18 +24,27 @@ export class ConfigRatesComponent implements OnInit {
   public msgDetails: MsgDetails;
   public isOnEdit: boolean;
   public isLoading: boolean;
+  public listValues: string[];
+  public rangeTypes: string[];
+  public rateTypes: string[];
+  public geographies: string[];
   private editRates: RatesModel[];
   
   constructor( 
                private ratesService: ConfigRatesService,
                private commonService: CommonService,
                private lookupService: LookupService,
-               private dialogConfig: DynamicDialogConfig) { }
+               private dialogConfig: DynamicDialogConfig,
+               private listValuesService: ConfigListValuesService) { }
 
   ngOnInit(): void {
     this.formInit();
     this.scenarioData = this.lookupService.configScenariosData;
     this.cohortData = this.lookupService.configCohortData;
+    this.listValuesService.getListValuesByListId(ListId.FOUR).subscribe(res => this.listValues = res);
+    this.listValuesService.getListValuesByListId(ListId.SIX).subscribe(res => this.rateTypes = res);
+    this.listValuesService.getListValuesByListId(ListId.FIVE).subscribe(res => this.rangeTypes = res);
+    this.listValuesService.getListValuesByListId(ListId.THREE).subscribe(res => this.geographies = res);
     this.isOnEdit = !this.dialogConfig.data?.add;
     
     if (this.isOnEdit) {

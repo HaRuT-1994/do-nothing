@@ -6,32 +6,22 @@
     <div class="G-flex-justify-around">
       <div class="G-column gap">
         <div class="G-flex-center-between">
-          <label for="scenarioId" class="label-for-select">Scenario Id</label>
-          <!-- <mat-form-field appearance="fill" class="dropdown">
-            <mat-label>Scenario</mat-label>
-            <mat-select formControlName="scenarioId">
-              <mat-option *ngFor="let scenario of scenarioData" [value]="scenario.id">{{scenario.value}}</mat-option>
-            </mat-select>
-          </mat-form-field> -->
+          <label for="scenarioId" class="label-for-select">Scenario</label>
           <p-dropdown [options]="scenarioData" optionLabel="value"  optionValue="id"  formControlName="scenario" editable="true" ></p-dropdown>
         </div>
         <div class="G-flex-center-between">
-          <label for="cohortId">Cohort Id</label>
-          <!-- <mat-form-field appearance="fill" class="dropdown">
-            <mat-label>Cohort</mat-label>
-            <mat-select formControlName="cohortId">
-              <mat-option *ngFor="let cohort of cohortData" [value]="cohort.id">{{cohort.value}}</mat-option>
-            </mat-select>
-          </mat-form-field> -->
+          <label for="cohortId">Cohort</label>
           <p-dropdown [options]="cohortData" optionLabel="value" optionValue="id"  formControlName="cohort" editable="true"  ></p-dropdown>
         </div>
         <div class="G-flex-center-between">
-          <label for="intervention">Intervention</label>
-          <input type="text" id="intervention" formControlName="intervention">
+          <label>Interventions</label>
+          <!-- <input type="text" id="intervention" formControlName="intervention"> -->
+          <p-dropdown [options]="listValues" formControlName="intervention" editable="true"></p-dropdown>
         </div>
         <div class="G-flex-center-between">
-          <label for="geography">Geography</label>
-          <input type="text" id="geography" formControlName="geography">
+          <label for="geography">Geographies</label>
+          <!-- <input type="text" id="geography" formControlName="geography"> -->
+          <p-dropdown [options]="geographies" formControlName="geography" editable="true"></p-dropdown>
         </div>
         <div class="G-flex-center-between">
           <label for="budgetSource">Budget Source</label>
@@ -43,7 +33,8 @@
         </div>
         <div class="G-flex-center-between">
           <label for="rateType">Rate Type</label>
-          <input type="text" id="rateType" formControlName="rateType">
+          <!-- <input type="text" id="rateType" formControlName="rateType"> -->
+          <p-dropdown [options]="rateTypes" formControlName="rateType" editable="true"></p-dropdown>
         </div>
         <div class="G-flex-center-between">
           <label for="minimumCost">Minimum Cost</label>
@@ -51,7 +42,8 @@
         </div>
         <div class="G-flex-center-between">
           <label for="rangeType">Range Type</label>
-          <input type="text" id="rangeType" formControlName="rangeType">
+          <!-- <input type="text" id="rangeType" formControlName="rangeType"> -->
+          <p-dropdown [options]="rangeTypes" formControlName="rangeType" editable="true"></p-dropdown>
         </div>
         <div class="G-flex-center-between">
           <label for="from1">From 1</label>

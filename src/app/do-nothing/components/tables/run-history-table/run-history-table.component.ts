@@ -25,7 +25,7 @@ export class RunHistoryTableComponent implements OnInit {
         this.isLoading = false;
       },
       err => {
-        console.log(err);
+        this.isLoading = false;
       }
      );
    }

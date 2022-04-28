@@ -7,19 +7,22 @@
       <div class="G-column gap">
         <div class="G-flex-center-between">
           <label for="model-name">Model</label>
-          <input type="text" id="model-name" formControlName="modelName">
+          <input type="text" id="model-name" formControlName="modelName"
+          [ngClass]="(submitted || formGroup.controls['modelName'].dirty) && formGroup.controls['modelName'].invalid? 'invalid' : ''">
         </div>
         <div class="G-flex-center-between">
           <label for="base-year">Base year</label>
-          <input type="number" id="base-year" min="2021" formControlName="baseYear">
+          <input type="number" id="base-year" min="2021" formControlName="baseYear"
+          [ngClass]="(submitted || formGroup.controls['baseYear'].dirty) && formGroup.controls['baseYear'].invalid? 'invalid' : ''">
         </div>
         <div class="G-flex-center-between">
           <label for="years-to-run">Years to run</label>
-          <input type="number" id="years-to-run" value="20" min="1" max="50" formControlName="yearsToRun">
+          <input type="number" id="years-to-run" value="20" min="1" max="50" formControlName="yearsToRun"
+          [ngClass]="(submitted || formGroup.controls['yearsToRun'].dirty) && formGroup.controls['yearsToRun'].invalid? 'invalid' : ''">
         </div>
         <div class="G-flex-center-between">
           <label>Skip these Lifecycles</label>
-          <p-multiSelect [showHeader]=false  [options]="skipTheseLifecycles"  defaultLabel="Lifecycles" formControlName="skipTheseLifecycle" optionLabel="value" optionValue="id" ></p-multiSelect>
+          <p-multiSelect [showHeader]=false  [options]="skipTheseLifecycles" defaultLabel="Lifecycles" formControlName="skipTheseLifecycle" optionLabel="value" optionValue="value"></p-multiSelect>
         </div>
         <div class="G-flex-center-between">
           <label>Skip these Asset Sources</label>
@@ -31,7 +34,8 @@
         </div>
         <div class="G-flex-center-between">
           <label>Scenarios to Run</label>
-          <p-multiSelect [showHeader]=false [options]="scenarioData" defaultLabel="Scenarios to Run" optionLabel="value" optionValue="id" formControlName="scenariosToRun"></p-multiSelect>
+          <p-multiSelect [showHeader]=false [options]="scenarioData" defaultLabel="Scenarios to Run" optionLabel="value" optionValue="id" formControlName="scenariosToRun"
+          [ngClass]="(submitted || formGroup.controls['scenariosToRun'].dirty) && formGroup.controls['scenariosToRun'].invalid? 'invalid' : ''"></p-multiSelect>
         </div>
         <div class="G-flex-center-between">
           <label>Condition Range</label>

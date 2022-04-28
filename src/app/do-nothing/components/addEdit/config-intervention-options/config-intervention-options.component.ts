@@ -9,6 +9,8 @@ import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { LookupService } from 'src/app/do-nothing/services/lookup.service';
 import { InterventionOptionsModel } from 'src/app/do-nothing/models/interventionOptionsData.interface';
+import { ConfigListValuesService } from 'src/app/do-nothing/services/config-listValues.service';
+import { ListId } from 'src/app/do-nothing/enums/listId.enum';
 
 @Component({
   selector: 'app-config-intervention-options',
@@ -22,6 +24,7 @@ export class ConfigInterventionOptionsComponent implements OnInit {
   public isLoading: boolean;
   public scenarioData: ConfigData[];
   public cohortData: ConfigData[];
+  public listValues: string[];
   private editInterventionOptions: InterventionOptionsModel[];
   
   constructor( 
@@ -29,12 +32,14 @@ export class ConfigInterventionOptionsComponent implements OnInit {
                private commonService: CommonService,
                private lookupService: LookupService,
                private dialogConfig: DynamicDialogConfig,
-               private fb: FormBuilder) { }
+               private fb: FormBuilder,
+               private listValuesService: ConfigListValuesService) { }
 
   ngOnInit(): void {
     this.formInit();
     this.scenarioData = this.lookupService.configScenariosData;
     this.cohortData = this.lookupService.configCohortData;
+    this.listValuesService.getListValuesByListId(ListId.FOUR).subscribe(res => this.listValues = res)
     this.isOnEdit = !this.dialogConfig.data?.add;
 
     if (this.isOnEdit) {

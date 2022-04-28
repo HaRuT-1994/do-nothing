@@ -68,61 +68,61 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let data of shownAllBudgets">
+      <tr *ngFor="let data of shownAllBudgetYears">
         <td [attr.title]="data.ScenarioName">{{data.Scenario.value}}</td>
         <td [attr.title]="data.BudgetSource">{{data.BudgetSource}}</td>
         <td [attr.title]="data.ExceedanceAllowance">{{data.ExceedanceAllowance}}</td>
         <td [attr.title]="data.BudgetName">{{data.BudgetName}}</td>
-        <td>{{data['_2022']}}</td>
-        <td>{{data['_2023']}}</td>
-        <td>{{data['_2024']}}</td>
-        <td>{{data['_2025']}}</td>
-        <td>{{data['_2026']}}</td>
-        <td>{{data['_2027']}}</td>
-        <td>{{data['_2028']}}</td>
-        <td>{{data['_2029']}}</td>
-        <td>{{data['_2030']}}</td>
-        <td>{{data['_2031']}}</td>
-        <td>{{data['_2032']}}</td>
-        <td>{{data['_2033']}}</td>
-        <td>{{data['_2034']}}</td>
-        <td>{{data['_2035']}}</td>
-        <td>{{data['_2036']}}</td>
-        <td>{{data['_2037']}}</td>
-        <td>{{data['_2038']}}</td>
-        <td>{{data['_2039']}}</td>
-        <td>{{data['_2040']}}</td>
-        <td>{{data['_2041']}}</td>
-        <td>{{data['_2042']}}</td>
-        <td>{{data['_2043']}}</td>
-        <td>{{data['_2044']}}</td>
-        <td>{{data['_2045']}}</td>
-        <td>{{data['_2046']}}</td>
-        <td>{{data['_2047']}}</td>
-        <td>{{data['_2048']}}</td>
-        <td>{{data['_2049']}}</td>
-        <td>{{data['_2050']}}</td>
-        <td>{{data['_2051']}}</td>
-        <td>{{data['_2052']}}</td>
-        <td>{{data['_2053']}}</td>
-        <td>{{data['_2054']}}</td>
-        <td>{{data['_2055']}}</td>
-        <td>{{data['_2056']}}</td>
-        <td>{{data['_2057']}}</td>
-        <td>{{data['_2058']}}</td>
-        <td>{{data['_2059']}}</td>
-        <td>{{data['_2060']}}</td>
-        <td>{{data['_2061']}}</td>
-        <td>{{data['_2062']}}</td>
-        <td>{{data['_2063']}}</td>
-        <td>{{data['_2064']}}</td>
-        <td>{{data['_2065']}}</td>
-        <td>{{data['_2066']}}</td>
-        <td>{{data['_2067']}}</td>
-        <td>{{data['_2068']}}</td>
-        <td>{{data['_2069']}}</td>
-        <td>{{data['_2070']}}</td>
-        <td>{{data['_2071']}}</td>
+        <!-- <td>{{data['_2022'] | number: '.2-2'}}</td>
+        <td>{{data['_2023'] | number: '.2-2'}}</td>
+        <td>{{data['_2024'] | number: '.2-2'}}</td>
+        <td>{{data['_2025'] | number: '.2-2'}}</td>
+        <td>{{data['_2026'] | number: '.2-2'}}</td>
+        <td>{{data['_2027'] | number: '.2-2'}}</td>
+        <td>{{data['_2028'] | number: '.2-2'}}</td>
+        <td>{{data['_2029'] | number: '.2-2'}}</td>
+        <td>{{data['_2030'] | number: '.2-2'}}</td>
+        <td>{{data['_2031'] | number: '.2-2'}}</td>
+        <td>{{data['_2032'] | number: '.2-2'}}</td>
+        <td>{{data['_2033'] | number: '.2-2'}}</td>
+        <td>{{data['_2034'] | number: '.2-2'}}</td>
+        <td>{{data['_2035'] | number: '.2-2'}}</td>
+        <td>{{data['_2036'] | number: '.2-2'}}</td>
+        <td>{{data['_2037'] | number: '.2-2'}}</td>
+        <td>{{data['_2038'] | number: '.2-2'}}</td>
+        <td>{{data['_2039'] | number: '.2-2'}}</td>
+        <td>{{data['_2040'] | number: '.2-2'}}</td>
+        <td>{{data['_2041'] | number: '.2-2'}}</td>
+        <td>{{data['_2042'] | number: '.2-2'}}</td>
+        <td>{{data['_2043'] | number: '.2-2'}}</td>
+        <td>{{data['_2044'] | number: '.2-2'}}</td>
+        <td>{{data['_2045'] | number: '.2-2'}}</td>
+        <td>{{data['_2046'] | number: '.2-2'}}</td>
+        <td>{{data['_2047'] | number: '.2-2'}}</td>
+        <td>{{data['_2048'] | number: '.2-2'}}</td>
+        <td>{{data['_2049'] | number: '.2-2'}}</td>
+        <td>{{data['_2050'] | number: '.2-2'}}</td>
+        <td>{{data['_2051'] | number: '.2-2'}}</td>
+        <td>{{data['_2052'] | number: '.2-2'}}</td>
+        <td>{{data['_2053'] | number: '.2-2'}}</td>
+        <td>{{data['_2054'] | number: '.2-2'}}</td>
+        <td>{{data['_2055'] | number: '.2-2'}}</td>
+        <td>{{data['_2056'] | number: '.2-2'}}</td>
+        <td>{{data['_2057'] | number: '.2-2'}}</td>
+        <td>{{data['_2058'] | number: '.2-2'}}</td>
+        <td>{{data['_2059'] | number: '.2-2'}}</td>
+        <td>{{data['_2060'] | number: '.2-2'}}</td>
+        <td>{{data['_2061'] | number: '.2-2'}}</td>
+        <td>{{data['_2062'] | number: '.2-2'}}</td>
+        <td>{{data['_2063'] | number: '.2-2'}}</td>
+        <td>{{data['_2064'] | number: '.2-2'}}</td>
+        <td>{{data['_2065'] | number: '.2-2'}}</td>
+        <td>{{data['_2066'] | number: '.2-2'}}</td>
+        <td>{{data['_2067'] | number: '.2-2'}}</td>
+        <td>{{data['_2068'] | number: '.2-2'}}</td>
+        <td>{{data['_2069'] | number: '.2-2'}}</td>
+        <td>{{data['_2070'] | number: '.2-2'}}</td>
+        <td>{{data['_2071'] | number: '.2-2'}}</td> -->
         <td class="buttonEffect fixedColumnEdit" (click)=onEditRow(data)>
           <span class="edit">Edit</span>
         </td>
@@ -133,9 +133,9 @@
           <input class="checkbox" type="checkbox" (change)="onChecked(data, $event)">
         </td>
       </tr>
-      <tr *ngIf="allBudgets.length > 10">
+      <tr *ngIf="allBudgetYears.length > 10">
         <td colspan="20">
-          <p-paginator [rows]="10" [totalRecords]="allBudgets.length" [rowsPerPageOptions]="[10,20,30]"
+          <p-paginator [rows]="10" [totalRecords]="allBudgetYears.length" [rowsPerPageOptions]="[10,20,30]"
           (onPageChange)="onPageChange($event)"></p-paginator>
         </td>
       </tr>

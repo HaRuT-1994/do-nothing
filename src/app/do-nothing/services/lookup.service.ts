@@ -1,11 +1,12 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { map } from "rxjs/operators";
 import { AppConfig } from "src/app/config/app.config";
 import { ConfigData } from "src/app/models/configData.interface";
 
 @Injectable()
 export class LookupService {
-  public skipTheseLifecycles: ConfigData[] = [];
+  public skipTheseLifecycles: ConfigData[];
   public skipTheseAssetSources: ConfigData[] = [];
   public skipTheseUnitClasses: ConfigData[] = [];
   public configCohortData: ConfigData[] = [];

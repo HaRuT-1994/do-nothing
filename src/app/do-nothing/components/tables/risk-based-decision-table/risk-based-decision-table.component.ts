@@ -38,13 +38,13 @@ export class RiskBasedDecisionTableComponent implements OnInit, OnDestroy {
         this.getAllRiskBasedDecisions();
       } else {
         this.allRiskBasedDecisions[this.index] = res.value;
-        this.shownAllRiskBasedDecisions[this.index] = res.value;
+        this.onPageChange(this.currentPage);
       }
     })
    }
 
   onEditRow(data: RiskBasedDecisionModel, i: number): void {
-    this.index = i;
+    this.index = this.currentPage['page'] * this.currentPage['rows'] + i || i;
     this.riskBasedDecisionService.onEditRow(data);
     this.commonService.show(ConfigRiskBasedDecisionsComponent);
   }
@@ -102,7 +102,8 @@ export class RiskBasedDecisionTableComponent implements OnInit, OnDestroy {
         this.isLoading = false;
       },
       err => {
-        console.log(err);
+        this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
+        this.isLoading = false;
       }
     );
   }
@@ -118,13 +119,7 @@ export class RiskBasedDecisionTableComponent implements OnInit, OnDestroy {
 
   filterData(search: string): void {
     if (search.length) {
-      this.shownAllRiskBasedDecisions = this.allRiskBasedDecisions.filter(item => {
-        for(let key in item) {
-          if(item[key] && key !== 'decisionId' && item[key].toString().toLowerCase().includes(search.toLowerCase())) {
-            return item;
-          }
-        }
-      })
+      this.shownAllRiskBasedDecisions = this.commonService.filterAlgorithm(this.allRiskBasedDecisions, search);
     } else {
       this.shownAllRiskBasedDecisions = this.allRiskBasedDecisions;
       this.onPageChange(this.currentPage);

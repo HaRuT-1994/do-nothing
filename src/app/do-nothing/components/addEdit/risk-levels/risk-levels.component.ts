@@ -53,7 +53,6 @@ export class RiskLevelsComponent implements OnInit {
         this.commonService.updateData(true);
       },
       err => {
-        console.log(err);
         this.isLoading = false;
         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
       }

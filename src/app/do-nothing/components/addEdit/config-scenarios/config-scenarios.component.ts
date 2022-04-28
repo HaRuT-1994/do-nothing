@@ -52,8 +52,7 @@ export class ConfigScenariosComponent implements OnInit {
         this.formInit();
         this.commonService.updateData(true);
       },
-      err => { 
-        console.log(err);
+      err => {
         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
         this.isLoading = false;
       }

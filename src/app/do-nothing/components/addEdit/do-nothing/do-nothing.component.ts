@@ -20,7 +20,8 @@ export class DoNothingComponent implements OnInit {
   public msgDetails: MsgDetails;
   public isOnEdit: boolean;
   public isLoading: boolean;
-  public skipTheseLifecycles: ConfigData[] = [];
+  public submitted: boolean;
+  public skipTheseLifecycles: ConfigData[];
   public skipTheseAssetSources: ConfigData[] = [];
   public skipTheseUnitClasses: ConfigData[] = [];
   public scenarioData: ConfigData[] = [];
@@ -38,21 +39,20 @@ export class DoNothingComponent implements OnInit {
     this.skipTheseLifecycles = this.lookupService.skipTheseLifecycles;
     this.skipTheseAssetSources = this.lookupService.skipTheseAssetSources;
     this.skipTheseUnitClasses = this.lookupService.skipTheseUnitClasses;
+    
     this.scenarioData = this.lookupService.configScenariosData;
     this.isOnEdit = !this.dialogConfig.data?.add;
-   //this.selectedLifecycles = this.separateIdfromObj(this.skipTheseLifecycles);
 
     if (this.isOnEdit) {
       this.editModel = this.doNothingService.editModel;
-      //this.skipTheseLifecycles = [{id: 1856486, value: 'Disposed'}]
-      //this.strToArray(['skipTheseLifecycle', 'skipTheseAssetSources', 'skipTheseUnitClasses' ]);
-      //this.separateIdfromObj(this.skipTheseLifecycles)
-      //this.editModel['skipTheseLifecycle'] = this.selectedLifecycles;
       this.commonService.updateForm(this.formGroup, this.editModel);
-      const scenarios = this.strToArray(this.editModel['scenariosToRun']);
+      const scenarios = this.doNothingService.strToArray(this.editModel['scenariosToRun']);
       
       this.formGroup.patchValue({
-        scenariosToRun: scenarios
+        scenariosToRun: scenarios,
+        skipTheseLifecycle: this.editModel['skipTheseLifecycle'].split(","),
+        skipTheseAssetSources: this.editModel['skipTheseAssetSources'].split(","),
+        skipTheseUnitClasses: this.editModel['skipTheseUnitClasses'].split(",")
       })
     }
   }
@@ -80,8 +80,7 @@ export class DoNothingComponent implements OnInit {
   addConfig(): void {
     if(this.formGroup.valid) {
       this.isLoading = true;
-      this.arrToString(['skipTheseLifecycle', 'skipTheseAssetSources', 'skipTheseUnitClasses', 'scenariosToRun']);
-    
+      this.doNothingService.arrToString(['skipTheseLifecycle', 'skipTheseAssetSources', 'skipTheseUnitClasses', 'scenariosToRun'], this.formGroup);
       this.doNothingService.addDoNothing(this.formGroup.value).subscribe(
         () => {
           this.isLoading = false;
@@ -91,22 +90,23 @@ export class DoNothingComponent implements OnInit {
         },
         err => {
           this.isLoading = false;
-          console.log(err);
           this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
         }
       );
+    } else {
+      this.submitted = true;
     }
   }
 
   editConfig(): void {
     if(this.formGroup.valid) {
       this.isLoading = true;
-      this.arrToString(['skipTheseLifecycle', 'skipTheseAssetSources', 'skipTheseUnitClasses', 'scenariosToRun', 'conditionRange']);
+      this.doNothingService.arrToString(['skipTheseLifecycle', 'skipTheseAssetSources', 'skipTheseUnitClasses', 'scenariosToRun'], this.formGroup);
       this.doNothingService.onEditModelConfig(this.formGroup.value).subscribe(
         () => {
           this.isLoading = false;
           this.msgDetails = {msg: 'Model Configurarion Form ' +  Message.EDIT_SUCCESS_MSG, severity: Severity.SUCCESS};
-          this.commonService.updateData(true);
+          this.commonService.updateData(this.formGroup);
           this.editConfig = this.formGroup.value;
           this.commonService.updateForm(this.formGroup, this.editConfig);
         },
@@ -115,32 +115,8 @@ export class DoNothingComponent implements OnInit {
           this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
         }
       );
+    } else {
+      this.submitted = true;
     }
   }
-
-  private arrToString(data: string[]) {
-    data.forEach(i => this.formGroup.value[i] = this.formGroup.value[i].toString());
-  }
-
-  private strToArray(data: string): number[] {
-    let arr = [];
-    data.split(',').map(i => arr.push(+i));
-    return arr;
-  }
-
-  private separateIdfromObj(data: ConfigData[]): number[] {
-    let arr = [];
-    console.log(this.editModel['skipTheseLifecycle']);
-    data.forEach(obj => {
-      
-      
-      this.editModel['scenariosToRun'].split(',').forEach(item => {
-        if(item === obj.value) {
-          arr.push(obj.id);
-        }
-      })
-    })
-
-    return arr;
-  } 
 }

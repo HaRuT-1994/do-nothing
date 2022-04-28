@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { BudgetModel } from 'src/app/do-nothing/models/budgetData.interface';
 import { Message } from 'src/app/enums/message.enum';
 import { Severity } from 'src/app/enums/severity.enum';
 import { CommonService } from 'src/app/services/common.service';
@@ -18,8 +17,8 @@ import { BudgetYearsModel } from 'src/app/do-nothing/models/budgetYearsData.inte
 export class BudgetYearsTableComponent implements OnInit {
   public isLoading: boolean;
   public msgDetails: MsgDetails;
-  public allBudgets: BudgetPivotDetails[] = [];
-  public shownAllBudgets: BudgetPivotDetails[] = [];
+  public allBudgetYears: BudgetPivotDetails[] = [];
+  public shownAllBudgetYears: BudgetPivotDetails[] = [];
   private currentPage = {first: 0, rows: 10};
 
   constructor( private budgetYearsService: ConfigBudgetYearService,
@@ -30,19 +29,9 @@ export class BudgetYearsTableComponent implements OnInit {
     this.getAllBudgetPivotYears();
    }
 
-  onEditRow(data: BudgetModel): void {
-   // console.log(data);
-    
+  onEditRow(data: BudgetYearsModel): void {
     this.budgetYearsService.onEditRow(data);
     this.commonService.show(BudgetYearsComponent);
-    // this.confirmationService.confirm({
-    //   message: 'Edit config?',
-    //   header: 'Confirmation',
-    //   icon: 'pi pi-exclamation-triangle',
-    //   accept: () => {
-       
-    //   }
-    // });
   }
 
   onDeleteRow(id: number): void {
@@ -55,7 +44,7 @@ export class BudgetYearsTableComponent implements OnInit {
         this.budgetYearsService.deleteBudgetYear(id).subscribe(
           () => {
             this.isLoading = false;
-            this.allBudgets = this.allBudgets.filter( (val) => val['budgetId'] !== id);
+            this.allBudgetYears = this.allBudgetYears.filter( (val) => val['BudgetId'] !== id);
             this.onPageChange(this.currentPage);
             this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
           },
@@ -94,37 +83,33 @@ export class BudgetYearsTableComponent implements OnInit {
     this.isLoading = true;
     this.budgetYearsService.getAllBudgetYears().subscribe(
       (res: BudgetPivotDetails[]) => {
-        this.allBudgets = res;
+        this.allBudgetYears = res;
         this.onPageChange(this.currentPage);
         this.isLoading = false;
+        console.log(res);
+        
       },
       err => {
-        console.log(err);
+        this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
+        this.isLoading = false;
       }
     );
   }
-  
 
   onPageChange(ev): void {
     this.currentPage = ev;
-    if(ev.page * ev.rows >= this.allBudgets.length) {
+    if(ev.page * ev.rows >= this.allBudgetYears.length) {
       ev.first -= 10;
     }
 
-    this.shownAllBudgets = this.allBudgets.slice(ev.first, ev.first + ev.rows);
+    this.shownAllBudgetYears = this.allBudgetYears.slice(ev.first, ev.first + ev.rows);
   }
 
   filterData(search: string): void {
     if (search.length) {
-      this.shownAllBudgets = this.allBudgets.filter(item => {
-        for(let key in item) {
-          if(item[key] && key !== 'budgetId' && item[key].toString().toLowerCase().includes(search.toLowerCase())) {
-            return item;
-          }
-        }
-      })
+      this.shownAllBudgetYears = this.commonService.filterAlgorithm(this.allBudgetYears, search);
     } else {
-      this.shownAllBudgets = this.allBudgets;
+      this.shownAllBudgetYears = this.allBudgetYears;
       this.onPageChange(this.currentPage);
     }
   }

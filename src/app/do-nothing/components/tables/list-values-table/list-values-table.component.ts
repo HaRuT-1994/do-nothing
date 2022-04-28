@@ -35,22 +35,15 @@ export class ListValuesTableComponent implements OnInit, OnDestroy {
         this.getAllListValues();
       } else {
         this.allListValues[this.index] = res.value;
-        this.shownAllListValues[this.index] = res.value;
+        this.onPageChange(this.currentPage);
       }
     })
    }
 
   onEditRow(data: ListValuesModel, i: number): void {
-    this.index = i;
-    // this.confirmationService.confirm({
-    //   message: 'Edit config?',
-    //   header: 'Confirmation',
-    //   icon: 'pi pi-exclamation-triangle',
-    //   accept: () => {
-        this.listValluesService.onEditRow(data);
-        this.commonService.show(ConfigListValuesComponent);
-    //   }
-    // });
+    this.index = this.currentPage['page'] * this.currentPage['rows'] + i || i;
+    this.listValluesService.onEditRow(data);
+    this.commonService.show(ConfigListValuesComponent);
   }
 
   onDeleteRow(id: number): void {
@@ -108,7 +101,8 @@ export class ListValuesTableComponent implements OnInit, OnDestroy {
         this.isLoading = false;
       },
       err => {
-        console.log(err);
+        this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
+        this.isLoading = false;
       }
     );
   }
@@ -124,20 +118,14 @@ export class ListValuesTableComponent implements OnInit, OnDestroy {
 
   filterData(search: string): void {
     if (search.length) {
-      this.shownAllListValues = this.allListValues.filter(item => {
-        for(let key in item) {
-          if(item[key] && key !== 'itemId' && item[key].toString().toLowerCase().includes(search.toLowerCase())) {
-            return item;
-          }
-        }
-      })
+      this.shownAllListValues = this.commonService.filterAlgorithm(this.allListValues, search);
     } else {
       this.shownAllListValues = this.allListValues;
       this.onPageChange(this.currentPage);
     }
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.sub$.unsubscribe();
   }
 }

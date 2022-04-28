@@ -37,22 +37,15 @@ export class CurvesTableComponent implements OnInit, OnDestroy {
         this.getAllCurves();
       } else {
         this.allCurves[this.index] = res.value;
-        this.shownAllCurves[this.index] = res.value;
+        this.onPageChange(this.currentPage);
       }
     })
   }
 
   onEditRow(data: CurveModel, i: number): void {
-    this.index = i;
-    // this.confirmationService.confirm({
-    //   message: 'Edit config?',
-    //   header: 'Confirmation',
-    //   icon: 'pi pi-exclamation-triangle',
-    //   accept: () => {
-        this.curvesService.onEditRow(data);
-        this.commonService.show(ConfigCurvesComponent);
-    //   }
-    // });
+    this.index = this.currentPage['page'] * this.currentPage['rows'] + i || i;
+    this.curvesService.onEditRow(data);
+    this.commonService.show(ConfigCurvesComponent);
   }
 
   onDeleteRow(id: number): void {
@@ -109,7 +102,8 @@ export class CurvesTableComponent implements OnInit, OnDestroy {
         this.isLoading = false;
       },
       err => {
-        console.log(err);
+        this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
+        this.isLoading = false;
       }
     );
   }
@@ -125,21 +119,14 @@ export class CurvesTableComponent implements OnInit, OnDestroy {
 
   filterData(search: string): void {
     if (search.length) {
-      this.shownAllCurves = this.allCurves.filter(item => {
-        for(let key in item) {
-          if( item[key] && key !== 'id' && key !== 'cohortId' && key !== 'ScenarioId'
-          && item[key].toString().toLowerCase().includes(search.toLowerCase())) {
-            return item;
-          }
-        }
-      })
+      this.shownAllCurves = this.commonService.filterAlgorithm(this.allCurves, search);
     } else {
       this.shownAllCurves = this.allCurves;
       this.onPageChange(this.currentPage);
     }
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.sub$.unsubscribe();
   }
 }

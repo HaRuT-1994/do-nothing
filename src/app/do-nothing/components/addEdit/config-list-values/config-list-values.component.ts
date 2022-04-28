@@ -18,7 +18,7 @@ export class ConfigListValuesComponent implements OnInit {
   public msgDetails: MsgDetails;
   public isOnEdit: boolean;
   public isLoading: boolean;
-  private editListValues: ListValuesModel[];  
+  private editListValues: ListValuesModel[];
   
   constructor( 
                private listValuesService: ConfigListValuesService,

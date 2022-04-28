@@ -6,31 +6,31 @@
     <div class="G-flex-justify-around">
       <div class="G-column gap">
         <div class="G-flex-center-between">
-          <label for="scenarioId">Scenario Id</label>
+          <label for="scenarioId">Scenario</label>
           <p-dropdown [options]="scenarioData"  optionLabel="value"  optionValue="id"  formControlName="scenario" editable="true"></p-dropdown>
         </div>
         <div class="G-flex-center-between">
-          <label for="cohortId">Cohort Id</label>
+          <label for="cohortId">Cohort</label>
           <p-dropdown [options]="cohortData" optionValue="id" optionLabel="value" formControlName="cohort" editable="true"></p-dropdown>
         </div>
         <div class="G-flex-center-between">
-          <label for="1">[>=1]</label>
+          <label for="1">Rare</label>
           <input type="number" id="1" formControlName="_1">
         </div>
         <div class="G-flex-center-between">
-          <label for="2">[>=2]</label>
+          <label for="2">Unlikely</label>
           <input type="number" id="2" formControlName="_2">
         </div>
         <div class="G-flex-center-between">
-          <label for="3">[>=3]</label>
+          <label for="3">Possible</label>
           <input type="number" id="3" formControlName="_3">
         </div>
         <div class="G-flex-center-between">
-          <label for="4">[>=4]</label>
+          <label for="4">Likely</label>
           <input type="number" id="4" formControlName="_4">
         </div>
         <div class="G-flex-center-between">
-          <label for="5">[>=5]</label>
+          <label for="5">Almost Certain</label>
           <input type="number" id="5" formControlName="_5">
         </div>
       </div>

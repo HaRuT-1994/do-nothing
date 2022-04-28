@@ -38,14 +38,14 @@ export class RatesTableComponent implements OnInit, OnDestroy {
         this.getAllRates();
       } else {
         this.allRates[this.index] = res.value;
-        this.shownAllRates[this.index] = res.value;
+        this.onPageChange(this.currentPage);
       }
       
     })
    }
 
   onEditRow(data: RatesModel, i: number): void {
-    this.index = i;
+    this.index = this.currentPage['page'] * this.currentPage['rows'] + i || i;
     this.rateService.onEditRow(data);
     this.commonService.show(ConfigRatesComponent);
   }
@@ -104,7 +104,8 @@ export class RatesTableComponent implements OnInit, OnDestroy {
         this.isLoading = false;
       },
       err => {
-        console.log(err);
+        this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
+        this.isLoading = false;
       }
      );
    }
@@ -121,13 +122,7 @@ export class RatesTableComponent implements OnInit, OnDestroy {
 
   filterData(search: string): void {
     if (search.length) {
-      this.shownAllRates = this.allRates.filter(item => {
-        for(let key in item) {
-          if(item[key] && key !== 'decisionId' && item[key].toString().toLowerCase().includes(search.toLowerCase())) {
-            return item;
-          }
-        }
-      })
+      this.shownAllRates = this.commonService.filterAlgorithm(this.allRates, search);
     } else {
       this.shownAllRates = this.allRates;
       this.onPageChange(this.currentPage);

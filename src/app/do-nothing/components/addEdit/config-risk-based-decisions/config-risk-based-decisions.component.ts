@@ -9,6 +9,8 @@ import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { LookupService } from 'src/app/do-nothing/services/lookup.service';
 import { RiskBasedDecisionModel } from 'src/app/do-nothing/models/riskBasedDecisionData.interface';
+import { ConfigListValuesService } from 'src/app/do-nothing/services/config-listValues.service';
+import { ListId } from 'src/app/do-nothing/enums/listId.enum';
 
 @Component({
   selector: 'app-config-risk-based-decisions',
@@ -22,18 +24,23 @@ export class ConfigRiskBasedDecisionsComponent implements OnInit {
   public msgDetails: MsgDetails;
   public isOnEdit: boolean;
   public isLoading: boolean;
+  public pofValues = [1,2,3,4,5];
+  public listValues: string[] = [];
+
   private editRiskBasedDecision: RiskBasedDecisionModel[];
   
   constructor(
               private riskBasedDecisionService: ConfigRiskBasedDecisionsService,
               private commonService: CommonService,
               private lookupService: LookupService,
-              private dialogConfig: DynamicDialogConfig) { }
+              private dialogConfig: DynamicDialogConfig,
+              private listValuesService: ConfigListValuesService) { }
 
   ngOnInit(): void {
     this.formInit();
     this.scenarioData = this.lookupService.configScenariosData;
     this.cohortData = this.lookupService.configCohortData;
+    this.listValuesService.getListValuesByListId(ListId.FOUR).subscribe(res => this.listValues = res)
     this.isOnEdit = !this.dialogConfig.data?.add;
     
     if (this.isOnEdit) {
@@ -46,8 +53,8 @@ export class ConfigRiskBasedDecisionsComponent implements OnInit {
     this.formGroup = new FormGroup({
       scenario: new FormControl(0),
       cohort: new FormControl(0),
-      poF: new FormControl(0),
-      coF: new FormControl(0),
+      poF: new FormControl(1),
+      coF: new FormControl(1),
       risk: new FormControl(0),
       band: new FormControl(""),
       intervention: new FormControl(""),

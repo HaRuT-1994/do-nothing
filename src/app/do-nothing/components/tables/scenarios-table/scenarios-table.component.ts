@@ -35,13 +35,13 @@ export class ScenariosTableComponent implements OnInit, OnDestroy {
         this.getAllScenarios();
       } else {
         this.allScenarios[this.index] = res.value;
-        this.shownAllScenarios[this.index] = res.value;
+        this.onPageChange(this.currentPage);
       }
     })
   }
 
   onEditRow(data: ScenarioModel, i: number): void {
-    this.index = i;
+    this.index = this.currentPage['page'] * this.currentPage['rows'] + i || i;
     this.scenarioService.onEditRow(data);
     this.commonService.show(ConfigScenariosComponent);
   }
@@ -100,8 +100,8 @@ export class ScenariosTableComponent implements OnInit, OnDestroy {
         this.isLoading = false;
       },
       err => {
+        this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
         this.isLoading = false;
-        console.log(err);
       }
     );
   }
@@ -117,15 +117,7 @@ export class ScenariosTableComponent implements OnInit, OnDestroy {
 
   filterData(search: string): void {
     if (search.length) {
-      
-      this.shownAllScenarios = this.allScenarios.filter(item => {
-        for(let key in item) {
-          if(item[key] && key !== 'scenarioId'
-          && item[key].toString().toLowerCase().includes(search.toLowerCase())) {
-            return item;
-          }
-        }
-      })
+      this.shownAllScenarios = this.commonService.filterAlgorithm(this.allScenarios, search);
     } else {
       this.shownAllScenarios = this.allScenarios;
       this.onPageChange(this.currentPage);

@@ -6,20 +6,21 @@
     <div class="G-flex-justify-around">
       <div class="G-column gap">
         <div class="G-flex-center-between">
-          <label class="label-for-select">Scenario Id</label>
+          <label class="label-for-select">Scenario</label>
           <p-dropdown [options]="scenarioData"  optionLabel="value"  optionValue="id" formControlName="scenario" editable="true" ></p-dropdown>
         </div>
         <div class="G-flex-center-between">
-          <label>Cohort Id</label>
+          <label>Cohort</label>
           <p-dropdown [options]="cohortData" optionLabel="value" optionValue="id" formControlName="cohort" editable="true"  ></p-dropdown>
         </div>
         <div class="G-flex-center-between">
-          <label for="intervention">Intervention</label>
-          <input type="text" id="intervention" formControlName="intervention">
+          <label>Interventions</label>
+          <!-- <input type="text" id="intervention" formControlName="intervention"> -->
+          <p-dropdown [options]="listValues" formControlName="intervention" editable="true" ></p-dropdown>
         </div>
         <div class="G-flex-center-start">
           <label for="available">Available</label>
-          <input type="checkbox" name="" id="available" class="checkbox" formControlName="available">
+          <input type="checkbox" id="available" class="checkbox" formControlName="available">
         </div>
         <div class="G-flex-center-between">
           <label for="reset">Reset</label>

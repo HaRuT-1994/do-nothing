@@ -7,13 +7,6 @@
     <div class="G-flex-center-start model">
       <h2>Model</h2>
       <div class="G-flex-center">
-        <!-- <mat-form-field appearance="fill" class="dropdown">
-          <mat-label>Select Model</mat-label>
-          <mat-select (selectionChange)="filterModel($event.value)">
-            <mat-option [value]="'All'">All</mat-option>
-            <mat-option *ngFor="let model of models" [value]="model">{{model}}</mat-option>
-          </mat-select>
-        </mat-form-field> -->
         <p-dropdown [options]="models" (onChange)="filterModel($event.value)"></p-dropdown>
       </div>
     </div>

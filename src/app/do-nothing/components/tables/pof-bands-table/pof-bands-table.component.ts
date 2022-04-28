@@ -38,14 +38,14 @@ export class PoFBandsTableComponent implements OnInit, OnDestroy {
         this.getAllPoFBands();
       } else {
         this.allPoFBands[this.index] = res.value;
-        this.sohwnAllPoFBands[this.index] = res.value;
+        this.onPageChange(this.currentPage);
       }
       
     })
   }
 
   onEditRow(data: PoFBandsModel, i: number): void {
-    this.index = i;
+    this.index = this.currentPage['page'] * this.currentPage['rows'] + i || i;
     this.pofBandService.onEditRow(data);
     this.commonService.show(PofBandsComponent);
   }
@@ -104,7 +104,8 @@ export class PoFBandsTableComponent implements OnInit, OnDestroy {
         this.isLoading = false;
       },
       err => {
-        console.log(err);
+        this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
+        this.isLoading = false;
       }
     );
   }
@@ -120,14 +121,7 @@ export class PoFBandsTableComponent implements OnInit, OnDestroy {
 
   filterData(search: string): void {
     if (search.length) {
-      this.sohwnAllPoFBands = this.allPoFBands.filter(item => {
-        for(let key in item) {
-          if( item[key] && key !== 'id' && key !== 'scenarioId' && key !== 'cohortId'
-          && item[key].toString().toLowerCase().includes(search).toLowerCase()) {
-            return item;
-          }
-        }
-      })
+      this.sohwnAllPoFBands = this.commonService.filterAlgorithm(this.allPoFBands, search);
     } else {
       this.sohwnAllPoFBands = this.allPoFBands;
       this.onPageChange(this.currentPage);
