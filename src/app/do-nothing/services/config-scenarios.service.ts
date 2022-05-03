@@ -13,10 +13,8 @@ export class ConfigScenariosService {
 
   constructor(private http: HttpClient) { }
 
-  copyScenarios(): Observable<any> {
-    if(this.checkedData.length) {
-      return this.http.post<number[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.copyScenarios}`, this.checkedData);
-    }
+  copyScenarios(data: number[]): Observable<any> {
+      return this.http.post<number[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.copyScenarios}`, data);
   }
 
   addConfigScenarios(data: any): Observable<ConfigData[]> {

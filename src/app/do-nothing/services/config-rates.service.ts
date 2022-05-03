@@ -11,10 +11,8 @@ export class ConfigRatesService {
   
   constructor(private http: HttpClient) { }
 
-  copyRates(): Observable<any> {
-    if(this.checkedData.length) {
-      return this.http.post<number[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.copyRates}`, this.checkedData);
-    }
+  copyRates(data: number[]): Observable<any> {
+    return this.http.post<number[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.copyRates}`, data);
   }
 
   addConfigRates(data: any): Observable<RatesModel[]> {

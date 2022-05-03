@@ -1,5 +1,5 @@
 table, th, td {
-  border: 0.5px solid $border-color;
+  // border: 0.5px solid $border-color;
   text-align: center;
 }
 
@@ -31,7 +31,7 @@ table {
   }
 
   td {
-    background-color: azure;
+    background-color: rgb(237, 241, 241);
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow-x: clip;

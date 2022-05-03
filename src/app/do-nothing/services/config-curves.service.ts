@@ -7,14 +7,11 @@ import { CurveModel } from '../models/curveData.interface';
 @Injectable()
 export class ConfigCurvesService {
   public editCurves: CurveModel[] = [];
-  public checkedData: number[] = [];
 
   constructor(private http: HttpClient) { }
 
-  copyCurves(): Observable<any> {
-    if(this.checkedData.length) {
-      return this.http.post<number[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.copyCurves}`, this.checkedData);
-    }
+  copyCurves(data: number[]): Observable<any> {
+    return this.http.post<number[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.copyCurves}`, data);
   }
 
   addConfigCurves(data: any): Observable<any> {

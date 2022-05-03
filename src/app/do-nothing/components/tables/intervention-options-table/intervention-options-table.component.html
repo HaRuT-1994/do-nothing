@@ -12,7 +12,7 @@
         <th>Intervention</th>
         <th>Available</th>
         <th>Reset</th>
-        <th>Apply When Mlc</th>
+        <th>Apply When Mlc <</th>
         <th>Exclude If Crc</th>
         <th>forceReplace</th>
         <th>whenAlc</th>
@@ -41,7 +41,7 @@
           <span class="delete">Delete</span>
         </td>
         <td>
-          <input class="checkbox" type="checkbox" (change)="onChecked(data, $event)">
+          <input class="checkbox" type="checkbox" [checked]="unCheckAll" (change)="onChecked(data, $event, i)">
         </td>
       </tr>
       <tr *ngIf="allInterventionOptions.length > 10">

@@ -13,22 +13,17 @@ export class DoNothingService {
   public skipTheseLifecycles: ConfigData[] = [];
   public skipTheseAssetSources: ConfigData[] = [];
   public skipTheseUnitClasses: ConfigData[] = [];
-  public checkedData: RunModelHistory[] = [];
+  // public checkedData: RunModelHistory[] = [];
   
   constructor(private http: HttpClient) { }
  
-  runModel(): Observable<any> {
-    if(this.checkedData.length) {
-      return this.http.post<RunModelHistory[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.runModels}`, this.checkedData);
-    }
+  runModel(data: RunModelHistory[]): Observable<any> {
+      return this.http.post<RunModelHistory[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.runModels}`, data);
   }
 
-  copyModel(): Observable<any> {
-    let data: number[] = [];
-    this.checkedData.forEach(item => data.push(item.configurationId))
-    if(this.checkedData.length) {
-      return this.http.post<number[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.copyModels}`, data);
-    }
+  copyModel(data): Observable<any> {
+    data = data.map(item => item.configurationId)  
+    return this.http.post<number[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.copyModels}`, data);
   }
 
   addDoNothing(data: any): Observable<any> {

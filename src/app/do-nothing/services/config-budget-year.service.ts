@@ -8,14 +8,11 @@ import { BudgetYearsModel } from '../models/budgetYearsData.interface';
 @Injectable()
 export class ConfigBudgetYearService {
   public editBudgetYears: BudgetYearsModel[];
-  public checkedData: number[] = [];
 
   constructor(private http: HttpClient) { }
 
-  copyBudgetYears(): Observable<any> {
-    if(this.checkedData.length) {
-      return this.http.post<number[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.copyBudgetYears}`, this.checkedData);
-    }
+  copyBudgetYears(data: number[]): Observable<any> {
+    return this.http.post<number[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.copyBudgetYears}`, data);
   }
 
   addConfigBudgetYear(data: any): Observable<BudgetYearsModel[]> {

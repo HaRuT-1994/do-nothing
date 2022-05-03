@@ -7,14 +7,11 @@ import { BudgetModel } from '../models/budgetData.interface';
 @Injectable()
 export class ConfigBudgetService {
   public editBudget: BudgetModel[];
-  public checkedData: number[] = [];
 
   constructor(private http: HttpClient) { }
 
-  copyBudgets(): Observable<any> {
-    if(this.checkedData.length) {
-      return this.http.post<number[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.copyBudgets}`, this.checkedData);
-    }
+  copyBudgets(data: number[]): Observable<any> {
+    return this.http.post<number[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.copyBudgets}`, data);
   }
 
   addConfigBudget(data: any): Observable<BudgetModel[]> {

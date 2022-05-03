@@ -8,6 +8,7 @@ import { ConfirmationService } from 'primeng/api';
 import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { RiskLevelsComponent } from '../../addEdit/risk-levels/risk-levels.component';
 import { Subscription } from 'rxjs';
+import { CheckedDataModel } from 'src/app/do-nothing/models/checkedData.interface';
 
 @Component({
   selector: 'app-risk-levels-table',
@@ -15,13 +16,15 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./risk-levels-table.component.scss']
 })
 export class RiskLevelsTableComponent implements OnInit, OnDestroy {
-  public isLoading: boolean;
-  public msgDetails: MsgDetails;
-  public allRiskLevels: RiskLevelsModel[] = [];
-  public shownAllRiskLevels: RiskLevelsModel[] = [];
+  isLoading: boolean;
+  msgDetails: MsgDetails;
+  allRiskLevels: RiskLevelsModel[] = [];
+  shownAllRiskLevels: RiskLevelsModel[] = [];
+  unCheckAll: boolean;
   private currentPage = {first: 0, rows: 10};
   private index = 0;
   private sub$: Subscription;
+  private checkedData: CheckedDataModel[] = [];
 
   constructor(private riskLvlService: RiskLevelsService,
               private commonService: CommonService,
@@ -70,24 +73,35 @@ export class RiskLevelsTableComponent implements OnInit, OnDestroy {
   }
 
   copyRiskLvls(): void {
-    this.isLoading = true;
-    this.riskLvlService.copyRiskLvls().subscribe(
-       res => {
-         this.isLoading = false;
-         this.msgDetails = {msg: 'Copy Risk Levels ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
-       },
-       err => {
-         this.isLoading = false;
-         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
-       }
-    )
+    if(!this.checkedData.length) {
+      this.msgDetails = {msg: 'Please check config', severity: Severity.WARNING};
+    } else {
+      this.isLoading = true;
+      setTimeout(() => {
+        this.unCheckAll = undefined;
+      }, 0);
+      const configIds = this.checkedData.sort((a, b) => ( a.index - b.index )).map(el => el.checkedId);
+
+      this.riskLvlService.copyRiskLvls(configIds).subscribe(
+        res => {
+          this.isLoading = false;
+          this.unCheckAll = false;
+          this.msgDetails = {msg: 'Copy Risk Levels ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
+        },
+        err => {
+          this.isLoading = false;
+          this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
+        }
+      )
+    }
   }
 
-  onChecked(item: RiskLevelsModel, ev): void{
+  onChecked(item: RiskLevelsModel, ev, index: number): void{
+    const idx = this.currentPage['page'] * this.currentPage['rows'] + index || index;
     if(ev.target.checked) {
-      this.riskLvlService.checkedData.push(item.id);
+      this.checkedData.push({checkedId: item.id, index: idx});
     } else {
-      this.riskLvlService.checkedData = this.riskLvlService.checkedData.filter(el => el !== item.id)
+      this.checkedData = this.checkedData.filter(el => el.checkedId !== item.id)
     }
   }
 

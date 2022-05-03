@@ -9,6 +9,7 @@ import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { ConfigCurvesComponent } from '../../addEdit/config-curves/config-curves.component';
 import { Subscription } from 'rxjs';
 import { LookupService } from 'src/app/do-nothing/services/lookup.service';
+import { CheckedDataModel } from 'src/app/do-nothing/models/checkedData.interface';
 
 @Component({
   selector: 'app-curves-table',
@@ -16,14 +17,16 @@ import { LookupService } from 'src/app/do-nothing/services/lookup.service';
   styleUrls: ['./curves-table.component.scss']
 })
 export class CurvesTableComponent implements OnInit, OnDestroy {
-  public isLoading: boolean;
-  public msgDetails: MsgDetails;
-  public allCurves: CurveModel[] = [];
-  public shownAllCurves: CurveModel[] = [];
+  isLoading: boolean;
+  msgDetails: MsgDetails;
+  allCurves: CurveModel[] = [];
+  shownAllCurves: CurveModel[] = [];
+  unCheckAll: boolean;
   private currentPage = {first: 0, rows: 10};
   private index = 0;
   private sub$: Subscription;
-
+  private checkedData: CheckedDataModel[] = [];
+ 
   constructor( private curvesService: ConfigCurvesService, 
                private commonService: CommonService,
                private confirmationService: ConfirmationService,
@@ -72,24 +75,35 @@ export class CurvesTableComponent implements OnInit, OnDestroy {
   }
 
   copyCurves(): void {
-    this.isLoading = true;
-    this.curvesService.copyCurves().subscribe(
-       res => {
-         this.isLoading = false;
-         this.msgDetails = {msg: 'Copy Curves ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
-       },
-       err => {
-         this.isLoading = false;
-         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
-       }
-    )
+    if(!this.checkedData.length) {
+      this.msgDetails = {msg: 'Please check config', severity: Severity.WARNING};
+    } else {
+      this.isLoading = true;
+      setTimeout(() => {
+        this.unCheckAll = undefined;
+      }, 0);
+      const configIds = this.checkedData.sort((a, b) => ( a.index - b.index )).map(el => el.checkedId);
+
+      this.curvesService.copyCurves(configIds).subscribe(
+        res => {
+          this.isLoading = false;
+          this.unCheckAll = false;
+          this.msgDetails = {msg: 'Copy Curves ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
+        },
+        err => {
+          this.isLoading = false;
+          this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
+        }
+      )
+    }
   }
 
-  onChecked(item: CurveModel, ev): void{
+  onChecked(item: CurveModel, ev, index: number): void{
+    const idx = this.currentPage['page'] * this.currentPage['rows'] + index || index;
     if(ev.target.checked) {
-      this.curvesService.checkedData.push(item.id);
+      this.checkedData.push({checkedId: item.id, index: idx});
     } else {
-      this.curvesService.checkedData = this.curvesService.checkedData.filter(el => el !== item.id)
+      this.checkedData = this.checkedData.filter(el => el.checkedId !== item.id)
     }
   }
 

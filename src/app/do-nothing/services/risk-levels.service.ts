@@ -7,14 +7,11 @@ import { RiskLevelsModel } from '../models/riskLevelData.interface';
 @Injectable()
 export class RiskLevelsService {
   public editRiskLvl: RiskLevelsModel[] = [];
-  public checkedData: number[] = [];
 
   constructor(private http: HttpClient) { }
 
-  copyRiskLvls(): Observable<any> {
-    if(this.checkedData.length) {
-      return this.http.post<number[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.copyRiskLevels}`, this.checkedData);
-    }
+  copyRiskLvls(data: number[]): Observable<any> {
+      return this.http.post<number[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.copyRiskLevels}`, data);
   }
 
   addRiskLevels(data: any): Observable<any> {

@@ -8,6 +8,7 @@ import { ConfirmationService } from 'primeng/api';
 import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { ConfigListsComponent } from '../../addEdit/config-lists/config-lists.component';
 import { Subscription } from 'rxjs';
+import { CheckedDataModel } from 'src/app/do-nothing/models/checkedData.interface';
 
 @Component({
   selector: 'app-lists-table',
@@ -15,13 +16,15 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./lists-table.component.scss']
 })
 export class ListsTableComponent implements OnInit, OnDestroy {
-  public isLoading: boolean;
-  public msgDetails: MsgDetails;
-  public allLists: ListsModel[] = [];
-  public shownAllLists: ListsModel[] = [];
+  isLoading: boolean;
+  msgDetails: MsgDetails;
+  allLists: ListsModel[] = [];
+  shownAllLists: ListsModel[] = [];
+  unCheckAll: boolean;
   private currentPage = {first: 0, rows: 10};
   private index = 0;
   private sub$: Subscription;
+  private checkedData: CheckedDataModel[] = [];
 
   constructor( private listsService: ConfigListsService,
                private commonService: CommonService,
@@ -70,24 +73,35 @@ export class ListsTableComponent implements OnInit, OnDestroy {
   }
 
   copyLists(): void {
-    this.isLoading = true;
-    this.listsService.copyLists().subscribe(
-       res => {
-         this.isLoading = false;
-         this.msgDetails = {msg: 'Copy Lists ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
-       },
-       err => {
-         this.isLoading = false;
-         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
-       }
-    )
+    if(!this.checkedData.length) {
+      this.msgDetails = {msg: 'Please check config', severity: Severity.WARNING};
+    } else {
+      this.isLoading = true;
+      setTimeout(() => {
+        this.unCheckAll = undefined;
+      }, 0);
+      const configIds = this.checkedData.sort((a, b) => ( a.index - b.index )).map(el => el.checkedId);
+
+      this.listsService.copyLists(configIds).subscribe(
+        res => {
+          this.isLoading = false;
+          this.unCheckAll = false;
+          this.msgDetails = {msg: 'Copy Lists ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
+        },
+        err => {
+          this.isLoading = false;
+          this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
+        }
+      )
+    }
   }
 
-  onChecked(item: ListsModel, ev): void{
+  onChecked(item: ListsModel, ev, index: number): void{
+    const idx = this.currentPage['page'] * this.currentPage['rows'] + index || index;
     if(ev.target.checked) {
-      this.listsService.checkedData.push(item.listId);
+      this.checkedData.push({checkedId: item.listId, index: idx});
     } else {
-      this.listsService.checkedData = this.listsService.checkedData.filter(el => el !== item.listId)
+      this.checkedData = this.checkedData.filter(el => el.checkedId !== item.listId)
     }
   }
 

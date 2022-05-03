@@ -9,6 +9,7 @@ import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { ConfigBudgetComponent } from '../../addEdit/config-budget/config-budget.component';
 import { Subscription } from 'rxjs';
 import { LookupService } from 'src/app/do-nothing/services/lookup.service';
+import { CheckedDataModel } from 'src/app/do-nothing/models/checkedData.interface';
 
 @Component({
   selector: 'app-budget-table',
@@ -16,13 +17,15 @@ import { LookupService } from 'src/app/do-nothing/services/lookup.service';
   styleUrls: ['./budget-table.component.scss']
 })
 export class BudgetTableComponent implements OnInit, OnDestroy {
-  public isLoading: boolean;
-  public msgDetails: MsgDetails;
-  public allBudgets: BudgetModel[];
-  public shownAllBudgets: BudgetModel[];
+  isLoading: boolean;
+  msgDetails: MsgDetails;
+  allBudgets: BudgetModel[];
+  shownAllBudgets: BudgetModel[];
+  unCheckAll: boolean;
   private currentPage = {first: 0, rows: 10};
   private index = 0;
   private sub$: Subscription;
+  private checkedData: CheckedDataModel[] = [];
 
   constructor( private budgetService: ConfigBudgetService,
                private commonService: CommonService,
@@ -74,24 +77,35 @@ export class BudgetTableComponent implements OnInit, OnDestroy {
   }
 
   copyBudgets(): void {
-    this.isLoading = true;
-    this.budgetService.copyBudgets().subscribe(
-       res => {
-         this.isLoading = false;
-         this.msgDetails = {msg: 'Copy Budgets ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
-       },
-       err => {
-         this.isLoading = false;
-         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
-       }
-    )
+    if(!this.checkedData.length) {
+      this.msgDetails = {msg: 'Please check config', severity: Severity.WARNING};
+    } else {
+      this.isLoading = true;
+      setTimeout(() => {
+        this.unCheckAll = undefined;
+      }, 0);
+      const configIds = this.checkedData.sort((a, b) => ( a.index - b.index )).map(el => el.checkedId);
+      
+      this.budgetService.copyBudgets(configIds).subscribe(
+        res => {
+          this.isLoading = false;
+          this.unCheckAll = false;
+          this.msgDetails = {msg: 'Copy Budgets ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
+        },
+        err => {
+          this.isLoading = false;
+          this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
+        }
+      )
+    }
   }
 
-  onChecked(item: BudgetModel, ev): void{
+  onChecked(item: BudgetModel, ev, index: number): void{
+    const idx = this.currentPage['page'] * this.currentPage['rows'] + index || index;
     if(ev.target.checked) {
-      this.budgetService.checkedData.push(item.budgetId);
+      this.checkedData.push({checkedId: item.budgetId, index: idx});
     } else {
-      this.budgetService.checkedData = this.budgetService.checkedData.filter(el => el !== item.budgetId)
+      this.checkedData = this.checkedData.filter(el => el.checkedId !== item.budgetId)
     }
   }
 

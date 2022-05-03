@@ -1,10 +1,10 @@
-<alert-message [msgDetails]="msgDetails"></alert-message>
+<!-- <alert-message [msgDetails]="msgDetails"></alert-message>
 <p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000"></p-confirmDialog>
 <app-loading *ngIf="isLoading"></app-loading>
 <main>
   <app-control-tables (copyTriggered)="copyCohorts()"></app-control-tables>
   <table [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
-    <!-- <caption>Config - Cohort</caption> -->
+    <caption>Config - Cohort</caption>
     <thead>
       <tr>
         <th>Cohorts</th>
@@ -25,7 +25,7 @@
           <span class="delete">Delete</span>
         </td>
         <td>
-          <input class="checkbox" type="checkbox" (change)="onChecked(data, $event)">
+          <input class="checkbox" type="checkbox" [checked]="unCheckAll" (change)="onChecked(data, $event, i)">
         </td>
       </tr>
       <tr *ngIf="allCohorts.length > 10">
@@ -36,4 +36,40 @@
       </tr>
     </tbody>
   </table>
+</main> -->
+
+
+<alert-message [msgDetails]="msgDetails"></alert-message>
+<p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000"></p-confirmDialog>
+<app-loading *ngIf="isLoading"></app-loading>
+<main>
+  <app-control-tables (copyTriggered)="copyCohorts()"></app-control-tables>
+  <p-table #dt [value]="allCohorts" [paginator]="true" [rows]="10" [globalFilterFields]="['cohorts','description']" [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
+    <ng-template pTemplate="header">
+        <tr>
+            <th pSortableColumn="cohorts">Cohorts<p-sortIcon field="name"></p-sortIcon></th>
+            <th pSortableColumn="description">Description<p-sortIcon field="country"></p-sortIcon></th>
+            <th colspan="3">
+              <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search" />
+              <!-- <input type="text" placeholder="Search" (input)="filterData($event.target.value)"> -->
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-data let-i="rowIndex">
+        <tr>
+          <td [attr.title]="data.cohorts">{{data.cohorts}}</td>
+          <td [attr.title]="data.description">{{data.description}}</td>
+          <td class="buttonEffect" style="width: 1rem" (click)="onEditRow(data, i)">
+            <span class="edit">Edit</span>
+          </td>
+          <td class="buttonEffect" (click)="onDeleteRow(data.cohortId)">
+            <span class="delete">Delete</span>
+          </td>
+          <td>
+            <input class="checkbox" type="checkbox" [checked]="unCheckAll" (change)="onChecked(data, $event, i)">
+          </td>
+        </tr>
+        
+    </ng-template>
+  </p-table>
 </main>

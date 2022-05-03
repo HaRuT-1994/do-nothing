@@ -23,7 +23,7 @@
           <span class="delete">Delete</span>
         </td>
         <td>
-          <input class="checkbox" type="checkbox" (change)="onChecked(data, $event)">
+          <input class="checkbox" type="checkbox" [checked]="unCheckAll" (change)="onChecked(data, $event, i)">
         </td>
       </tr>
       <tr *ngIf="allLists.length > 10">

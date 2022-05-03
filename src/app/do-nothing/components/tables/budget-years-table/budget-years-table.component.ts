@@ -8,6 +8,7 @@ import { BudgetYearsComponent } from '../../addEdit/config-budget-year/config-bu
 import { ConfigBudgetYearService } from 'src/app/do-nothing/services/config-budget-year.service';
 import { BudgetPivotDetails } from 'src/app/do-nothing/models/budgetPivotDetails.interface';
 import { BudgetYearsModel } from 'src/app/do-nothing/models/budgetYearsData.interface';
+import { CheckedDataModel } from 'src/app/do-nothing/models/checkedData.interface';
 
 @Component({
   selector: 'app-budget-table',
@@ -15,11 +16,13 @@ import { BudgetYearsModel } from 'src/app/do-nothing/models/budgetYearsData.inte
   styleUrls: ['./budget-years-table.component.scss']
 })
 export class BudgetYearsTableComponent implements OnInit {
-  public isLoading: boolean;
-  public msgDetails: MsgDetails;
-  public allBudgetYears: BudgetPivotDetails[] = [];
-  public shownAllBudgetYears: BudgetPivotDetails[] = [];
+  isLoading: boolean;
+  msgDetails: MsgDetails;
+  allBudgetYears: BudgetPivotDetails[] = [];
+  unCheckAll: boolean;
+  shownAllBudgetYears: BudgetPivotDetails[] = [];
   private currentPage = {first: 0, rows: 10};
+  private checkedData: CheckedDataModel[] = [];
 
   constructor( private budgetYearsService: ConfigBudgetYearService,
                private commonService: CommonService,
@@ -58,24 +61,35 @@ export class BudgetYearsTableComponent implements OnInit {
   }
 
   copyBudgetYears(): void {
-    this.isLoading = true;
-    this.budgetYearsService.copyBudgetYears().subscribe(
-       res => {
-         this.isLoading = false;
-         this.msgDetails = {msg: 'Copy Budget Years ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
-       },
-       err => {
-         this.isLoading = false;
-         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
-       }
-    )
+    if(!this.checkedData.length) {
+      this.msgDetails = {msg: 'Please check config', severity: Severity.WARNING};
+    } else {
+      this.isLoading = true;
+      setTimeout(() => {
+        this.unCheckAll = undefined;
+      }, 0);
+      const configIds = this.checkedData.sort((a, b) => ( a.index - b.index )).map(el => el.checkedId);
+
+      this.budgetYearsService.copyBudgetYears(configIds).subscribe(
+        res => {
+          this.isLoading = false;
+          this.unCheckAll = false;
+          this.msgDetails = {msg: 'Copy Budget Years ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
+        },
+        err => {
+          this.isLoading = false;
+          this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
+        }
+      )
+    }
   }
 
-  onChecked(item: BudgetYearsModel, ev): void {
+  onChecked(item: BudgetYearsModel, ev, index: number): void {
+    const idx = this.currentPage['page'] * this.currentPage['rows'] + index || index;
     if(ev.target.checked) {
-      this.budgetYearsService.checkedData.push(item.BudgetId);
+      this.checkedData.push({checkedId: item.BudgetId, index: idx});
     } else {
-      this.budgetYearsService.checkedData = this.budgetYearsService.checkedData.filter(el => el !== item.BudgetId)
+      this.checkedData = this.checkedData.filter(el => el.checkedId !== item.BudgetId)
     }
   }
 

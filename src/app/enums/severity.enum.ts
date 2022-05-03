@@ -1,4 +1,5 @@
 export enum Severity {
   SUCCESS = 'success',
-  ERROR = 'error'
+  ERROR = 'error',
+  WARNING = 'warn'
 }

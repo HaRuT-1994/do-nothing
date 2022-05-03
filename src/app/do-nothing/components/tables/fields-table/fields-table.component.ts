@@ -8,6 +8,7 @@ import { ConfirmationService } from 'primeng/api';
 import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { ConfigFieldsComponent } from '../../addEdit/config-fields/config-fields.component';
 import { Subscription } from 'rxjs';
+import { CheckedDataModel } from 'src/app/do-nothing/models/checkedData.interface';
 
 @Component({
   selector: 'app-fields-table',
@@ -15,14 +16,15 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./fields-table.component.scss']
 })
 export class FieldsTableComponent implements OnInit, OnDestroy {
-  public isLoading: boolean;
-  public msgDetails: MsgDetails;
-  public allFields: FieldModel[] = [];
-  public shownAllFields: FieldModel[] = [];
+  isLoading: boolean;
+  msgDetails: MsgDetails;
+  allFields: FieldModel[] = [];
+  shownAllFields: FieldModel[] = [];
+  unCheckAll: boolean;
   private currentPage = {first: 0, rows: 10};
   private index = 0;
   private sub$: Subscription;
-
+  private checkedData: CheckedDataModel[] = [];
 
   constructor( private fieldService: ConfigFieldsService,
                private commonService: CommonService,
@@ -71,24 +73,35 @@ export class FieldsTableComponent implements OnInit, OnDestroy {
   }
 
   copyFields(): void {
-    this.isLoading = true;
-    this.fieldService.copyFields().subscribe(
-       res => {
-         this.isLoading = false;
-         this.msgDetails = {msg: 'Copy Fields ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
-       },
-       err => {
-         this.isLoading = false;
-         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
-       }
-    )
+    if(!this.checkedData.length) {
+      this.msgDetails = {msg: 'Please check config', severity: Severity.WARNING};
+    } else {
+      this.isLoading = true;
+      setTimeout(() => {
+        this.unCheckAll = undefined;
+      }, 0);
+      const configIds = this.checkedData.sort((a, b) => ( a.index - b.index )).map(el => el.checkedId);
+
+      this.fieldService.copyFields(configIds).subscribe(
+        res => {
+          this.isLoading = false;
+          this.unCheckAll = false;
+          this.msgDetails = {msg: 'Copy Fields ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
+        },
+        err => {
+          this.isLoading = false;
+          this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
+        }
+      )
+    }
   }
 
-  onChecked(item: FieldModel, ev): void{
+  onChecked(item: FieldModel, ev, index: number): void{
+    const idx = this.currentPage['page'] * this.currentPage['rows'] + index || index;
     if(ev.target.checked) {
-      this.fieldService.checkedData.push(item.id);
+      this.checkedData.push({checkedId: item.id, index: idx});
     } else {
-      this.fieldService.checkedData = this.fieldService.checkedData.filter(el => el !== item.id)
+      this.checkedData = this.checkedData.filter(el => el.checkedId !== item.id)
     }
   }
 

@@ -4,7 +4,7 @@
   </div>
   <div class="G-flex-center-between menu-tab">
     <div>
-      <span class="selected">Scenario</span>
+      <span class="selected">Run Models</span>
       <span routerLink="/Data-Model">Data Models</span>
     </div>
     <div>
@@ -17,6 +17,9 @@
     </div>
     <div>
       <button (click)="copyConfig()">Copy</button>
+    </div>
+    <div>
+      <button >Delete</button>
     </div>
     <div *ngIf="needRun">
       <button (click)="runModel()">Run</button>

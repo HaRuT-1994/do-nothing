@@ -7,14 +7,11 @@ import { FieldModel } from '../models/fieldData.interface';
 @Injectable()
 export class ConfigFieldsService {
   public editFields: FieldModel[] = [];
-  public checkedData: number[] = [];
 
   constructor(private http: HttpClient) { }
 
-  copyFields(): Observable<any> {
-    if(this.checkedData.length) {
-      return this.http.post<number[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.copyFields}`, this.checkedData);
-    }
+  copyFields(data: number[]): Observable<any> {
+    return this.http.post<number[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.copyFields}`, data);
   }
 
   addConfigFields(data: any): Observable<any> {

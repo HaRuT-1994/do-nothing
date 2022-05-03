@@ -9,6 +9,7 @@ import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { ConfigRiskBasedDecisionsComponent } from '../../addEdit/config-risk-based-decisions/config-risk-based-decisions.component';
 import { Subscription } from 'rxjs';
 import { LookupService } from 'src/app/do-nothing/services/lookup.service';
+import { CheckedDataModel } from 'src/app/do-nothing/models/checkedData.interface';
 
 @Component({
   selector: 'app-risk-based-decision-table',
@@ -16,13 +17,15 @@ import { LookupService } from 'src/app/do-nothing/services/lookup.service';
   styleUrls: ['./risk-based-decision-table.component.scss']
 })
 export class RiskBasedDecisionTableComponent implements OnInit, OnDestroy {
-  public isLoading: boolean;
-  public msgDetails: MsgDetails;
-  public allRiskBasedDecisions: RiskBasedDecisionModel[];
-  public shownAllRiskBasedDecisions: RiskBasedDecisionModel[];
+  isLoading: boolean;
+  msgDetails: MsgDetails;
+  allRiskBasedDecisions: RiskBasedDecisionModel[];
+  shownAllRiskBasedDecisions: RiskBasedDecisionModel[];
+  unCheckAll: boolean;
   private currentPage = {first: 0, rows: 10};
   private index = 0;
   private sub$: Subscription;
+  private checkedData: CheckedDataModel[] = [];
 
   constructor( private riskBasedDecisionService: ConfigRiskBasedDecisionsService,
                private commonService: CommonService,
@@ -73,24 +76,35 @@ export class RiskBasedDecisionTableComponent implements OnInit, OnDestroy {
   }
 
   copyRiskBasedDecisions(): void {
-    this.isLoading = true;
-    this.riskBasedDecisionService.copyRiskBasedDecisions().subscribe(
-       res => {
-         this.isLoading = false;
-         this.msgDetails = {msg: 'Copy Risk Based Decisions ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
-       },
-       err => {
-         this.isLoading = false;
-         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
-       }
-    )
+    if(!this.checkedData.length) {
+      this.msgDetails = {msg: 'Please check config', severity: Severity.WARNING};
+    } else {
+      this.isLoading = true;
+      setTimeout(() => {
+        this.unCheckAll = undefined;
+      }, 0);
+      const configIds = this.checkedData.sort((a, b) => ( a.index - b.index )).map(el => el.checkedId);
+
+      this.riskBasedDecisionService.copyRiskBasedDecisions(configIds).subscribe(
+        res => {
+          this.isLoading = false;
+          this.unCheckAll = false;
+          this.msgDetails = {msg: 'Copy Risk Based Decisions ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
+        },
+        err => {
+          this.isLoading = false;
+          this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
+        }
+      )
+    }
   }
 
-  onChecked(item: RiskBasedDecisionModel, ev): void{
+  onChecked(item: RiskBasedDecisionModel, ev, index: number): void{
+    const idx = this.currentPage['page'] * this.currentPage['rows'] + index || index;
     if(ev.target.checked) {
-      this.riskBasedDecisionService.checkedData.push(item.decisionId);
+      this.checkedData.push({checkedId: item.decisionId, index: idx});
     } else {
-      this.riskBasedDecisionService.checkedData = this.riskBasedDecisionService.checkedData.filter(el => el !== item.decisionId)
+      this.checkedData = this.checkedData.filter(el => el.checkedId !== item.decisionId)
     }
   }
 
