@@ -19,9 +19,7 @@ export class RiskLevelsTableComponent implements OnInit, OnDestroy {
   isLoading: boolean;
   msgDetails: MsgDetails;
   allRiskLevels: RiskLevelsModel[] = [];
-  shownAllRiskLevels: RiskLevelsModel[] = [];
   unCheckAll: boolean;
-  private currentPage = {first: 0, rows: 10};
   private index = 0;
   private sub$: Subscription;
   private checkedData: CheckedDataModel[] = [];
@@ -38,13 +36,12 @@ export class RiskLevelsTableComponent implements OnInit, OnDestroy {
         this.getAllRiskLevels();
       } else {
         this.allRiskLevels[this.index] = res.value;
-        this.onPageChange(this.currentPage);
       }
     })
   }
 
-  onEditRow(data: RiskLevelsModel, i: number): void {
-    this.index = this.currentPage['page'] * this.currentPage['rows'] + i || i;
+  onEditRow(data: RiskLevelsModel, idx: number): void {
+    this.index = idx;
     this.riskLvlService.onEditRow(data);
     this.commonService.show(RiskLevelsComponent);
   }
@@ -60,7 +57,6 @@ export class RiskLevelsTableComponent implements OnInit, OnDestroy {
           () => {
             this.isLoading = false;
             this.allRiskLevels = this.allRiskLevels.filter( (val) => val['id'] !== id);
-            this.onPageChange(this.currentPage);
             this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
           },
           () => {
@@ -86,6 +82,7 @@ export class RiskLevelsTableComponent implements OnInit, OnDestroy {
         res => {
           this.isLoading = false;
           this.unCheckAll = false;
+          this.checkedData = [];
           this.msgDetails = {msg: 'Copy Risk Levels ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         },
         err => {
@@ -96,8 +93,7 @@ export class RiskLevelsTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  onChecked(item: RiskLevelsModel, ev, index: number): void{
-    const idx = this.currentPage['page'] * this.currentPage['rows'] + index || index;
+  onChecked(item: RiskLevelsModel, ev, idx: number): void{
     if(ev.target.checked) {
       this.checkedData.push({checkedId: item.id, index: idx});
     } else {
@@ -110,7 +106,6 @@ private getAllRiskLevels(): void {
   this.riskLvlService.getAllRiskLevels().subscribe(
     (res: RiskLevelsModel[]) => {
       this.allRiskLevels = res;
-      this.onPageChange(this.currentPage);
       this.isLoading = false;
     },
     err => {
@@ -119,25 +114,6 @@ private getAllRiskLevels(): void {
     }
   );
 }
-  
-
-  onPageChange(ev) {
-    this.currentPage = ev;
-    if(ev.page * ev.rows >= this.allRiskLevels.length) {
-      ev.first -= 10;
-    }
-
-    this.shownAllRiskLevels = this.allRiskLevels.slice(ev.first, ev.first + ev.rows);
-  }
-
-  filterData(search: string): void {
-    if (search.length) {
-      this.shownAllRiskLevels = this.commonService.filterAlgorithm(this.allRiskLevels, search);
-    } else {
-      this.shownAllRiskLevels = this.allRiskLevels;
-      this.onPageChange(this.currentPage);
-    }
-  }
 
   ngOnDestroy() {
     this.sub$.unsubscribe();

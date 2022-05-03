@@ -1,10 +1,10 @@
-<alert-message [msgDetails]="msgDetails"></alert-message>
+<!-- <alert-message [msgDetails]="msgDetails"></alert-message>
 <p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000"></p-confirmDialog>
 <app-loading *ngIf="isLoading"></app-loading>
 <main>
   <app-control-tables (copyTriggered)="copyCurves()"></app-control-tables>
   <table [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
-    <!-- <caption>Config - Curves</caption> -->
+    <caption>Config - Curves</caption>
     <thead>
       <tr>
         <th>Scenario</th>
@@ -50,4 +50,53 @@
       </tr>
     </tbody>
   </table>
+</main> -->
+
+<alert-message [msgDetails]="msgDetails"></alert-message>
+<p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000"></p-confirmDialog>
+<app-loading *ngIf="isLoading"></app-loading>
+<main>
+  <app-control-tables (copyTriggered)="copyCurves()"></app-control-tables>
+  <p-table #dt [value]="allCurves" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,20,30]"
+    [globalFilterFields]="['scenario.value','cohort.value', 'calculation', 'poFCurve', 'poFNav', 'healthCurve', 'healthNav', 'poFConstant', 'healthConstant']"
+    [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
+    <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="scenario.value">Scenario<p-sortIcon field="scenario.value"></p-sortIcon></th>
+          <th pSortableColumn="cohort.value">Cohort<p-sortIcon field="cohort.value"></p-sortIcon></th>
+          <th pSortableColumn="calculation">Calculation<p-sortIcon field="calculation"></p-sortIcon></th>
+          <th pSortableColumn="poFCurve">PoF Curve<p-sortIcon field="poFCurve"></p-sortIcon></th>
+          <th pSortableColumn="poFNav">PoF NAV<p-sortIcon field="poFNav"></p-sortIcon></th>
+          <th pSortableColumn="healthCurve">Health Curve<p-sortIcon field="healthCurve"></p-sortIcon></th>
+          <th pSortableColumn="healthNav">Health NAV<p-sortIcon field="healthNav"></p-sortIcon></th>
+          <th pSortableColumn="poFConstant">PoF Constant<p-sortIcon field="poFConstant"></p-sortIcon></th>
+          <th pSortableColumn="healthConstant">Health Constant<p-sortIcon field="healthConstant"></p-sortIcon></th>
+          <th colspan="3">
+            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search" />
+          </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-data let-i="rowIndex">
+        <tr>
+          <td [attr.title]="data.scenario.value">{{data.scenario.value}}</td>
+          <td [attr.title]="data.cohort.value">{{data.cohort.value}}</td>
+          <td [attr.title]="data.calculation">{{data.calculation}}</td>
+          <td [attr.title]="data.poFCurve">{{data.poFCurve}}</td>
+          <td [attr.title]="data.poFNav">{{data.poFNav}}</td>
+          <td [attr.title]="data.healthCurve">{{data.healthCurve}}</td>
+          <td [attr.title]="data.healthNav">{{data.healthNav}}</td>
+          <td [attr.title]="data.poFConstant">{{data.poFConstant}}</td>
+          <td [attr.title]="data.healthConstant">{{data.healthConstant}}</td>
+          <td class="buttonEffect" (click)="onEditRow(data, i)">
+            <span class="edit">Edit</span>
+          </td>
+          <td class="buttonEffect" (click)="onDeleteRow(data.id)">
+            <span class="delete">Delete</span>
+          </td>
+          <td>
+            <input class="checkbox" type="checkbox" [checked]="unCheckAll" (change)="onChecked(data, $event, i)">
+          </td>
+        </tr> 
+    </ng-template>
+  </p-table>
 </main>

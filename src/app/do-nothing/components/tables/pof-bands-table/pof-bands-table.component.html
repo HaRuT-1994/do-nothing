@@ -1,10 +1,9 @@
-<alert-message [msgDetails]="msgDetails"></alert-message>
+<!-- <alert-message [msgDetails]="msgDetails"></alert-message>
 <p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000"></p-confirmDialog>
 <app-loading *ngIf="isLoading"></app-loading>
 <main>
   <app-control-tables (copyTriggered)="copyPoFBands()"></app-control-tables>
   <table [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
-    <!-- <caption>Config - PoF Bands</caption> -->
     <thead>
       <tr>
         <th>Scenario</th>
@@ -46,4 +45,49 @@
       </tr>
     </tbody>
   </table>
+</main> -->
+
+<alert-message [msgDetails]="msgDetails"></alert-message>
+<p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000"></p-confirmDialog>
+<app-loading *ngIf="isLoading"></app-loading>
+<main>
+  <app-control-tables (copyTriggered)="copyPoFBands()"></app-control-tables>
+  <p-table #dt [value]="allPoFBands" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,20,30]"
+  [globalFilterFields]="['scenario.value', 'cohort.value', '_1', '_2', '_3', '_4', '_5']"
+    [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
+    <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="scenario.value">Scenario<p-sortIcon field="scenario.value"></p-sortIcon></th>
+          <th pSortableColumn="cohort.value">Cohort<p-sortIcon field="cohort.value"></p-sortIcon></th>
+          <th pSortableColumn="_1">Rare<p-sortIcon field="_1"></p-sortIcon></th>
+          <th pSortableColumn="_2">Unlikely<p-sortIcon field="_2"></p-sortIcon></th>
+          <th pSortableColumn="_3">Possible<p-sortIcon field="_3"></p-sortIcon></th>
+          <th pSortableColumn="_4">Likely<p-sortIcon field="_4"></p-sortIcon></th>
+          <th pSortableColumn="_5">Almost Certain<p-sortIcon field="_5"></p-sortIcon></th>
+          <th colspan="3">
+            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search" />
+          </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-data let-i="rowIndex">
+        <tr>
+          <td [attr.title]="data.scenario.value">{{data.scenario.value}}</td>
+          <td [attr.title]="data.cohort.value">{{data.cohort.value}}</td>
+          <td [attr.title]="data._1">{{data._1}}</td>
+          <td [attr.title]="data._2">{{data._2}}</td>
+          <td [attr.title]="data._3">{{data._3}}</td>
+          <td [attr.title]="data._4">{{data._4}}</td>
+          <td [attr.title]="data._5">{{data._5}}</td>
+          <td class="buttonEffect" (click)="onEditRow(data, i)">
+            <span class="edit">Edit</span>
+          </td>
+          <td class="buttonEffect" (click)="onDeleteRow(data.id)">
+            <span class="delete">Delete</span>
+          </td>
+          <td>
+            <input class="checkbox" type="checkbox" [checked]="unCheckAll" (change)="onChecked(data, $event, i)">
+          </td>
+        </tr> 
+    </ng-template>
+  </p-table>
 </main>

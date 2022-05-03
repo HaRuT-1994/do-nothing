@@ -4,142 +4,136 @@
 <main>
   <app-control-tables (copyTriggered)="copyBudgetYears()"></app-control-tables>
   <div class="budget-year">
-  <table [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
-    <!-- <caption>Config - Budget</caption> -->
-    <thead>
-      <tr>
-        <th>Scenario</th>
-        <th>Budget Source</th>
-        <th>Exceeded Allowance</th>
-        <th>Budget</th>
-        <th>2022</th>
-        <th>2023</th>
-        <th>2024</th>
-        <th>2025</th>
-        <th>2026</th>
-        <th>2027</th>
-        <th>2028</th>
-        <th>2029</th>
-        <th>2030</th>
-        <th>2031</th>
-        <th>2032</th>
-        <th>2033</th>
-        <th>2034</th>
-        <th>2035</th>
-        <th>2036</th>
-        <th>2037</th>
-        <th>2038</th>
-        <th>2039</th>
-        <th>2040</th>
-        <th>2041</th>
-        <th>2042</th>
-        <th>2043</th>
-        <th>2044</th>
-        <th>2045</th>
-        <th>2046</th>
-        <th>2047</th>
-        <th>2048</th>
-        <th>2049</th>
-        <th>2050</th>
-        <th>2051</th>
-        <th>2052</th>
-        <th>2053</th>
-        <th>2054</th>
-        <th>2055</th>
-        <th>2056</th>
-        <th>2057</th>
-        <th>2058</th>
-        <th>2059</th>
-        <th>2060</th>
-        <th>2061</th>
-        <th>2062</th>
-        <th>2063</th>
-        <th>2064</th>
-        <th>2065</th>
-        <th>2066</th>
-        <th>2067</th>
-        <th>2068</th>
-        <th>2069</th>
-        <th>2070</th>
-        <th>2071</th>
-        <th colspan="3" class="fixedColumn">
-          <input type="text" placeholder="Search" (input)="filterData($event.target.value)">
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let data of shownAllBudgetYears">
-        <td [attr.title]="data.ScenarioName">{{data.Scenario.value}}</td>
-        <td [attr.title]="data.BudgetSource">{{data.BudgetSource}}</td>
-        <td [attr.title]="data.ExceedanceAllowance">{{data.ExceedanceAllowance}}</td>
-        <td [attr.title]="data.BudgetName">{{data.BudgetName}}</td>
-        <!-- <td>{{data['_2022'] | number: '.2-2'}}</td>
-        <td>{{data['_2023'] | number: '.2-2'}}</td>
-        <td>{{data['_2024'] | number: '.2-2'}}</td>
-        <td>{{data['_2025'] | number: '.2-2'}}</td>
-        <td>{{data['_2026'] | number: '.2-2'}}</td>
-        <td>{{data['_2027'] | number: '.2-2'}}</td>
-        <td>{{data['_2028'] | number: '.2-2'}}</td>
-        <td>{{data['_2029'] | number: '.2-2'}}</td>
-        <td>{{data['_2030'] | number: '.2-2'}}</td>
-        <td>{{data['_2031'] | number: '.2-2'}}</td>
-        <td>{{data['_2032'] | number: '.2-2'}}</td>
-        <td>{{data['_2033'] | number: '.2-2'}}</td>
-        <td>{{data['_2034'] | number: '.2-2'}}</td>
-        <td>{{data['_2035'] | number: '.2-2'}}</td>
-        <td>{{data['_2036'] | number: '.2-2'}}</td>
-        <td>{{data['_2037'] | number: '.2-2'}}</td>
-        <td>{{data['_2038'] | number: '.2-2'}}</td>
-        <td>{{data['_2039'] | number: '.2-2'}}</td>
-        <td>{{data['_2040'] | number: '.2-2'}}</td>
-        <td>{{data['_2041'] | number: '.2-2'}}</td>
-        <td>{{data['_2042'] | number: '.2-2'}}</td>
-        <td>{{data['_2043'] | number: '.2-2'}}</td>
-        <td>{{data['_2044'] | number: '.2-2'}}</td>
-        <td>{{data['_2045'] | number: '.2-2'}}</td>
-        <td>{{data['_2046'] | number: '.2-2'}}</td>
-        <td>{{data['_2047'] | number: '.2-2'}}</td>
-        <td>{{data['_2048'] | number: '.2-2'}}</td>
-        <td>{{data['_2049'] | number: '.2-2'}}</td>
-        <td>{{data['_2050'] | number: '.2-2'}}</td>
-        <td>{{data['_2051'] | number: '.2-2'}}</td>
-        <td>{{data['_2052'] | number: '.2-2'}}</td>
-        <td>{{data['_2053'] | number: '.2-2'}}</td>
-        <td>{{data['_2054'] | number: '.2-2'}}</td>
-        <td>{{data['_2055'] | number: '.2-2'}}</td>
-        <td>{{data['_2056'] | number: '.2-2'}}</td>
-        <td>{{data['_2057'] | number: '.2-2'}}</td>
-        <td>{{data['_2058'] | number: '.2-2'}}</td>
-        <td>{{data['_2059'] | number: '.2-2'}}</td>
-        <td>{{data['_2060'] | number: '.2-2'}}</td>
-        <td>{{data['_2061'] | number: '.2-2'}}</td>
-        <td>{{data['_2062'] | number: '.2-2'}}</td>
-        <td>{{data['_2063'] | number: '.2-2'}}</td>
-        <td>{{data['_2064'] | number: '.2-2'}}</td>
-        <td>{{data['_2065'] | number: '.2-2'}}</td>
-        <td>{{data['_2066'] | number: '.2-2'}}</td>
-        <td>{{data['_2067'] | number: '.2-2'}}</td>
-        <td>{{data['_2068'] | number: '.2-2'}}</td>
-        <td>{{data['_2069'] | number: '.2-2'}}</td>
-        <td>{{data['_2070'] | number: '.2-2'}}</td>
-        <td>{{data['_2071'] | number: '.2-2'}}</td> -->
-        <td class="buttonEffect fixedColumnEdit" (click)=onEditRow(data)>
-          <span class="edit">Edit</span>
-        </td>
-        <td class="buttonEffect fixedColumnDelete" (click)="onDeleteRow(data.BudgetId)">
-          <span class="delete">Delete</span>
-        </td>
-        <td class="fixedColumn">
-          <input class="checkbox" type="checkbox" [checked]="unCheckAll" (change)="onChecked(data, $event, i)">
-        </td>
-      </tr>
-      <tr *ngIf="allBudgetYears.length > 10">
-        <td colspan="20">
-          <p-paginator [rows]="10" [totalRecords]="allBudgetYears.length" [rowsPerPageOptions]="[10,20,30]"
-          (onPageChange)="onPageChange($event)"></p-paginator>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+    <p-table #dt [value]="allBudgetYears" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,20,30]" [globalFilterFields]="['Scenario.value','BudgetSource', 'ExceedanceAllowance', 'BudgetName']"
+      [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
+      <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="Scenario.value">Scenario<p-sortIcon field="Scenario.value"></p-sortIcon></th>
+            <th pSortableColumn="BudgetSource">Budget Source<p-sortIcon field="BudgetSource"></p-sortIcon></th>
+            <th pSortableColumn="ExceedanceAllowance">Exceeded Allowance<<p-sortIcon field="ExceedanceAllowance"></p-sortIcon></th>
+            <th pSortableColumn="BudgetName">Budget<p-sortIcon field="BudgetName"></p-sortIcon></th>
+            <th>2022</th>
+            <th>2023</th>
+            <th>2024</th>
+            <th>2025</th>
+            <th>2026</th>
+            <th>2027</th>
+            <th>2028</th>
+            <th>2029</th>
+            <th>2030</th>
+            <th>2031</th>
+            <th>2032</th>
+            <th>2033</th>
+            <th>2034</th>
+            <th>2035</th>
+            <th>2036</th>
+            <th>2037</th>
+            <th>2038</th>
+            <th>2039</th>
+            <th>2040</th>
+            <th>2041</th>
+            <th>2042</th>
+            <th>2043</th>
+            <th>2044</th>
+            <th>2045</th>
+            <th>2046</th>
+            <th>2047</th>
+            <th>2048</th>
+            <th>2049</th>
+            <th>2050</th>
+            <th>2051</th>
+            <th>2052</th>
+            <th>2053</th>
+            <th>2054</th>
+            <th>2055</th>
+            <th>2056</th>
+            <th>2057</th>
+            <th>2058</th>
+            <th>2059</th>
+            <th>2060</th>
+            <th>2061</th>
+            <th>2062</th>
+            <th>2063</th>
+            <th>2064</th>
+            <th>2065</th>
+            <th>2066</th>
+            <th>2067</th>
+            <th>2068</th>
+            <th>2069</th>
+            <th>2070</th>
+            <th>2071</th>
+              <th colspan="3" class="fixedColumn">
+                <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search" />
+              </th>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-data let-i="rowIndex">
+          <tr>
+            <td [attr.title]="data.ScenarioName">{{data.Scenario.value}}</td>
+            <td [attr.title]="data.BudgetSource">{{data.BudgetSource}}</td>
+            <td [attr.title]="data.ExceedanceAllowance">{{data.ExceedanceAllowance}}</td>
+            <td [attr.title]="data.BudgetName">{{data.BudgetName}}</td>
+            <!-- <td>{{data['_2022'] | number: '.2-2'}}</td>
+            <td>{{data['_2023'] | number: '.2-2'}}</td>
+            <td>{{data['_2024'] | number: '.2-2'}}</td>
+            <td>{{data['_2025'] | number: '.2-2'}}</td>
+            <td>{{data['_2026'] | number: '.2-2'}}</td>
+            <td>{{data['_2027'] | number: '.2-2'}}</td>
+            <td>{{data['_2028'] | number: '.2-2'}}</td>
+            <td>{{data['_2029'] | number: '.2-2'}}</td>
+            <td>{{data['_2030'] | number: '.2-2'}}</td>
+            <td>{{data['_2031'] | number: '.2-2'}}</td>
+            <td>{{data['_2032'] | number: '.2-2'}}</td>
+            <td>{{data['_2033'] | number: '.2-2'}}</td>
+            <td>{{data['_2034'] | number: '.2-2'}}</td>
+            <td>{{data['_2035'] | number: '.2-2'}}</td>
+            <td>{{data['_2036'] | number: '.2-2'}}</td>
+            <td>{{data['_2037'] | number: '.2-2'}}</td>
+            <td>{{data['_2038'] | number: '.2-2'}}</td>
+            <td>{{data['_2039'] | number: '.2-2'}}</td>
+            <td>{{data['_2040'] | number: '.2-2'}}</td>
+            <td>{{data['_2041'] | number: '.2-2'}}</td>
+            <td>{{data['_2042'] | number: '.2-2'}}</td>
+            <td>{{data['_2043'] | number: '.2-2'}}</td>
+            <td>{{data['_2044'] | number: '.2-2'}}</td>
+            <td>{{data['_2045'] | number: '.2-2'}}</td>
+            <td>{{data['_2046'] | number: '.2-2'}}</td>
+            <td>{{data['_2047'] | number: '.2-2'}}</td>
+            <td>{{data['_2048'] | number: '.2-2'}}</td>
+            <td>{{data['_2049'] | number: '.2-2'}}</td>
+            <td>{{data['_2050'] | number: '.2-2'}}</td>
+            <td>{{data['_2051'] | number: '.2-2'}}</td>
+            <td>{{data['_2052'] | number: '.2-2'}}</td>
+            <td>{{data['_2053'] | number: '.2-2'}}</td>
+            <td>{{data['_2054'] | number: '.2-2'}}</td>
+            <td>{{data['_2055'] | number: '.2-2'}}</td>
+            <td>{{data['_2056'] | number: '.2-2'}}</td>
+            <td>{{data['_2057'] | number: '.2-2'}}</td>
+            <td>{{data['_2058'] | number: '.2-2'}}</td>
+            <td>{{data['_2059'] | number: '.2-2'}}</td>
+            <td>{{data['_2060'] | number: '.2-2'}}</td>
+            <td>{{data['_2061'] | number: '.2-2'}}</td>
+            <td>{{data['_2062'] | number: '.2-2'}}</td>
+            <td>{{data['_2063'] | number: '.2-2'}}</td>
+            <td>{{data['_2064'] | number: '.2-2'}}</td>
+            <td>{{data['_2065'] | number: '.2-2'}}</td>
+            <td>{{data['_2066'] | number: '.2-2'}}</td>
+            <td>{{data['_2067'] | number: '.2-2'}}</td>
+            <td>{{data['_2068'] | number: '.2-2'}}</td>
+            <td>{{data['_2069'] | number: '.2-2'}}</td>
+            <td>{{data['_2070'] | number: '.2-2'}}</td>
+            <td>{{data['_2071'] | number: '.2-2'}}</td> -->
+            <td class="buttonEffect fixedColumnEdit" (click)=onEditRow(data)>
+              <span class="edit">Edit</span>
+            </td>
+            <td class="buttonEffect fixedColumnDelete" (click)="onDeleteRow(data.BudgetId)">
+              <span class="delete">Delete</span>
+            </td>
+            <td class="fixedColumn">
+              <input class="checkbox" type="checkbox" [checked]="unCheckAll" (change)="onChecked(data, $event, i)">
+            </td>
+          </tr> 
+      </ng-template>
+    </p-table>
   </div>
 </main>

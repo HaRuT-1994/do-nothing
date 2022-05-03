@@ -10,6 +10,7 @@ import { ConfigRiskBasedDecisionsComponent } from '../../addEdit/config-risk-bas
 import { Subscription } from 'rxjs';
 import { LookupService } from 'src/app/do-nothing/services/lookup.service';
 import { CheckedDataModel } from 'src/app/do-nothing/models/checkedData.interface';
+import { ThrowStmt } from '@angular/compiler';
 
 @Component({
   selector: 'app-risk-based-decision-table',
@@ -20,9 +21,7 @@ export class RiskBasedDecisionTableComponent implements OnInit, OnDestroy {
   isLoading: boolean;
   msgDetails: MsgDetails;
   allRiskBasedDecisions: RiskBasedDecisionModel[];
-  shownAllRiskBasedDecisions: RiskBasedDecisionModel[];
   unCheckAll: boolean;
-  private currentPage = {first: 0, rows: 10};
   private index = 0;
   private sub$: Subscription;
   private checkedData: CheckedDataModel[] = [];
@@ -41,13 +40,12 @@ export class RiskBasedDecisionTableComponent implements OnInit, OnDestroy {
         this.getAllRiskBasedDecisions();
       } else {
         this.allRiskBasedDecisions[this.index] = res.value;
-        this.onPageChange(this.currentPage);
       }
     })
    }
 
-  onEditRow(data: RiskBasedDecisionModel, i: number): void {
-    this.index = this.currentPage['page'] * this.currentPage['rows'] + i || i;
+  onEditRow(data: RiskBasedDecisionModel, idx: number): void {
+    this.index = idx;
     this.riskBasedDecisionService.onEditRow(data);
     this.commonService.show(ConfigRiskBasedDecisionsComponent);
   }
@@ -63,7 +61,6 @@ export class RiskBasedDecisionTableComponent implements OnInit, OnDestroy {
           () => {
             this.isLoading = false;
             this.allRiskBasedDecisions = this.allRiskBasedDecisions.filter( (val) => val['decisionId'] !== id);
-            this.onPageChange(this.currentPage);
             this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
           },
           () => {
@@ -77,7 +74,7 @@ export class RiskBasedDecisionTableComponent implements OnInit, OnDestroy {
 
   copyRiskBasedDecisions(): void {
     if(!this.checkedData.length) {
-      this.msgDetails = {msg: 'Please check config', severity: Severity.WARNING};
+      this.msgDetails = {msg: Message.WARNING_COPY, severity: Severity.WARNING};
     } else {
       this.isLoading = true;
       setTimeout(() => {
@@ -89,6 +86,7 @@ export class RiskBasedDecisionTableComponent implements OnInit, OnDestroy {
         res => {
           this.isLoading = false;
           this.unCheckAll = false;
+          this.checkedData = [];
           this.msgDetails = {msg: 'Copy Risk Based Decisions ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         },
         err => {
@@ -99,8 +97,7 @@ export class RiskBasedDecisionTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  onChecked(item: RiskBasedDecisionModel, ev, index: number): void{
-    const idx = this.currentPage['page'] * this.currentPage['rows'] + index || index;
+  onChecked(item: RiskBasedDecisionModel, ev, idx: number): void{
     if(ev.target.checked) {
       this.checkedData.push({checkedId: item.decisionId, index: idx});
     } else {
@@ -112,7 +109,6 @@ export class RiskBasedDecisionTableComponent implements OnInit, OnDestroy {
     this.riskBasedDecisionService.getAllRiskBasedDecisions().subscribe(
       (res: RiskBasedDecisionModel[]) => {
         this.allRiskBasedDecisions = res;
-        this.onPageChange(this.currentPage);
         this.isLoading = false;
       },
       err => {
@@ -120,24 +116,6 @@ export class RiskBasedDecisionTableComponent implements OnInit, OnDestroy {
         this.isLoading = false;
       }
     );
-  }
-
-  onPageChange(ev): void {
-    this.currentPage = ev;
-    if(ev.page * ev.rows >= this.allRiskBasedDecisions.length) {
-      ev.first -= 10;
-    }
-
-    this.shownAllRiskBasedDecisions = this.allRiskBasedDecisions.slice(ev.first, ev.first + ev.rows);
-  }
-
-  filterData(search: string): void {
-    if (search.length) {
-      this.shownAllRiskBasedDecisions = this.commonService.filterAlgorithm(this.allRiskBasedDecisions, search);
-    } else {
-      this.shownAllRiskBasedDecisions = this.allRiskBasedDecisions;
-      this.onPageChange(this.currentPage);
-    }
   }
 
   ngOnDestroy(): void {

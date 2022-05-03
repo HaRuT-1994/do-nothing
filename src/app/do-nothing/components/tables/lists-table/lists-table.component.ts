@@ -19,9 +19,7 @@ export class ListsTableComponent implements OnInit, OnDestroy {
   isLoading: boolean;
   msgDetails: MsgDetails;
   allLists: ListsModel[] = [];
-  shownAllLists: ListsModel[] = [];
   unCheckAll: boolean;
-  private currentPage = {first: 0, rows: 10};
   private index = 0;
   private sub$: Subscription;
   private checkedData: CheckedDataModel[] = [];
@@ -38,13 +36,12 @@ export class ListsTableComponent implements OnInit, OnDestroy {
         this.getAllLists();
       } else {
         this.allLists[this.index] = res.value;
-        this.onPageChange(this.currentPage);
       }
     })
    }
 
-  onEditRow(data: ListsModel, i: number): void {
-    this.index = this.currentPage['page'] * this.currentPage['rows'] + i || i;
+  onEditRow(data: ListsModel, idx: number): void {
+    this.index = idx;
     this.listsService.onEditRow(data);
     this.commonService.show(ConfigListsComponent);
   }
@@ -60,7 +57,6 @@ export class ListsTableComponent implements OnInit, OnDestroy {
           () => {
             this.isLoading = false;
             this.allLists = this.allLists.filter( (val) => val['listId'] !== id);
-            this.onPageChange(this.currentPage);
             this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
           },
           () => {
@@ -74,7 +70,7 @@ export class ListsTableComponent implements OnInit, OnDestroy {
 
   copyLists(): void {
     if(!this.checkedData.length) {
-      this.msgDetails = {msg: 'Please check config', severity: Severity.WARNING};
+      this.msgDetails = {msg: Message.WARNING_COPY, severity: Severity.WARNING};
     } else {
       this.isLoading = true;
       setTimeout(() => {
@@ -86,6 +82,7 @@ export class ListsTableComponent implements OnInit, OnDestroy {
         res => {
           this.isLoading = false;
           this.unCheckAll = false;
+          this.checkedData = [];
           this.msgDetails = {msg: 'Copy Lists ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         },
         err => {
@@ -96,8 +93,7 @@ export class ListsTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  onChecked(item: ListsModel, ev, index: number): void{
-    const idx = this.currentPage['page'] * this.currentPage['rows'] + index || index;
+  onChecked(item: ListsModel, ev, idx: number): void{
     if(ev.target.checked) {
       this.checkedData.push({checkedId: item.listId, index: idx});
     } else {
@@ -110,7 +106,6 @@ export class ListsTableComponent implements OnInit, OnDestroy {
     this.listsService.getAllLists().subscribe(
       (res: ListsModel[]) => {
         this.allLists = res;
-        this.onPageChange(this.currentPage);
         this.isLoading = false;
       },
       err => {
@@ -118,25 +113,6 @@ export class ListsTableComponent implements OnInit, OnDestroy {
         this.isLoading = false;
       }
     );
-  }
-  
-
-  onPageChange(ev): void {
-    this.currentPage = ev;
-    if(ev.page * ev.rows >= this.allLists.length) {
-      ev.first -= 10;
-    }
-
-    this.shownAllLists = this.allLists.slice(ev.first, ev.first + ev.rows);
-  }
-
-  filterData(search: string): void {
-    if (search.length) {
-      this.shownAllLists = this.commonService.filterAlgorithm(this.allLists, search);
-    } else {
-      this.shownAllLists = this.allLists;
-      this.onPageChange(this.currentPage);
-    }
   }
 
   ngOnDestroy() {

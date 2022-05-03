@@ -3,41 +3,36 @@
 <app-loading *ngIf="isLoading"></app-loading>
 <main>
   <app-control-tables (copyTriggered)="copyScenarios()"></app-control-tables>
-  <table [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
-    <!-- <caption>Config - Scenarios</caption> -->
-    <thead>
-      <tr>
-        <th>Scenario Name</th>
-        <th>Validated Option</th>
-        <th>Restrict To Budget</th>
-        <th>Run</th>
-        <th colspan="3">
-          <input type="text" placeholder="Search" (input)="filterData($event.target.value)">
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let data of shownAllScenarios; let i = index">
-        <td [attr.title]="data.scenario">{{data.scenario}}</td>
-        <td [attr.title]="data.validatedOption">{{data.validatedOption}}</td>
-        <td [attr.title]="data.restrictToBudget">{{data.restrictToBudget}}</td>
-        <td [attr.title]="data.run">{{data.run}}</td>
-        <td class="buttonEffect" (click)="onEditRow(data, i)">
-          <span class="edit">Edit</span>
-        </td>
-        <td class="buttonEffect" (click)="onDeleteRow(data.scenarioId)">
-          <span class="delete">Delete</span>
-        </td>
-        <td>
-          <input class="checkbox" type="checkbox" [checked]="unCheckAll" (change)="onChecked(data, $event, i)">
-        </td>
-      </tr>
-      <tr *ngIf="allScenarios.length > 10">
-        <td colspan="7">
-          <p-paginator [rows]="10" [totalRecords]="allScenarios.length" [rowsPerPageOptions]="[10,20,30]"
-          (onPageChange)="onPageChange($event)"></p-paginator>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <p-table #dt [value]="allScenarios" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,20,30]"
+  [globalFilterFields]="['scenario','validatedOption', 'restrictToBudget', 'run']"
+    [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
+    <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="scenario">Scenario Name<p-sortIcon field="scenario"></p-sortIcon></th>
+          <th pSortableColumn="validatedOption">Validated Option<p-sortIcon field="validatedOption"></p-sortIcon></th>
+          <th pSortableColumn="restrictToBudget">Restrict To Budget<p-sortIcon field="restrictToBudget"></p-sortIcon></th>
+          <th pSortableColumn="run">Run<p-sortIcon field="run"></p-sortIcon></th>
+          <th colspan="3">
+            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search" />
+          </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-data let-i="rowIndex">
+        <tr>
+          <td [attr.title]="data.scenario">{{data.scenario}}</td>
+          <td [attr.title]="data.validatedOption">{{data.validatedOption}}</td>
+          <td [attr.title]="data.restrictToBudget">{{data.restrictToBudget}}</td>
+          <td [attr.title]="data.run">{{data.run}}</td>
+          <td class="buttonEffect" (click)="onEditRow(data, i)">
+            <span class="edit">Edit</span>
+          </td>
+          <td class="buttonEffect" (click)="onDeleteRow(data.scenarioId)">
+            <span class="delete">Delete</span>
+          </td>
+          <td>
+            <input class="checkbox" type="checkbox" [checked]="unCheckAll" (change)="onChecked(data, $event, i)">
+          </td>
+        </tr> 
+    </ng-template>
+  </p-table>
 </main>

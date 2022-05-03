@@ -21,13 +21,12 @@ export class DoNothingTableComponent implements OnInit, OnDestroy {
   isLoading: boolean;
   msgDetails: MsgDetails;
   allModels: ModelConfig[] = [];
-  shownAllModels: ModelConfig[] = [];
   models = [];
   unCheckAll: boolean;
-  private currentPage = {first: 0, rows: 10};
   private index = 0;
   private sub$: Subscription;
   private checkedData: CheckedDataModel[] = [];
+  private defaultModels: ModelConfig[] = [];
 
   constructor( private doNothingService: DoNothingService,
                private commonService: CommonService,
@@ -41,13 +40,12 @@ export class DoNothingTableComponent implements OnInit, OnDestroy {
         this.getAllModelConfigs();
       } else {
         this.allModels[this.index] = res.value;
-        this.onPageChange(this.currentPage);
       }
     })
   }
 
-  onEditRow(data: ModelConfig, i: number): void {
-    this.index = this.currentPage['page'] * this.currentPage['rows'] + i || i;
+  onEditRow(data: ModelConfig, idx: number): void {
+    this.index = idx;
     this.doNothingService.onEditRow(data);
     this.commonService.show(DoNothingComponent);
   }
@@ -63,7 +61,6 @@ export class DoNothingTableComponent implements OnInit, OnDestroy {
           () => {
             this.isLoading = false;
             this.allModels = this.allModels.filter( (val) => val['id'] !== id);
-            this.onPageChange(this.currentPage);
             this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
           },
           () => {
@@ -77,7 +74,7 @@ export class DoNothingTableComponent implements OnInit, OnDestroy {
 
   runModel(): void {
     if(!this.checkedData.length) {
-      this.msgDetails = {msg: 'Please check config', severity: Severity.WARNING};
+      this.msgDetails = {msg: Message.WARNING_COPY, severity: Severity.WARNING};
     } else {
       this.isLoading = true;
       setTimeout(() => {
@@ -89,6 +86,7 @@ export class DoNothingTableComponent implements OnInit, OnDestroy {
         res => {
           this.isLoading = false;
           this.unCheckAll = false;
+          this.checkedData = [];
           this.msgDetails = {msg: 'Run Model ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         },
         err => {
@@ -101,7 +99,7 @@ export class DoNothingTableComponent implements OnInit, OnDestroy {
 
   copyModel(): void {
     if(!this.checkedData.length) {
-      this.msgDetails = {msg: 'Please check config', severity: Severity.WARNING};
+      this.msgDetails = {msg: Message.WARNING_COPY, severity: Severity.WARNING};
     } else {
       this.isLoading = true;
       setTimeout(() => {
@@ -113,6 +111,7 @@ export class DoNothingTableComponent implements OnInit, OnDestroy {
           res => {
             this.isLoading = false;
             this.unCheckAll = false;
+            this.checkedData = [];
             this.msgDetails = {msg: 'Copy Model ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
           },
           err => {
@@ -123,9 +122,8 @@ export class DoNothingTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  onChecked(item: ModelConfig, ev, index: number): void {
+  onChecked(item: ModelConfig, ev, idx: number): void {
     const data = strToArray(item['scenariosToRun']);
-    const idx = this.currentPage['page'] * this.currentPage['rows'] + index || index;
     if(ev.target.checked) {
       this.checkedData.push({checkedId: {
         configurationId: item.id,
@@ -141,8 +139,8 @@ export class DoNothingTableComponent implements OnInit, OnDestroy {
     this.doNothingService.getAllModelConfigs().subscribe(
       (res: ModelConfig[]) => {
         this.allModels = res;
+        this.defaultModels = res;
         this.isLoading = false;
-        this.onPageChange(this.currentPage);
         let setModels = new Set();
         this.allModels.forEach(el => {
           setModels.add(el.modelName)
@@ -156,31 +154,12 @@ export class DoNothingTableComponent implements OnInit, OnDestroy {
       }
     );
   }
-  
-  onPageChange(ev): void {
-    this.currentPage = ev;
-    if(ev.page * ev.rows >= this.allModels.length) {
-      ev.first -= 10;
-    }
-
-    this.shownAllModels = this.allModels.slice(ev.first, ev.first + ev.rows);
-  }
 
   filterModel(model: string) {
     if (model !== 'All') {
-      this.shownAllModels = this.allModels.filter(item => item.modelName === model)
+      this.allModels = this.defaultModels.filter(item => item.modelName === model)
     } else {
-      this.shownAllModels = this.allModels;
-      this.onPageChange(this.currentPage);
-    }
-  }
-
-  filterData(search: string): void {
-    if (search.length) {
-      this.shownAllModels = this.commonService.filterAlgorithm(this.allModels, search);
-    } else {
-      this.shownAllModels = this.allModels;
-      this.onPageChange(this.currentPage);
+      this.allModels = this.defaultModels;
     }
   }
 

@@ -20,9 +20,7 @@ export class InterventionOptionsTableComponent implements OnInit {
   isLoading: boolean;
   msgDetails: MsgDetails;
   allInterventionOptions: InterventionOptionsModel[] = [];
-  shownAllInterventionOptions: InterventionOptionsModel[] = [];
   unCheckAll: boolean;
-  private currentPage = {first: 0, rows: 10};
   private index = 0;
   private sub$: Subscription;
   private checkedData: CheckedDataModel[] = [];
@@ -40,14 +38,12 @@ export class InterventionOptionsTableComponent implements OnInit {
         this.getAllInterventionOptions();
       } else {
         this.allInterventionOptions[this.index] = res.value;
-        this.onPageChange(this.currentPage);
       }
-      
     })
    }
 
-  onEditRow(data: InterventionOptionsModel, i: number): void {
-    this.index = this.currentPage['page'] * this.currentPage['rows'] + i || i;
+  onEditRow(data: InterventionOptionsModel, idx: number): void {
+    this.index = idx;
     this.interventionOptionsService.onEditRow(data);
     this.commonService.show(ConfigInterventionOptionsComponent);
   }
@@ -63,7 +59,6 @@ export class InterventionOptionsTableComponent implements OnInit {
           () => {
             this.isLoading = false;
             this.allInterventionOptions = this.allInterventionOptions.filter( (val) => val['interventionId'] !== id);
-            this.onPageChange(this.currentPage);
             this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
           },
           () => {
@@ -89,6 +84,7 @@ export class InterventionOptionsTableComponent implements OnInit {
         res => {
           this.isLoading = false;
           this.unCheckAll = false;
+          this.checkedData = [];
           this.msgDetails = {msg: 'Copy Intervention Options ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         },
         err => {
@@ -99,8 +95,7 @@ export class InterventionOptionsTableComponent implements OnInit {
     }
   }
 
-  onChecked(item: InterventionOptionsModel, ev, index: number): void{
-    const idx = this.currentPage['page'] * this.currentPage['rows'] + index || index;
+  onChecked(item: InterventionOptionsModel, ev, idx: number): void{
     if(ev.target.checked) {
       this.checkedData.push({checkedId: item.interventionId, index: idx});
     } else {
@@ -114,7 +109,6 @@ export class InterventionOptionsTableComponent implements OnInit {
     this.interventionOptionsService.getAllInterventionOptions().subscribe(
       (res: InterventionOptionsModel[]) => {
         this.allInterventionOptions = res;
-        this.onPageChange(this.currentPage);
         this.isLoading = false;
       },
       err => {
@@ -122,24 +116,6 @@ export class InterventionOptionsTableComponent implements OnInit {
         this.isLoading = false;
       }
     );
-  }
-
-  onPageChange(ev): void {
-    this.currentPage = ev;
-    if(ev.page * ev.rows >= this.allInterventionOptions.length) {
-      ev.first -= 10;
-    }
-
-    this.shownAllInterventionOptions = this.allInterventionOptions.slice(ev.first, ev.first + ev.rows);
-  }
-
-  filterData(search: string): void {
-    if (search.length) {
-      this.shownAllInterventionOptions = this.commonService.filterAlgorithm(this.allInterventionOptions, search);
-    } else {
-      this.shownAllInterventionOptions = this.allInterventionOptions;
-      this.onPageChange(this.currentPage);
-    }
   }
 
   ngOnDestroy(): void {

@@ -20,9 +20,7 @@ export class RatesTableComponent implements OnInit, OnDestroy {
   isLoading: boolean;
   msgDetails: MsgDetails;
   allRates: RatesModel[] = [];
-  shownAllRates: RatesModel[] = [];
   unCheckAll: boolean;
-  private currentPage = {first: 0, rows: 10};
   private index = 0;
   private sub$: Subscription;
   private checkedData: CheckedDataModel[] = [];
@@ -41,13 +39,12 @@ export class RatesTableComponent implements OnInit, OnDestroy {
         this.getAllRates();
       } else {
         this.allRates[this.index] = res.value;
-        this.onPageChange(this.currentPage);
       }
     })
    }
 
-  onEditRow(data: RatesModel, i: number): void {
-    this.index = this.currentPage['page'] * this.currentPage['rows'] + i || i;
+  onEditRow(data: RatesModel, idx: number): void {
+    this.index = idx;
     this.rateService.onEditRow(data);
     this.commonService.show(ConfigRatesComponent);
   }
@@ -63,7 +60,6 @@ export class RatesTableComponent implements OnInit, OnDestroy {
           () => {
             this.isLoading = false;
             this.allRates = this.allRates.filter( (val) => val['ratesId'] !== id);
-            this.onPageChange(this.currentPage);
             this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
           },
           () => {
@@ -77,7 +73,7 @@ export class RatesTableComponent implements OnInit, OnDestroy {
 
    copyRates(): void {
     if(!this.checkedData.length) {
-      this.msgDetails = {msg: 'Please check config', severity: Severity.WARNING};
+      this.msgDetails = {msg: Message.WARNING_COPY, severity: Severity.WARNING};
     } else {
       this.isLoading = true;
       setTimeout(() => {
@@ -89,6 +85,7 @@ export class RatesTableComponent implements OnInit, OnDestroy {
         res => {
           this.isLoading = false;
           this.unCheckAll = false;
+          this.checkedData = [];
           this.msgDetails = {msg: 'Copy Rates ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         },
         err => {
@@ -99,8 +96,7 @@ export class RatesTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  onChecked(item: RatesModel, ev, index: number): void{
-    const idx = this.currentPage['page'] * this.currentPage['rows'] + index || index;
+  onChecked(item: RatesModel, ev, idx: number): void{
     if(ev.target.checked) {
       this.checkedData.push({checkedId: item.ratesId, index: idx});
     } else {
@@ -113,7 +109,6 @@ export class RatesTableComponent implements OnInit, OnDestroy {
      this.rateService.getAllRates().subscribe(
       (res: RatesModel[]) => {
         this.allRates = res;
-        this.onPageChange(this.currentPage);
         this.isLoading = false;
       },
       err => {
@@ -122,25 +117,6 @@ export class RatesTableComponent implements OnInit, OnDestroy {
       }
      );
    }
-   
-
-  onPageChange(ev): void {
-    this.currentPage = ev;
-    if(ev.page * ev.rows >= this.allRates.length) {
-      ev.first -= 10;
-    }
-
-    this.shownAllRates = this.allRates.slice(ev.first, ev.first + ev.rows);
-  }
-
-  filterData(search: string): void {
-    if (search.length) {
-      this.shownAllRates = this.commonService.filterAlgorithm(this.allRates, search);
-    } else {
-      this.shownAllRates = this.allRates;
-      this.onPageChange(this.currentPage);
-    }
-  }
 
   ngOnDestroy() {
     this.sub$.unsubscribe();

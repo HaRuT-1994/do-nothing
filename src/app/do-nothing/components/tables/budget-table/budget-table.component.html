@@ -3,41 +3,36 @@
 <app-loading *ngIf="isLoading"></app-loading>
 <main>
   <app-control-tables (copyTriggered)="copyBudgets()"></app-control-tables>
-  <table [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
-    <!-- <caption>Config - Budget</caption> -->
-    <thead>
-      <tr>
-        <th>Budget Name</th>
-        <th>Scenario Name</th>
-        <th>Budget Source</th>
-        <th>Exceeded Allowance</th>
-        <th colspan="3">
-          <input type="text" placeholder="Search" (input)="filterData($event.target.value)">
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let data of shownAllBudgets; let i = index">
-        <td [attr.title]="data.BudgetName">{{data.budgetName}}</td>
-        <td [attr.title]="data.ScenarioName">{{data.scenario.value}}</td>
-        <td [attr.title]="data.BudgetSource">{{data.budgetSource}}</td>
-        <td [attr.title]="data.ExceedanceAllowance">{{data.exceedanceAllowance}}</td>
-        <td class="buttonEffect" (click)="onEditRow(data, i)">
-          <span class="edit">Edit</span>
-        </td>
-        <td class="buttonEffect" (click)="onDeleteRow(data.budgetId)">
-          <span class="delete">Delete</span>
-        </td>
-        <td>
-          <input class="checkbox" type="checkbox" [checked]="unCheckAll" (change)="onChecked(data, $event, i)">
-        </td>
-      </tr>
-      <tr *ngIf="allBudgets?.length > 10">
-        <td colspan="20">
-          <p-paginator [rows]="10" [totalRecords]="allBudgets?.length" [rowsPerPageOptions]="[10,20,30]"
-          (onPageChange)="onPageChange($event)"></p-paginator>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <p-table #dt [value]="allBudgets" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,20,30]"
+  [globalFilterFields]="['budgetName','scenario.value', 'budgetSource', 'exceedanceAllowance']"
+    [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
+    <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="scenario.value">Scenario Name<p-sortIcon field="scenario.value"></p-sortIcon></th>
+          <th pSortableColumn="budgetName">Budget Name<p-sortIcon field="budgetName"></p-sortIcon></th>
+          <th pSortableColumn="budgetSource">Budget Source<p-sortIcon field="budgetSource"></p-sortIcon></th>
+          <th pSortableColumn="exceedanceAllowance">Exceeded Allowance<p-sortIcon field="exceedanceAllowance"></p-sortIcon></th>
+          <th colspan="3">
+            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search" />
+          </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-data let-i="rowIndex">
+        <tr>
+          <td [attr.title]="data.ScenarioName">{{data.scenario.value}}</td>
+          <td [attr.title]="data.BudgetName">{{data.budgetName}}</td>
+          <td [attr.title]="data.BudgetSource">{{data.budgetSource}}</td>
+          <td [attr.title]="data.ExceedanceAllowance">{{data.exceedanceAllowance}}</td>
+          <td class="buttonEffect" (click)="onEditRow(data, i)">
+            <span class="edit">Edit</span>
+          </td>
+          <td class="buttonEffect" (click)="onDeleteRow(data.budgetId)">
+            <span class="delete">Delete</span>
+          </td>
+          <td>
+            <input class="checkbox" type="checkbox" [checked]="unCheckAll" (change)="onChecked(data, $event, i)">
+          </td>
+        </tr> 
+    </ng-template>
+  </p-table>
 </main>

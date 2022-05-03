@@ -20,8 +20,6 @@ export class ListValuesTableComponent implements OnInit, OnDestroy {
   msgDetails: MsgDetails;
   allListValues: ListValuesModel[] = [];
   unCheckAll: boolean;
-  shownAllListValues: ListValuesModel[] = [];
-  private currentPage = {first: 0, rows: 10};
   private index = 0;
   private sub$: Subscription;
   private checkedData: CheckedDataModel[] = [];
@@ -38,13 +36,12 @@ export class ListValuesTableComponent implements OnInit, OnDestroy {
         this.getAllListValues();
       } else {
         this.allListValues[this.index] = res.value;
-        this.onPageChange(this.currentPage);
       }
     })
    }
 
-  onEditRow(data: ListValuesModel, i: number): void {
-    this.index = this.currentPage['page'] * this.currentPage['rows'] + i || i;
+  onEditRow(data: ListValuesModel, idx: number): void {
+    this.index = idx;
     this.listValluesService.onEditRow(data);
     this.commonService.show(ConfigListValuesComponent);
   }
@@ -60,7 +57,6 @@ export class ListValuesTableComponent implements OnInit, OnDestroy {
           () => {
             this.isLoading = false;
             this.allListValues = this.allListValues.filter( (val) => val['itemId'] !== id);
-            this.onPageChange(this.currentPage);
             this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
           },
           () => {
@@ -74,7 +70,7 @@ export class ListValuesTableComponent implements OnInit, OnDestroy {
 
   copyListValues(): void {
     if(!this.checkedData.length) {
-      this.msgDetails = {msg: 'Please check config', severity: Severity.WARNING};
+      this.msgDetails = {msg: Message.WARNING_COPY, severity: Severity.WARNING};
     } else {
       this.isLoading = true;
       setTimeout(() => {
@@ -86,6 +82,7 @@ export class ListValuesTableComponent implements OnInit, OnDestroy {
         res => {
           this.isLoading = false;
           this.unCheckAll = false;
+          this.checkedData = [];
           this.msgDetails = {msg: 'Copy List Values ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         },
         err => {
@@ -96,8 +93,7 @@ export class ListValuesTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  onChecked(item: ListValuesModel, ev, index: number): void{
-    const idx = this.currentPage['page'] * this.currentPage['rows'] + index || index;
+  onChecked(item: ListValuesModel, ev, idx: number): void{
     if(ev.target.checked) {
       this.checkedData.push({checkedId: item.itemId, index: idx});
     } else {
@@ -105,13 +101,11 @@ export class ListValuesTableComponent implements OnInit, OnDestroy {
     }
   }
 
-
   private getAllListValues(): void {
     this.isLoading = true;
     this.listValluesService.getAllListValues().subscribe(
       (res: ListValuesModel[]) => {
         this.allListValues = res;
-        this.onPageChange(this.currentPage);
         this.isLoading = false;
       },
       err => {
@@ -119,24 +113,6 @@ export class ListValuesTableComponent implements OnInit, OnDestroy {
         this.isLoading = false;
       }
     );
-  }
-
-  onPageChange(ev): void {
-    this.currentPage = ev;
-    if(ev.page * ev.rows >= this.allListValues.length) {
-      ev.first -= 10;
-    }
-
-    this.shownAllListValues = this.allListValues.slice(ev.first, ev.first + ev.rows);
-  }
-
-  filterData(search: string): void {
-    if (search.length) {
-      this.shownAllListValues = this.commonService.filterAlgorithm(this.allListValues, search);
-    } else {
-      this.shownAllListValues = this.allListValues;
-      this.onPageChange(this.currentPage);
-    }
   }
 
   ngOnDestroy(): void {

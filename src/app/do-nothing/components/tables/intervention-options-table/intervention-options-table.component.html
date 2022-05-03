@@ -3,53 +3,49 @@
 <app-loading *ngIf="isLoading"></app-loading>
 <main>
   <app-control-tables (copyTriggered)="copyIntOptions()"></app-control-tables>
-  <table [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
-    <!-- <caption>Config - Intervention Options</caption> -->
-    <thead>
-      <tr>
-        <th>Scenario</th>
-        <th>Cohort</th>
-        <th>Intervention</th>
-        <th>Available</th>
-        <th>Reset</th>
-        <th>Apply When Mlc <</th>
-        <th>Exclude If Crc</th>
-        <th>forceReplace</th>
-        <th>whenAlc</th>
-        <th>replaceWithCohortId</th>
-        <th colspan="3">
-          <input type="text" placeholder="Search" (input)="filterData($event.target.value)">
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let data of shownAllInterventionOptions; let i = index">
-        <td [attr.title]="data.scenario.value">{{data.scenario.value}}</td>
-        <td [attr.title]="data.cohort.value">{{data.cohort.value}}</td>
-        <td [attr.title]="data.intervention">{{data.intervention}}</td>
-        <td [attr.title]="data.available">{{data.available}}</td>
-        <td [attr.title]="data.reset">{{data.reset}}</td>
-        <td [attr.title]="data.applyWhenMlc">{{data.applyWhenMlc}}</td>
-        <td [attr.title]="data.excludeIfCrc">{{data.excludeIfCrc}}</td>
-        <td [attr.title]="data.forceReplace">{{data.forceReplace}}</td>
-        <td [attr.title]="data.whenAlc">{{data.whenAlc}}</td>
-        <td [attr.title]="data.replaceWithCohortId">{{data.replaceWithCohortId}}</td>
-        <td class="buttonEffect" (click)="onEditRow(data, i)">
-          <span class="edit">Edit</span>
-        </td>
-        <td class="buttonEffect" (click)="onDeleteRow(data.interventionId)">
-          <span class="delete">Delete</span>
-        </td>
-        <td>
-          <input class="checkbox" type="checkbox" [checked]="unCheckAll" (change)="onChecked(data, $event, i)">
-        </td>
-      </tr>
-      <tr *ngIf="allInterventionOptions.length > 10">
-        <td colspan="13">
-          <p-paginator [rows]="10" [totalRecords]="allInterventionOptions.length" [rowsPerPageOptions]="[10,20,30]"
-          (onPageChange)="onPageChange($event)"></p-paginator>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <p-table #dt [value]="allInterventionOptions" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,20,30]"
+  [globalFilterFields]="['scenario.value','cohort.value', 'intervention', 'available', 'reset', 'applyWhenMlc', 'excludeIfCrc', 'forceReplace', 'whenAlc', 'replaceWithCohortId']"
+    [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
+    <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="scenario.value">Scenario<p-sortIcon field="scenario.value"></p-sortIcon></th>
+          <th pSortableColumn="cohort.value">Cohort<p-sortIcon field="cohort.value"></p-sortIcon></th>
+          <th pSortableColumn="intervention">Intervention<p-sortIcon field="intervention"></p-sortIcon></th>
+          <th pSortableColumn="available">Available<p-sortIcon field="available"></p-sortIcon></th>
+          <th pSortableColumn="reset">Reset<p-sortIcon field="reset"></p-sortIcon></th>
+          <th pSortableColumn="applyWhenMlc">Apply When Mlc <<p-sortIcon field="applyWhenMlc"></p-sortIcon></th>
+          <th pSortableColumn="excludeIfCrc">Exclude If Crc<p-sortIcon field="excludeIfCrc"></p-sortIcon></th>
+          <th pSortableColumn="forceReplace">Force Replace<p-sortIcon field="forceReplace"></p-sortIcon></th>
+          <th pSortableColumn="whenAlc">WhenAlc<p-sortIcon field="whenAlc"></p-sortIcon></th>
+          <th pSortableColumn="replaceWithCohortId">Replace With CohortId<p-sortIcon field="replaceWithCohortId"></p-sortIcon></th>
+          <th colspan="3">
+            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search" />
+          </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-data let-i="rowIndex">
+        <tr>
+          <td [attr.title]="data.scenario.value">{{data.scenario.value}}</td>
+          <td [attr.title]="data.cohort.value">{{data.cohort.value}}</td>
+          <td [attr.title]="data.intervention">{{data.intervention}}</td>
+          <td [attr.title]="data.available">{{data.available}}</td>
+          <td [attr.title]="data.reset">{{data.reset}}</td>
+          <td [attr.title]="data.applyWhenMlc">{{data.applyWhenMlc}}</td>
+          <td [attr.title]="data.excludeIfCrc">{{data.excludeIfCrc}}</td>
+          <td [attr.title]="data.forceReplace">{{data.forceReplace}}</td>
+          <td [attr.title]="data.whenAlc">{{data.whenAlc}}</td>
+          <td [attr.title]="data.replaceWithCohortId">{{data.replaceWithCohortId}}</td>
+          <td class="buttonEffect" (click)="onEditRow(data, i)">
+            <span class="edit">Edit</span>
+          </td>
+          <td class="buttonEffect" (click)="onDeleteRow(data.interventionId)">
+            <span class="delete">Delete</span>
+          </td>
+          <td>
+            <input class="checkbox" type="checkbox" [checked]="unCheckAll" (change)="onChecked(data, $event, i)">
+          </td>
+        </tr> 
+    </ng-template>
+  </p-table>
 </main>
+

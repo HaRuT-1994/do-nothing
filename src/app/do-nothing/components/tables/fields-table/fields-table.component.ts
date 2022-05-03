@@ -19,9 +19,7 @@ export class FieldsTableComponent implements OnInit, OnDestroy {
   isLoading: boolean;
   msgDetails: MsgDetails;
   allFields: FieldModel[] = [];
-  shownAllFields: FieldModel[] = [];
   unCheckAll: boolean;
-  private currentPage = {first: 0, rows: 10};
   private index = 0;
   private sub$: Subscription;
   private checkedData: CheckedDataModel[] = [];
@@ -38,13 +36,12 @@ export class FieldsTableComponent implements OnInit, OnDestroy {
         this.getAllFields();
       } else {
         this.allFields[this.index] = res.value;
-        this.onPageChange(this.currentPage);
       }
     })
   }
 
-  onEditRow(data: FieldModel, i: number): void {
-    this.index = this.currentPage['page'] * this.currentPage['rows'] + i || i;
+  onEditRow(data: FieldModel, idx: number): void {
+    this.index = idx;
     this.fieldService.onEditRow(data);
     this.commonService.show(ConfigFieldsComponent);
   }
@@ -60,7 +57,6 @@ export class FieldsTableComponent implements OnInit, OnDestroy {
           () => {
             this.isLoading = false;
             this.allFields = this.allFields.filter( (val) => val['id'] !== id);
-            this.onPageChange(this.currentPage);
             this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
           },
           () => {
@@ -74,7 +70,7 @@ export class FieldsTableComponent implements OnInit, OnDestroy {
 
   copyFields(): void {
     if(!this.checkedData.length) {
-      this.msgDetails = {msg: 'Please check config', severity: Severity.WARNING};
+      this.msgDetails = {msg: Message.WARNING_COPY, severity: Severity.WARNING};
     } else {
       this.isLoading = true;
       setTimeout(() => {
@@ -86,6 +82,7 @@ export class FieldsTableComponent implements OnInit, OnDestroy {
         res => {
           this.isLoading = false;
           this.unCheckAll = false;
+          this.checkedData = [];
           this.msgDetails = {msg: 'Copy Fields ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         },
         err => {
@@ -96,8 +93,7 @@ export class FieldsTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  onChecked(item: FieldModel, ev, index: number): void{
-    const idx = this.currentPage['page'] * this.currentPage['rows'] + index || index;
+  onChecked(item: FieldModel, ev, idx: number): void{
     if(ev.target.checked) {
       this.checkedData.push({checkedId: item.id, index: idx});
     } else {
@@ -110,7 +106,6 @@ export class FieldsTableComponent implements OnInit, OnDestroy {
     this.fieldService.getAllFields().subscribe(
       (res: FieldModel[]) => {
         this.allFields = res;
-        this.onPageChange(this.currentPage);
         this.isLoading = false;
       },
       err => {
@@ -118,24 +113,6 @@ export class FieldsTableComponent implements OnInit, OnDestroy {
         this.isLoading = false;
       }
     );
-  }
-
-  onPageChange(ev) {
-    this.currentPage = ev;
-    if(ev.page * ev.rows >= this.allFields.length) {
-      ev.first -= 10;
-    }
-
-    this.shownAllFields = this.allFields.slice(ev.first, ev.first + ev.rows);
-  }
-
-  filterData(search: string): void {
-    if (search.length) {
-      this.shownAllFields = this.commonService.filterAlgorithm(this.allFields, search);
-    } else {
-      this.shownAllFields = this.allFields;
-      this.onPageChange(this.currentPage);
-    }
   }
 
   ngOnDestroy() {

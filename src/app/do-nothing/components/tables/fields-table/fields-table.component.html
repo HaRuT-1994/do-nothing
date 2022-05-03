@@ -3,43 +3,38 @@
 <app-loading *ngIf="isLoading"></app-loading>
 <main>
   <app-control-tables (copyTriggered)="copyFields()"></app-control-tables>
-  <table [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
-    <!-- <caption>Config - Fields</caption> -->
-    <thead>
-      <tr>
-        <th>Tab</th>
-        <th>Internal Field Reference</th>
-        <th>Field Name In Sheet</th>
-        <th>Column</th>
-        <th>Mandatory For Model</th>
-        <th colspan="3">
-          <input type="text" placeholder="Search" (input)="filterData($event.target.value)">
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let data of shownAllFields; let i = index">
-        <td [attr.title]="data.tab">{{data.tab}}</td>
-        <td [attr.title]="data.internalFieldReference">{{data.internalFieldReference}}</td>
-        <td [attr.title]="data.fieldNameInSheet">{{data.fieldNameInSheet}}</td>
-        <td [attr.title]="data.column">{{data.column}}</td>
-        <td [attr.title]="data.mandatoryForModel">{{data.mandatoryForModel}}</td>
-        <td class="buttonEffect" (click)="onEditRow(data, i)">
-          <span class="edit">Edit</span>
-        </td>
-        <td class="buttonEffect" (click)="onDeleteRow(data.id)">
-          <span class="delete">Delete</span>
-        </td>
-        <td>
-          <input class="checkbox" type="checkbox" [checked]="unCheckAll" (change)="onChecked(data, $event, i)">
-        </td>
-      </tr>
-      <tr *ngIf="allFields.length > 10">
-        <td colspan="8">
-          <p-paginator [rows]="10" [totalRecords]="allFields.length" [rowsPerPageOptions]="[10,20,30]"
-          (onPageChange)="onPageChange($event)"></p-paginator>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <p-table #dt [value]="allFields" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,20,30]"
+  [globalFilterFields]="['tab','internalFieldReference', 'fieldNameInSheet', 'column', 'mandatoryForModel']"
+    [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
+    <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="tab">Tab<p-sortIcon field="tab"></p-sortIcon></th>
+          <th pSortableColumn="internalFieldReference">Internal Field Reference<p-sortIcon field="internalFieldReference"></p-sortIcon></th>
+          <th pSortableColumn="fieldNameInSheet">Field Name In Sheet<p-sortIcon field="fieldNameInSheet"></p-sortIcon></th>
+          <th pSortableColumn="column">Column<p-sortIcon field="column"></p-sortIcon></th>
+          <th pSortableColumn="mandatoryForModel">Mandatory For Model<p-sortIcon field="mandatoryForModel"></p-sortIcon></th>
+          <th colspan="3">
+            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search" />
+          </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-data let-i="rowIndex">
+        <tr>
+          <td [attr.title]="data.tab">{{data.tab}}</td>
+          <td [attr.title]="data.internalFieldReference">{{data.internalFieldReference}}</td>
+          <td [attr.title]="data.fieldNameInSheet">{{data.fieldNameInSheet}}</td>
+          <td [attr.title]="data.column">{{data.column}}</td>
+          <td [attr.title]="data.mandatoryForModel">{{data.mandatoryForModel}}</td>
+          <td class="buttonEffect" (click)="onEditRow(data, i)">
+            <span class="edit">Edit</span>
+          </td>
+          <td class="buttonEffect" (click)="onDeleteRow(data.id)">
+            <span class="delete">Delete</span>
+          </td>
+          <td>
+            <input class="checkbox" type="checkbox" [checked]="unCheckAll" (change)="onChecked(data, $event, i)">
+          </td>
+        </tr> 
+    </ng-template>
+  </p-table>
 </main>

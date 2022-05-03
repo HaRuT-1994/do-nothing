@@ -19,9 +19,7 @@ export class ScenariosTableComponent implements OnInit, OnDestroy {
   isLoading: boolean;
   msgDetails: MsgDetails;
   allScenarios: ScenarioModel[] = [];
-  shownAllScenarios: ScenarioModel[] = [];
   unCheckAll: boolean;
-  private currentPage = {first: 0, rows: 10};
   private index = 0;
   private sub$: Subscription;
   private checkedData: CheckedDataModel[] = [];
@@ -38,13 +36,12 @@ export class ScenariosTableComponent implements OnInit, OnDestroy {
         this.getAllScenarios();
       } else {
         this.allScenarios[this.index] = res.value;
-        this.onPageChange(this.currentPage);
       }
     })
   }
 
-  onEditRow(data: ScenarioModel, i: number): void {
-    this.index = this.currentPage['page'] * this.currentPage['rows'] + i || i;
+  onEditRow(data: ScenarioModel, idx: number): void {
+    this.index = idx;
     this.scenarioService.onEditRow(data);
     this.commonService.show(ConfigScenariosComponent);
   }
@@ -60,7 +57,6 @@ export class ScenariosTableComponent implements OnInit, OnDestroy {
           () => {
             this.isLoading = false;
             this.allScenarios = this.allScenarios.filter( (val) => val['scenarioId'] !== id);
-            this.onPageChange(this.currentPage);
             this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
           },
           () => {
@@ -74,7 +70,7 @@ export class ScenariosTableComponent implements OnInit, OnDestroy {
 
   copyScenarios(): void {
     if(!this.checkedData.length) {
-      this.msgDetails = {msg: 'Please check config', severity: Severity.WARNING};
+      this.msgDetails = {msg: Message.WARNING_COPY, severity: Severity.WARNING};
     } else {
       this.isLoading = true;
       setTimeout(() => {
@@ -86,6 +82,7 @@ export class ScenariosTableComponent implements OnInit, OnDestroy {
         res => {
           this.isLoading = false;
           this.unCheckAll = false;
+          this.checkedData = [];
           this.msgDetails = {msg: 'Copy Scenarios ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         },
         err => {
@@ -96,8 +93,7 @@ export class ScenariosTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  onChecked(item: ScenarioModel, ev, index: number): void{
-    const idx = this.currentPage['page'] * this.currentPage['rows'] + index || index;
+  onChecked(item: ScenarioModel, ev, idx: number): void{
     if(ev.target.checked) {
       this.checkedData.push({checkedId: item.scenarioId, index: idx});
     } else {
@@ -110,7 +106,6 @@ export class ScenariosTableComponent implements OnInit, OnDestroy {
     this.scenarioService.getAllScenarios().subscribe(
       (res: ScenarioModel[]) => {
         this.allScenarios = res;
-        this.onPageChange(this.currentPage);
         this.isLoading = false;
       },
       err => {
@@ -118,24 +113,6 @@ export class ScenariosTableComponent implements OnInit, OnDestroy {
         this.isLoading = false;
       }
     );
-  }
-
-  onPageChange(ev): void {
-    this.currentPage = ev;
-    if(ev.page * ev.rows >= this.allScenarios.length) {
-      ev.first -= 10;
-    }
-
-    this.shownAllScenarios = this.allScenarios.slice(ev.first, ev.first + ev.rows);
-  }
-
-  filterData(search: string): void {
-    if (search.length) {
-      this.shownAllScenarios = this.commonService.filterAlgorithm(this.allScenarios, search);
-    } else {
-      this.shownAllScenarios = this.allScenarios;
-      this.onPageChange(this.currentPage);
-    }
   }
 
   ngOnDestroy() {

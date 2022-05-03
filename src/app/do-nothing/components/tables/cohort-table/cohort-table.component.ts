@@ -16,14 +16,10 @@ import { CheckedDataModel } from 'src/app/do-nothing/models/checkedData.interfac
   styleUrls: ['./cohort-table.component.scss']
 })
 export class CohortTableComponent implements OnInit, OnDestroy {
-  totalRecords: number;
-
   isLoading: boolean;
   msgDetails: MsgDetails;
   allCohorts: CohortModel[] = [];
-  shownAllCohorts: CohortModel[] = [];
   unCheckAll: boolean;
-  // private currentPage = {first: 0, rows: 10};
   private index = 0;
   private sub$: Subscription;
   private checkedData: CheckedDataModel[] = [];
@@ -40,7 +36,6 @@ export class CohortTableComponent implements OnInit, OnDestroy {
         this.getAllCohorts();
       } else {
         this.allCohorts[this.index] = res.value;
-        // this.onPageChange(this.currentPage);
       }
     })
   }
@@ -62,7 +57,6 @@ export class CohortTableComponent implements OnInit, OnDestroy {
           () => {
             this.isLoading = false;
             this.allCohorts = this.allCohorts.filter( (val) => val['cohortId'] !== id);
-            // this.onPageChange(this.currentPage);
             this.msgDetails = {msg: Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
           },
           () => {
@@ -88,6 +82,7 @@ export class CohortTableComponent implements OnInit, OnDestroy {
         res => {
           this.isLoading = false;
           this.unCheckAll = false;
+          this.checkedData = [];
           this.msgDetails = {msg: 'Copy Cohorts ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         },
         err => {
@@ -99,9 +94,6 @@ export class CohortTableComponent implements OnInit, OnDestroy {
   }
 
   onChecked(item: CohortModel, ev, idx: number): void{
-    // console.log(index, item, ev );
-    
-    //const idx = this.currentPage['page'] * this.currentPage['rows'] + index || index;
     if(ev.target.checked) {
       this.checkedData.push({checkedId: item.cohortId, index: idx});
     } else {
@@ -109,39 +101,19 @@ export class CohortTableComponent implements OnInit, OnDestroy {
     }
   }
 
-private getAllCohorts(): void {
-  this.isLoading = true;
-  this.cohortService.getAllCohorts().subscribe(
-    (res: CohortModel[]) => {
-      this.allCohorts = res;
-      this.totalRecords = res.length;
-      // this.onPageChange(this.currentPage);
-      this.isLoading = false;
-    },
-    err => {
-      this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
-      this.isLoading = false;
-    }
-  );
-}
-
-  // onPageChange(ev): void {
-  //   this.currentPage = ev;
-  //   if(ev.page * ev.rows >= this.allCohorts.length) {
-  //     ev.first -= 10;
-  //   }
-
-  //   this.shownAllCohorts = this.allCohorts.slice(ev.first, ev.first + ev.rows);
-  // }
-
-  // filterData(search: string): void {
-  //   if (search.length) {
-  //     this.shownAllCohorts = this.commonService.filterAlgorithm(this.allCohorts, search);
-  //   } else {
-  //     this.shownAllCohorts = this.allCohorts;
-  //     this.onPageChange(this.currentPage);
-  //   }
-  // }
+  private getAllCohorts(): void {
+    this.isLoading = true;
+    this.cohortService.getAllCohorts().subscribe(
+      (res: CohortModel[]) => {
+        this.allCohorts = res;
+        this.isLoading = false;
+      },
+      err => {
+        this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
+        this.isLoading = false;
+      }
+    );
+  }
 
   ngOnDestroy(): void {
     this.sub$.unsubscribe();

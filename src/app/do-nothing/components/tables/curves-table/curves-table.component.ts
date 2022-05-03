@@ -20,9 +20,7 @@ export class CurvesTableComponent implements OnInit, OnDestroy {
   isLoading: boolean;
   msgDetails: MsgDetails;
   allCurves: CurveModel[] = [];
-  shownAllCurves: CurveModel[] = [];
   unCheckAll: boolean;
-  private currentPage = {first: 0, rows: 10};
   private index = 0;
   private sub$: Subscription;
   private checkedData: CheckedDataModel[] = [];
@@ -40,13 +38,12 @@ export class CurvesTableComponent implements OnInit, OnDestroy {
         this.getAllCurves();
       } else {
         this.allCurves[this.index] = res.value;
-        this.onPageChange(this.currentPage);
       }
     })
   }
 
-  onEditRow(data: CurveModel, i: number): void {
-    this.index = this.currentPage['page'] * this.currentPage['rows'] + i || i;
+  onEditRow(data: CurveModel, idx: number): void {
+    this.index = idx;
     this.curvesService.onEditRow(data);
     this.commonService.show(ConfigCurvesComponent);
   }
@@ -62,7 +59,6 @@ export class CurvesTableComponent implements OnInit, OnDestroy {
           () => {
             this.isLoading = false;
             this.allCurves = this.allCurves.filter( (val) => val['id'] !== id);
-            this.onPageChange(this.currentPage);
             this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
           },
           () => {
@@ -76,7 +72,7 @@ export class CurvesTableComponent implements OnInit, OnDestroy {
 
   copyCurves(): void {
     if(!this.checkedData.length) {
-      this.msgDetails = {msg: 'Please check config', severity: Severity.WARNING};
+      this.msgDetails = {msg: Message.WARNING_COPY, severity: Severity.WARNING};
     } else {
       this.isLoading = true;
       setTimeout(() => {
@@ -88,6 +84,7 @@ export class CurvesTableComponent implements OnInit, OnDestroy {
         res => {
           this.isLoading = false;
           this.unCheckAll = false;
+          this.checkedData = [];
           this.msgDetails = {msg: 'Copy Curves ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         },
         err => {
@@ -98,8 +95,7 @@ export class CurvesTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  onChecked(item: CurveModel, ev, index: number): void{
-    const idx = this.currentPage['page'] * this.currentPage['rows'] + index || index;
+  onChecked(item: CurveModel, ev, idx: number): void{
     if(ev.target.checked) {
       this.checkedData.push({checkedId: item.id, index: idx});
     } else {
@@ -112,7 +108,6 @@ export class CurvesTableComponent implements OnInit, OnDestroy {
     this.curvesService.getAllCurves().subscribe(
       (res: CurveModel[]) => {
         this.allCurves = res;
-        this.onPageChange(this.currentPage);
         this.isLoading = false;
       },
       err => {
@@ -120,24 +115,6 @@ export class CurvesTableComponent implements OnInit, OnDestroy {
         this.isLoading = false;
       }
     );
-  }
-
-  onPageChange(ev): void {
-    this.currentPage = ev;
-    if(ev.page * ev.rows >= this.allCurves.length) {
-      ev.first -= 10;
-    }
-
-    this.shownAllCurves = this.allCurves.slice(ev.first, ev.first + ev.rows);
-  }
-
-  filterData(search: string): void {
-    if (search.length) {
-      this.shownAllCurves = this.commonService.filterAlgorithm(this.allCurves, search);
-    } else {
-      this.shownAllCurves = this.allCurves;
-      this.onPageChange(this.currentPage);
-    }
   }
 
   ngOnDestroy(): void {

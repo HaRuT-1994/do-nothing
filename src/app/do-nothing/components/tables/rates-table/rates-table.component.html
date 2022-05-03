@@ -3,59 +3,54 @@
 <app-loading *ngIf="isLoading"></app-loading>
 <main>
   <app-control-tables (copyTriggered)="copyRates()"></app-control-tables>
-  <table [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
-    <!-- <caption>Config - Rates</caption> -->
-    <thead>
-      <tr>
-        <th>Scenario</th>
-        <th>Cohort</th>
-        <th>Intervention</th>
-        <th>Geography</th>
-        <th>Budget Source</th>
-        <th>Value</th>
-        <th>Rate Type</th>
-        <th>Minimum Cost</th>
-        <th>Range Type</th>
-        <th>From1</th>
-        <th>Value1</th>
-        <th>From2</th>
-        <th>Value2</th>
-        <th colspan="3">
-          <input type="text" placeholder="Search" (input)="filterData($event.target.value)">
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let data of shownAllRates; let i = index">
-        <td [attr.title]="data.scenario.value">{{data.scenario.value}}</td>
-        <td [attr.title]="data.cohort.value">{{data.cohort.value}}</td>
-        <td [attr.title]="data.intervention">{{data.intervention}}</td>
-        <td [attr.title]="data.geography">{{data.geography}}</td>
-        <td [attr.title]="data.budgetSource">{{data.budgetSource}}</td>
-        <td [attr.title]="data.value">{{data.value}}</td>
-        <td [attr.title]="data.rateType">{{data.rateType}}</td>
-        <td [attr.title]="data.minimumCost">{{data.minimumCost}}</td>
-        <td [attr.title]="data.rangeType">{{data.rangeType}}</td>
-        <td [attr.title]="data.from1">{{data.from1}}</td>
-        <td [attr.title]="data.value1">{{data.value1}}</td>
-        <td [attr.title]="data.from2">{{data.from2}}</td>
-        <td [attr.title]="data.value2">{{data.value2}}</td>
-        <td class="buttonEffect" (click)="onEditRow(data, i)">
-          <span class="edit">Edit</span>
-        </td>
-        <td class="buttonEffect" (click)="onDeleteRow(data.ratesId)">
-          <span class="delete">Delete</span>
-        </td>
-        <td>
-          <input class="checkbox" type="checkbox" [checked]="unCheckAll" (change)="onChecked(data, $event, i)">
-        </td>
-      </tr>
-      <tr *ngIf="allRates.length > 10">
-        <td colspan="15">
-          <p-paginator [rows]="10" [totalRecords]="allRates.length" [rowsPerPageOptions]="[10,20,30]"
-          (onPageChange)="onPageChange($event)"></p-paginator>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <p-table #dt [value]="allRates" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,20,30]"
+  [globalFilterFields]="['scenario.value','cohort.value', 'intervention', 'geography', 'budgetSource', 'value', 'rateType', 'minimumCost', 'rangeType', 'from1', 'value1', 'from2', 'value2']"
+    [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
+    <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="scenario.value">Scenario<p-sortIcon field="scenario.value"></p-sortIcon></th>
+          <th pSortableColumn="cohort.value">Cohort<p-sortIcon field="cohort.value"></p-sortIcon></th>
+          <th pSortableColumn="intervention">Intervention<p-sortIcon field="intervention"></p-sortIcon></th>
+          <th pSortableColumn="geography">Geography<p-sortIcon field="geography"></p-sortIcon></th>
+          <th pSortableColumn="budgetSource">Budget Source<p-sortIcon field="budgetSource"></p-sortIcon></th>
+          <th pSortableColumn="value">Value<p-sortIcon field="value"></p-sortIcon></th>
+          <th pSortableColumn="rateType">Rate Type<p-sortIcon field="rateType"></p-sortIcon></th>
+          <th pSortableColumn="minimumCost">Minimum Cost<p-sortIcon field="minimumCost"></p-sortIcon></th>
+          <th pSortableColumn="rangeType">Range Type<p-sortIcon field="rangeType"></p-sortIcon></th>
+          <th pSortableColumn="from1">From1<p-sortIcon field="from1"></p-sortIcon></th>
+          <th pSortableColumn="value1">Value1<p-sortIcon field="value1"></p-sortIcon></th>
+          <th pSortableColumn="from2">From2<p-sortIcon field="from2"></p-sortIcon></th>
+          <th pSortableColumn="value2">Value2<p-sortIcon field="value2"></p-sortIcon></th>
+          <th colspan="3">
+            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search" />
+          </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-data let-i="rowIndex">
+        <tr>
+          <td [attr.title]="data.scenario.value">{{data.scenario.value}}</td>
+          <td [attr.title]="data.cohort.value">{{data.cohort.value}}</td>
+          <td [attr.title]="data.intervention">{{data.intervention}}</td>
+          <td [attr.title]="data.geography">{{data.geography}}</td>
+          <td [attr.title]="data.budgetSource">{{data.budgetSource}}</td>
+          <td [attr.title]="data.value">{{data.value}}</td>
+          <td [attr.title]="data.rateType">{{data.rateType}}</td>
+          <td [attr.title]="data.minimumCost">{{data.minimumCost}}</td>
+          <td [attr.title]="data.rangeType">{{data.rangeType}}</td>
+          <td [attr.title]="data.from1">{{data.from1}}</td>
+          <td [attr.title]="data.value1">{{data.value1}}</td>
+          <td [attr.title]="data.from2">{{data.from2}}</td>
+          <td [attr.title]="data.value2">{{data.value2}}</td>
+          <td class="buttonEffect" (click)="onEditRow(data, i)">
+            <span class="edit">Edit</span>
+          </td>
+          <td class="buttonEffect" (click)="onDeleteRow(data.ratesId)">
+            <span class="delete">Delete</span>
+          </td>
+          <td>
+            <input class="checkbox" type="checkbox" [checked]="unCheckAll" (change)="onChecked(data, $event, i)">
+          </td>
+        </tr> 
+    </ng-template>
+  </p-table>
 </main>
