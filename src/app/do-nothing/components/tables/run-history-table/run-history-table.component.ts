@@ -11,8 +11,6 @@ import { RunHistoryService } from 'src/app/do-nothing/services/runHistroy.servic
 export class RunHistoryTableComponent implements OnInit {
   public isLoading: boolean;
   public allRunHistory: RunHistoryModel[] = [];
-  public shownAllRunHistory: RunHistoryModel[] = [];
-  private currentPage = {first: 0, rows: 10};
 
   constructor( private runHistoryService: RunHistoryService ) { }
 
@@ -21,7 +19,6 @@ export class RunHistoryTableComponent implements OnInit {
      this.runHistoryService.getAllRiskBasedDecisions().subscribe(
       (res: RunHistoryModel[]) => {
         this.allRunHistory = res;
-        this.onPageChange(this.currentPage);
         this.isLoading = false;
       },
       err => {
@@ -29,13 +26,4 @@ export class RunHistoryTableComponent implements OnInit {
       }
      );
    }
-
-  onPageChange(ev): void {
-    this.currentPage = ev;
-    if(ev.page * ev.rows >= this.allRunHistory.length) {
-      ev.first -= 10;
-    }
-
-    this.shownAllRunHistory = this.allRunHistory.slice(ev.first, ev.first + ev.rows);
-  }
 }

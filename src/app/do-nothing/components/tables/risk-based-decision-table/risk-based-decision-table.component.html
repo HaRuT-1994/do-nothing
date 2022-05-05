@@ -2,7 +2,7 @@
 <p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000"></p-confirmDialog>
 <app-loading *ngIf="isLoading"></app-loading>
 <main>
-  <app-control-tables (copyTriggered)="copyRiskBasedDecisions()"></app-control-tables>
+  <app-control-tables (copyTriggered)="copyRiskBasedDecisions()" (deleteTriggered)="deleteRiskBasedDecisions()"></app-control-tables>
   <p-table #dt [value]="allRiskBasedDecisions" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,20,30]"
   [globalFilterFields]="['scenario.value','cohort.value', 'poF', 'coF', 'risk', 'band', 'intervention', 'frequency']"
     [ngStyle]="isLoading && {'filter': 'blur(4px)'}">

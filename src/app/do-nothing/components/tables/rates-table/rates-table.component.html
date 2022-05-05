@@ -2,7 +2,7 @@
 <p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000"></p-confirmDialog>
 <app-loading *ngIf="isLoading"></app-loading>
 <main>
-  <app-control-tables (copyTriggered)="copyRates()"></app-control-tables>
+  <app-control-tables (copyTriggered)="copyRates()" (deleteTriggered)="deleteRates()"></app-control-tables>
   <p-table #dt [value]="allRates" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,20,30]"
   [globalFilterFields]="['scenario.value','cohort.value', 'intervention', 'geography', 'budgetSource', 'value', 'rateType', 'minimumCost', 'rangeType', 'from1', 'value1', 'from2', 'value2']"
     [ngStyle]="isLoading && {'filter': 'blur(4px)'}">

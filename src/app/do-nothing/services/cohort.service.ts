@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AppConfig } from '../../config/app.config';
 import { CohortModel } from '../models/cohortData.interface';
@@ -13,6 +13,15 @@ export class CohortService {
 
   copyCohorts(data: number[]): Observable<any> {
     return this.http.post<number[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.copyCohorts}`, data);
+  }
+
+  deleteCohorts(data: number[]): Observable<any> {
+    const options = {
+      headers: new HttpHeaders({'content-type': 'application/json'}),
+      body: data
+    }
+  
+    return this.http.delete<any>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.deleteMultiCohorts}`, options);
   }
 
   addCohort(data: any): Observable<ConfigData[]> {

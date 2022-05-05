@@ -1,49 +1,8 @@
-<!-- <alert-message [msgDetails]="msgDetails"></alert-message>
-<p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000"></p-confirmDialog>
-<app-loading *ngIf="isLoading"></app-loading>
-<main>
-  <app-control-tables (copyTriggered)="copyListValues()"></app-control-tables>
-  <table [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
-    <thead>
-      <tr>
-        <th>List</th>
-        <th>List Lookup</th>
-        <th>List Value</th>
-        <th colspan="3">
-          <input type="text" placeholder="Search" (input)="filterData($event.target.value)">
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let data of shownAllListValues; let i = index">
-        <td [attr.title]="data.listId">{{data.listId}}</td>
-        <td [attr.title]="data.listLookup">{{data.listLookup}}</td>
-        <td [attr.title]="data.listValue">{{data.listValue}}</td>
-        <td class="buttonEffect" (click)="onEditRow(data, i)">
-          <span class="edit">Edit</span>
-        </td>
-        <td class="buttonEffect" (click)="onDeleteRow(data.itemId)">
-          <span class="delete">Delete</span>
-        </td>
-        <td>
-          <input class="checkbox" type="checkbox" [checked]="unCheckAll" (change)="onChecked(data, $event, i)">
-        </td>
-      </tr>
-      <tr *ngIf="allListValues.length > 10">
-        <td colspan="6">
-          <p-paginator [rows]="10" [totalRecords]="allListValues.length" [rowsPerPageOptions]="[10,20,30]"
-          (onPageChange)="onPageChange($event)"></p-paginator>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</main> -->
-
 <alert-message [msgDetails]="msgDetails"></alert-message>
 <p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000"></p-confirmDialog>
 <app-loading *ngIf="isLoading"></app-loading>
 <main>
-  <app-control-tables (copyTriggered)="copyListValues()"></app-control-tables>
+  <app-control-tables (copyTriggered)="copyListValues()" (deleteTriggered)="deleteListValues()"></app-control-tables>
   <p-table #dt [value]="allListValues" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,20,30]"
   [globalFilterFields]="['listId','listLookup', 'listValue']"
     [ngStyle]="isLoading && {'filter': 'blur(4px)'}">

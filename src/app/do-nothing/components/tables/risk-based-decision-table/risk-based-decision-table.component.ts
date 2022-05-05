@@ -77,17 +77,38 @@ export class RiskBasedDecisionTableComponent implements OnInit, OnDestroy {
       this.msgDetails = {msg: Message.WARNING_COPY, severity: Severity.WARNING};
     } else {
       this.isLoading = true;
-      setTimeout(() => {
-        this.unCheckAll = undefined;
-      }, 0);
+      setTimeout(() => this.unCheckAll = undefined );
       const configIds = this.checkedData.sort((a, b) => ( a.index - b.index )).map(el => el.checkedId);
 
       this.riskBasedDecisionService.copyRiskBasedDecisions(configIds).subscribe(
         res => {
-          this.isLoading = false;
+          this.getAllRiskBasedDecisions();
           this.unCheckAll = false;
           this.checkedData = [];
           this.msgDetails = {msg: 'Copy Risk Based Decisions ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
+        },
+        err => {
+          this.isLoading = false;
+          this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
+        }
+      )
+    }
+  }
+
+  deleteRiskBasedDecisions(): void {
+    if(!this.checkedData.length) {
+      this.msgDetails = {msg: Message.WARNING_DELETE, severity: Severity.WARNING};
+    } else {
+      this.isLoading = true;
+      setTimeout(() => this.unCheckAll = undefined );
+      const configIds = this.checkedData.map(el => el.checkedId);
+
+      this.riskBasedDecisionService.deleteRiskBasedDecisions(configIds).subscribe(
+        res => {
+          this.getAllRiskBasedDecisions();
+          this.unCheckAll = false;
+          this.checkedData = [];
+          this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
         },
         err => {
           this.isLoading = false;

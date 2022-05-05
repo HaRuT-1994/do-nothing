@@ -2,7 +2,7 @@
 <p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000"></p-confirmDialog>
 <app-loading *ngIf="isLoading"></app-loading>
 <main>
-  <app-control-tables (copyTriggered)="copyBudgetYears()"></app-control-tables>
+  <app-control-tables (copyTriggered)="copyBudgetYears()" (deleteTriggered)="deleteBudgetYears()"></app-control-tables>
   <div class="budget-year">
     <p-table #dt [value]="allBudgetYears" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,20,30]" [globalFilterFields]="['Scenario.value','BudgetSource', 'ExceedanceAllowance', 'BudgetName']"
       [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
@@ -73,7 +73,7 @@
             <td [attr.title]="data.BudgetSource">{{data.BudgetSource}}</td>
             <td [attr.title]="data.ExceedanceAllowance">{{data.ExceedanceAllowance}}</td>
             <td [attr.title]="data.BudgetName">{{data.BudgetName}}</td>
-            <!-- <td>{{data['_2022'] | number: '.2-2'}}</td>
+            <td>{{data['_2022'] | number: '.2-2'}}</td>
             <td>{{data['_2023'] | number: '.2-2'}}</td>
             <td>{{data['_2024'] | number: '.2-2'}}</td>
             <td>{{data['_2025'] | number: '.2-2'}}</td>
@@ -122,7 +122,7 @@
             <td>{{data['_2068'] | number: '.2-2'}}</td>
             <td>{{data['_2069'] | number: '.2-2'}}</td>
             <td>{{data['_2070'] | number: '.2-2'}}</td>
-            <td>{{data['_2071'] | number: '.2-2'}}</td> -->
+            <td>{{data['_2071'] | number: '.2-2'}}</td>
             <td class="buttonEffect fixedColumnEdit" (click)=onEditRow(data)>
               <span class="edit">Edit</span>
             </td>

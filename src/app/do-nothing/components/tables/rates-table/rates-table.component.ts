@@ -76,17 +76,38 @@ export class RatesTableComponent implements OnInit, OnDestroy {
       this.msgDetails = {msg: Message.WARNING_COPY, severity: Severity.WARNING};
     } else {
       this.isLoading = true;
-      setTimeout(() => {
-        this.unCheckAll = undefined;
-      }, 0);
+      setTimeout(() => this.unCheckAll = undefined );
       const configIds = this.checkedData.sort((a, b) => ( a.index - b.index )).map(el => el.checkedId);
       
       this.rateService.copyRates(configIds).subscribe(
         res => {
-          this.isLoading = false;
+          this.getAllRates();
           this.unCheckAll = false;
           this.checkedData = [];
           this.msgDetails = {msg: 'Copy Rates ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
+        },
+        err => {
+          this.isLoading = false;
+          this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
+        }
+      )
+    }
+  }
+
+  deleteRates(): void {
+    if(!this.checkedData.length) {
+      this.msgDetails = {msg: Message.WARNING_DELETE, severity: Severity.WARNING};
+    } else {
+      this.isLoading = true;
+      setTimeout(() => this.unCheckAll = undefined );
+      const configIds = this.checkedData.map(el => el.checkedId);
+
+      this.rateService.deleteRates(configIds).subscribe(
+        res => {
+          this.getAllRates();
+          this.unCheckAll = false;
+          this.checkedData = [];
+          this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
         },
         err => {
           this.isLoading = false;

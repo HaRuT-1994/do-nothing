@@ -9,6 +9,7 @@ import { ConfigBudgetYearService } from 'src/app/do-nothing/services/config-budg
 import { BudgetPivotDetails } from 'src/app/do-nothing/models/budgetPivotDetails.interface';
 import { BudgetYearsModel } from 'src/app/do-nothing/models/budgetYearsData.interface';
 import { CheckedDataModel } from 'src/app/do-nothing/models/checkedData.interface';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-budget-table',
@@ -20,9 +21,8 @@ export class BudgetYearsTableComponent implements OnInit {
   msgDetails: MsgDetails;
   allBudgetYears: BudgetPivotDetails[] = [];
   unCheckAll: boolean;
-  shownAllBudgetYears: BudgetPivotDetails[] = [];
-  private currentPage = {first: 0, rows: 10};
   private checkedData: CheckedDataModel[] = [];
+  private sub$: Subscription;
 
   constructor( private budgetYearsService: ConfigBudgetYearService,
                private commonService: CommonService,
@@ -30,6 +30,8 @@ export class BudgetYearsTableComponent implements OnInit {
 
    ngOnInit(): void {
     this.getAllBudgetPivotYears();
+
+    this.sub$ = this.commonService.getData().subscribe(res => { this.getAllBudgetPivotYears() })
    }
 
   onEditRow(data: BudgetYearsModel): void {
@@ -48,7 +50,6 @@ export class BudgetYearsTableComponent implements OnInit {
           () => {
             this.isLoading = false;
             this.allBudgetYears = this.allBudgetYears.filter( (val) => val['BudgetId'] !== id);
-            this.onPageChange(this.currentPage);
             this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
           },
           () => {
@@ -62,18 +63,17 @@ export class BudgetYearsTableComponent implements OnInit {
 
   copyBudgetYears(): void {
     if(!this.checkedData.length) {
-      this.msgDetails = {msg: 'Please check config', severity: Severity.WARNING};
+      this.msgDetails = {msg: Message.WARNING_COPY, severity: Severity.WARNING};
     } else {
       this.isLoading = true;
-      setTimeout(() => {
-        this.unCheckAll = undefined;
-      }, 0);
+      setTimeout(() => this.unCheckAll = undefined );
       const configIds = this.checkedData.sort((a, b) => ( a.index - b.index )).map(el => el.checkedId);
 
       this.budgetYearsService.copyBudgetYears(configIds).subscribe(
         res => {
-          this.isLoading = false;
+          this.getAllBudgetPivotYears();
           this.unCheckAll = false;
+          this.checkedData = [];
           this.msgDetails = {msg: 'Copy Budget Years ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         },
         err => {
@@ -84,8 +84,30 @@ export class BudgetYearsTableComponent implements OnInit {
     }
   }
 
-  onChecked(item: BudgetYearsModel, ev, index: number): void {
-    const idx = this.currentPage['page'] * this.currentPage['rows'] + index || index;
+  deleteBudgetYears(): void {
+    if(!this.checkedData.length) {
+      this.msgDetails = {msg: Message.WARNING_DELETE, severity: Severity.WARNING};
+    } else {
+      this.isLoading = true;
+      setTimeout(() => this.unCheckAll = undefined );
+      const configIds = this.checkedData.map(el => el.checkedId);
+
+      this.budgetYearsService.deleteBudgetYears(configIds).subscribe(
+        res => {
+          this.getAllBudgetPivotYears();
+          this.unCheckAll = false;
+          this.checkedData = [];
+          this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
+        },
+        err => {
+          this.isLoading = false;
+          this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
+        }
+      )
+    }
+  }
+
+  onChecked(item: BudgetYearsModel, ev, idx: number): void {
     if(ev.target.checked) {
       this.checkedData.push({checkedId: item.BudgetId, index: idx});
     } else {
@@ -98,33 +120,12 @@ export class BudgetYearsTableComponent implements OnInit {
     this.budgetYearsService.getAllBudgetYears().subscribe(
       (res: BudgetPivotDetails[]) => {
         this.allBudgetYears = res;
-        this.onPageChange(this.currentPage);
         this.isLoading = false;
-        console.log(res);
-        
       },
       err => {
         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
         this.isLoading = false;
       }
     );
-  }
-
-  onPageChange(ev): void {
-    this.currentPage = ev;
-    if(ev.page * ev.rows >= this.allBudgetYears.length) {
-      ev.first -= 10;
-    }
-
-    this.shownAllBudgetYears = this.allBudgetYears.slice(ev.first, ev.first + ev.rows);
-  }
-
-  filterData(search: string): void {
-    if (search.length) {
-      this.shownAllBudgetYears = this.commonService.filterAlgorithm(this.allBudgetYears, search);
-    } else {
-      this.shownAllBudgetYears = this.allBudgetYears;
-      this.onPageChange(this.currentPage);
-    }
   }
 }

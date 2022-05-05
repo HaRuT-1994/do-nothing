@@ -31,6 +31,9 @@ import { Router } from '@angular/router';
 export class ControlTablesComponent implements OnInit, OnDestroy {
   @Input() path: string;
   @Input() needRun: boolean;
+  @Input() needCopy = true;
+  @Input() needDelete = true;
+  @Input() needNew = true;
   private ref: DynamicDialogRef;
   private component: any;
   public controlTables = [
@@ -53,6 +56,7 @@ export class ControlTablesComponent implements OnInit, OnDestroy {
   public selectedItem = {};
   @Output() runTriggered = new EventEmitter<void>();
   @Output() copyTriggered = new EventEmitter<void>();
+  @Output() deleteTriggered = new EventEmitter<void>();
 
   constructor( private confirmationService: ConfirmationService,
                private dialogService: DialogService,
@@ -69,14 +73,7 @@ export class ControlTablesComponent implements OnInit, OnDestroy {
   }
 
   onAddConfig(): void {
-    // this.confirmationService.confirm({
-    //     message: 'Add New config?',
-    //     header: 'Confirmation',
-    //     icon: 'pi pi-exclamation-triangle',
-    //     accept: () => {
-          this.show();
-    //     }
-    // });
+    this.show();
   }
 
   private show(): void {
@@ -99,13 +96,24 @@ export class ControlTablesComponent implements OnInit, OnDestroy {
     });
   }
 
-  copyConfig(): void {
+  copyConfigs(): void {
     this.confirmationService.confirm({
       message: 'Copy checked?',
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.copyTriggered.emit();
+      }
+    });
+  }
+
+  deleteConfigs(): void {
+    this.confirmationService.confirm({
+      message: 'Delete checked?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.deleteTriggered.emit();
       }
     });
   }

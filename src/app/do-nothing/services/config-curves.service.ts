@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AppConfig } from '../../config/app.config';
@@ -12,6 +12,15 @@ export class ConfigCurvesService {
 
   copyCurves(data: number[]): Observable<any> {
     return this.http.post<number[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.copyCurves}`, data);
+  }
+
+  deleteCurves(data: number[]): Observable<any> {
+    const options = {
+      headers: new HttpHeaders({'content-type': 'application/json'}),
+      body: data
+    }
+  
+    return this.http.delete<any>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.deleteMultiCurves}`, options);
   }
 
   addConfigCurves(data: any): Observable<any> {

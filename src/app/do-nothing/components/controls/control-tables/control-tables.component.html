@@ -13,13 +13,13 @@
   </div>
   <section class="G-flex-center-between">
     <div>
-      <button (click)="onAddConfig()">New</button>
+      <button  *ngIf="needNew" (click)="onAddConfig()">New</button>
     </div>
-    <div>
-      <button (click)="copyConfig()">Copy</button>
+    <div *ngIf="needCopy">
+      <button (click)="copyConfigs()">Copy</button>
     </div>
-    <div>
-      <button >Delete</button>
+    <div *ngIf="needDelete">
+      <button (click)="deleteConfigs()">Delete</button>
     </div>
     <div *ngIf="needRun">
       <button (click)="runModel()">Run</button>

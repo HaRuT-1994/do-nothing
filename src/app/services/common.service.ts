@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Form, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Observable, Subject } from 'rxjs';
 import { ConfigData } from '../models/configData.interface';
@@ -56,20 +56,5 @@ export class CommonService {
 
       form.patchValue({ cohort: cohort[0] })
     }
-  }
-
-  filterAlgorithm (data: any, search: string) {
-    const pattern = /Id|id/;
-    return data.filter(item => {
-      for(let key in item) {
-        if(!pattern.test(key) && item[key]) {
-          if(typeof item[key] === 'object' && item[key]['value'] && item[key]['value'].toLowerCase().includes(search.trim().toLowerCase())) {
-            return item;
-          } else if (item[key].toString().toLowerCase().includes(search.trim().toLowerCase())) {
-            return item;
-          }
-        }
-      }
-    })
   }
 }

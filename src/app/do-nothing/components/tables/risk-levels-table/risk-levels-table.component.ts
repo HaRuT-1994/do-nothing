@@ -73,17 +73,38 @@ export class RiskLevelsTableComponent implements OnInit, OnDestroy {
       this.msgDetails = {msg: 'Please check config', severity: Severity.WARNING};
     } else {
       this.isLoading = true;
-      setTimeout(() => {
-        this.unCheckAll = undefined;
-      }, 0);
+      setTimeout(() => this.unCheckAll = undefined );
       const configIds = this.checkedData.sort((a, b) => ( a.index - b.index )).map(el => el.checkedId);
 
       this.riskLvlService.copyRiskLvls(configIds).subscribe(
         res => {
-          this.isLoading = false;
+          this.getAllRiskLevels();
           this.unCheckAll = false;
           this.checkedData = [];
           this.msgDetails = {msg: 'Copy Risk Levels ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
+        },
+        err => {
+          this.isLoading = false;
+          this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
+        }
+      )
+    }
+  }
+
+  deleteRiskLvls(): void {
+    if(!this.checkedData.length) {
+      this.msgDetails = {msg: Message.WARNING_DELETE, severity: Severity.WARNING};
+    } else {
+      this.isLoading = true;
+      setTimeout(() => this.unCheckAll = undefined );
+      const configIds = this.checkedData.map(el => el.checkedId);
+
+      this.riskLvlService.deleteRiskLvls(configIds).subscribe(
+        res => {
+          this.getAllRiskLevels();
+          this.unCheckAll = false;
+          this.checkedData = [];
+          this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
         },
         err => {
           this.isLoading = false;

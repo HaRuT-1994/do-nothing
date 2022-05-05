@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AppConfig } from '../../config/app.config';
@@ -13,6 +13,15 @@ export class ConfigBudgetYearService {
 
   copyBudgetYears(data: number[]): Observable<any> {
     return this.http.post<number[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.copyBudgetYears}`, data);
+  }
+
+  deleteBudgetYears(data: number[]): Observable<any> {
+    const options = {
+      headers: new HttpHeaders({'content-type': 'application/json'}),
+      body: data
+    }
+  
+    return this.http.delete<any>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.deleteMultiBudgetYears}`, options);
   }
 
   addConfigBudgetYear(data: any): Observable<BudgetYearsModel[]> {

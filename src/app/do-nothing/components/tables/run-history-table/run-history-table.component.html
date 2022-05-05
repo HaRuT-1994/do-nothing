@@ -1,35 +1,32 @@
 <app-loading *ngIf="isLoading"></app-loading>
 <main>
-  <app-control-tables></app-control-tables>
-  <table [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
-    <caption>Run History</caption>
-    <thead>
-      <tr>
-        <th>Configuration Id</th>
-        <th>Scenario</th>
-        <th>Rows Ran</th>
-        <th>Status</th>
-        <th>Comments</th>
-        <th>Run Start</th>
-        <th>Run End</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let data of shownAllRunHistory">
-        <td [attr.title]="data.configurationId">{{data.configurationId}}</td>
-        <td [attr.title]="data.scenarioName">{{data.scenarioName}}</td>
-        <td [attr.title]="data.rowsRan">{{data.rowsRan}}</td>
-        <td [attr.title]="data.status">{{data.status}}</td>
-        <td [attr.title]="data.comments">{{data.comments}}</td>
-        <td [attr.title]="data.runStart | date: 'full'">{{data.runStart | date: 'medium'}}</td>
-        <td [attr.title]="data.runEnd | date: 'full'">{{data.runEnd | date: 'medium'}}</td>
-      </tr>
-      <tr *ngIf="allRunHistory.length > 10">
-        <td colspan="7">
-          <p-paginator [rows]="10" [totalRecords]="allRunHistory.length" [rowsPerPageOptions]="[10,20,30]"
-          (onPageChange)="onPageChange($event)"></p-paginator>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <app-control-tables [needNew]="false" [needCopy]="false" [needDelete]="false"></app-control-tables>
+  <p-table #dt [value]="allRunHistory" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,20,30]"
+    [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
+    <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="configurationId">Configuration Id<p-sortIcon field="configurationId"></p-sortIcon></th>
+          <th pSortableColumn="scenarioName">Scenario<p-sortIcon field="scenarioName"></p-sortIcon></th>
+          <th pSortableColumn="rowsRan">Rows Ran<p-sortIcon field="rowsRan"></p-sortIcon></th>
+          <th pSortableColumn="status">Status<p-sortIcon field="status"></p-sortIcon></th>
+          <th pSortableColumn="comments">Comments<p-sortIcon field="comments"></p-sortIcon></th>
+          <th pSortableColumn="runStart">Run Start<p-sortIcon field="runStart"></p-sortIcon></th>
+          <th pSortableColumn="runEnd">Run End<p-sortIcon field="runEnd"></p-sortIcon></th>
+          <!-- <th colspan="3">
+            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search" />
+          </th> -->
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-data>
+        <tr>
+          <td [attr.title]="data.configurationId">{{data.configurationId}}</td>
+          <td [attr.title]="data.scenarioName">{{data.scenarioName}}</td>
+          <td [attr.title]="data.rowsRan">{{data.rowsRan}}</td>
+          <td [attr.title]="data.status">{{data.status}}</td>
+          <td [attr.title]="data.comments">{{data.comments}}</td>
+          <td [attr.title]="data.runStart | date: 'full'">{{data.runStart | date: 'medium'}}</td>
+          <td [attr.title]="data.runEnd | date: 'full'">{{data.runEnd | date: 'medium'}}</td>
+        </tr> 
+    </ng-template>
+  </p-table>
 </main>

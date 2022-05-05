@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
@@ -24,6 +24,15 @@ export class DoNothingService {
   copyModel(data): Observable<any> {
     data = data.map(item => item.configurationId)  
     return this.http.post<number[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.copyModels}`, data);
+  }
+
+   deleteModels(data: number[]): Observable<any> {
+    const options = {
+      headers: new HttpHeaders({'content-type': 'application/json'}),
+      body: data
+    }
+  
+    return this.http.delete<any>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.deleteMultiModels}`, options);
   }
 
   addDoNothing(data: any): Observable<any> {

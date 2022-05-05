@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -10,7 +10,6 @@ export class ConfigListValuesService {
   public editListValues: ListValuesModel[] = [];
   
   constructor(private http: HttpClient) { }
-
 
  getListValuesByListId(id: number): Observable<any> {
     return this.http.get(`${AppConfig.baseUrl}api/${AppConfig.endPoints.getListValuesByListId}/${id}`).pipe(
@@ -24,6 +23,15 @@ export class ConfigListValuesService {
 
   copyListValues(data: number[]): Observable<any> {
     return this.http.post<number[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.copyListValues}`, data);
+  }
+
+   deletListValues(data: number[]): Observable<any> {
+    const options = {
+      headers: new HttpHeaders({'content-type': 'application/json'}),
+      body: data
+    }
+  
+    return this.http.delete<any>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.deleteMultiListValues}`, options);
   }
 
   addConfigListValue(data: any): Observable<ListValuesModel[]> {
