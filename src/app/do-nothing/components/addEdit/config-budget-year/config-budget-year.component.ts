@@ -33,12 +33,10 @@ export class BudgetYearsComponent implements OnInit {
 
   ngOnInit(): void {
     this.formInit();
-    // this.formGroup.reset();
-    // this.commonService.updateForm(this.formGroup, this.editBudgetYear)
     this.scenarioData = this.lookupService.configScenariosData;
     this.isOnEdit = !this.dialogConfig.data?.add;
     this.getConfigBudgets();
-
+     
     if (this.isOnEdit) {
       for(let i = 2022; i <= 2071; i++) {
         this.years.push(i);
@@ -58,24 +56,28 @@ export class BudgetYearsComponent implements OnInit {
       BudgetName: [''],
       ScenarioName: [''],
       BudgetSource: [''],
-      year: [0],
+      year: [2022],
       budget: [0]
     })
   }
 
   addConfig(): void {
     this.isLoading = true;
-    const form = { BudgetId: this.formGroup.value.BudgetId,
+    const form = { budgetId: this.formGroup.value.BudgetId || this.budgets[0].budgetId,
                    year: this.formGroup.value.year,
                    budget: this.formGroup.value.budget };
+    
     this.budgetYearService.addConfigBudgetYear(form).subscribe(
-      () => {
+      (res) => {
+        console.log(res);
         this.isLoading = false;
         this.msgDetails = {msg: 'Config Budget Year Form ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
-        this.commonService.updateData(true)
+        this.commonService.updateData(true);
         this.formInit();
       },
-      () => {
+      (err) => {
+        console.log(err);
+        
         this.isLoading = false;
         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
       }
@@ -84,14 +86,15 @@ export class BudgetYearsComponent implements OnInit {
 
   editConfig(): void {
     this.isLoading = true;
-    const form = {BudgetId: this.editBudgetYear['BudgetId'], year: this.formGroup.value.year, budget: this.formGroup.value.budget };
+    const form = {budgetId: this.editBudgetYear['BudgetId'], year: this.formGroup.value.year, budget: this.formGroup.value.budget };
+    
     this.budgetYearService.onEditBudgetYear(form).subscribe(
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: 'Config Budget Form ' +  Message.EDIT_SUCCESS_MSG, severity: Severity.SUCCESS};
         this.commonService.updateData(this.formGroup);
         this.editBudgetYear = this.formGroup.value;
-        this.commonService.updateForm(this.formGroup, this.editBudgetYear);
+        this.commonService.updateData(true)
       },
       () => {
         this.isLoading = false;

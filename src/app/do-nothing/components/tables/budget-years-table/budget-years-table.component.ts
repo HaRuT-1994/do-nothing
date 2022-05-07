@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Message } from 'src/app/enums/message.enum';
 import { Severity } from 'src/app/enums/severity.enum';
 import { CommonService } from 'src/app/services/common.service';
@@ -16,7 +16,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './budget-years-table.component.html',
   styleUrls: ['./budget-years-table.component.scss']
 })
-export class BudgetYearsTableComponent implements OnInit {
+export class BudgetYearsTableComponent implements OnInit, OnDestroy {
   isLoading: boolean;
   msgDetails: MsgDetails;
   allBudgetYears: BudgetPivotDetails[] = [];
@@ -127,5 +127,9 @@ export class BudgetYearsTableComponent implements OnInit {
         this.isLoading = false;
       }
     );
+  }
+
+  ngOnDestroy(): void {
+    this.sub$.unsubscribe();
   }
 }

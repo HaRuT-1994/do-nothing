@@ -44,12 +44,12 @@
         </div>
         <div class="G-flex-center-between">
           <label for="replaceWithCohortId">Replace With CohortId</label>
-          <p-dropdown [options]="cohortData" optionValue="id"  formControlName="cohort" optionLabel="value" editable="true"  ></p-dropdown>
+          <p-dropdown [options]="cohortData" optionValue="id"  formControlName="replaceWithCohortId" optionLabel="value" editable="true"  ></p-dropdown>
         </div>
       </div>
     </div>
-
-    <button type="submit" *ngIf="!isOnEdit" (click)="addConfig()">Submit</button>
+i
+    <button type="submt" *ngIf="!isOnEdit" (click)="addConfig()">Submit</button>
     <button type="submit" *ngIf="isOnEdit" (click)="editConfig()">Submit</button>
   </form>
 </main>

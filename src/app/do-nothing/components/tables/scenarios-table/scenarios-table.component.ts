@@ -118,7 +118,7 @@ export class ScenariosTableComponent implements OnInit, OnDestroy {
     if(ev.target.checked) {
       this.checkedData.push({checkedId: item.scenarioId, index: idx});
     } else {
-      this.checkedData = this.checkedData.filter(el => el.checkedId !== item.scenarioId)
+      this.checkedData = this.checkedData.filter(el => el.checkedId !== item.scenarioId);
     }
   }
 

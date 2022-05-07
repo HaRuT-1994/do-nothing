@@ -4,11 +4,11 @@
 <main>
   <app-control-tables (copyTriggered)="copyBudgetYears()" (deleteTriggered)="deleteBudgetYears()"></app-control-tables>
   <div class="budget-year">
-    <p-table #dt [value]="allBudgetYears" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,20,30]" [globalFilterFields]="['Scenario.value','BudgetSource', 'ExceedanceAllowance', 'BudgetName']"
+    <p-table #dt [value]="allBudgetYears" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,20,30]" [globalFilterFields]="['Scenario','BudgetSource', 'ExceedanceAllowance', 'BudgetName']"
       [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
       <ng-template pTemplate="header">
           <tr>
-            <th pSortableColumn="Scenario.value">Scenario<p-sortIcon field="Scenario.value"></p-sortIcon></th>
+            <th pSortableColumn="Scenario">Scenario<p-sortIcon field="Scenario"></p-sortIcon></th>
             <th pSortableColumn="BudgetSource">Budget Source<p-sortIcon field="BudgetSource"></p-sortIcon></th>
             <th pSortableColumn="ExceedanceAllowance">Exceeded Allowance<<p-sortIcon field="ExceedanceAllowance"></p-sortIcon></th>
             <th pSortableColumn="BudgetName">Budget<p-sortIcon field="BudgetName"></p-sortIcon></th>
@@ -69,7 +69,7 @@
       </ng-template>
       <ng-template pTemplate="body" let-data let-i="rowIndex">
           <tr>
-            <td [attr.title]="data.ScenarioName">{{data.Scenario.value}}</td>
+            <td [attr.title]="data.Scenario">{{data.Scenario}}</td>
             <td [attr.title]="data.BudgetSource">{{data.BudgetSource}}</td>
             <td [attr.title]="data.ExceedanceAllowance">{{data.ExceedanceAllowance}}</td>
             <td [attr.title]="data.BudgetName">{{data.BudgetName}}</td>

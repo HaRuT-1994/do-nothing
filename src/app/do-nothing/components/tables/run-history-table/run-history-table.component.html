@@ -1,12 +1,13 @@
 <app-loading *ngIf="isLoading"></app-loading>
 <main>
   <app-control-tables [needNew]="false" [needCopy]="false" [needDelete]="false"></app-control-tables>
+  <div class="history-view">
   <p-table #dt [value]="allRunHistory" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,20,30]"
     [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
     <ng-template pTemplate="header">
         <tr>
           <th pSortableColumn="configurationId">Configuration Id<p-sortIcon field="configurationId"></p-sortIcon></th>
-          <th pSortableColumn="scenarioName">Scenario<p-sortIcon field="scenarioName"></p-sortIcon></th>
+          <th pSortableColumn="scenario">Scenario<p-sortIcon field="scenario"></p-sortIcon></th>
           <th pSortableColumn="rowsRan">Rows Ran<p-sortIcon field="rowsRan"></p-sortIcon></th>
           <th pSortableColumn="status">Status<p-sortIcon field="status"></p-sortIcon></th>
           <th pSortableColumn="comments">Comments<p-sortIcon field="comments"></p-sortIcon></th>
@@ -20,13 +21,14 @@
     <ng-template pTemplate="body" let-data>
         <tr>
           <td [attr.title]="data.configurationId">{{data.configurationId}}</td>
-          <td [attr.title]="data.scenarioName">{{data.scenarioName}}</td>
+          <td [attr.title]="data.scenario">{{data.scenario}}</td>
           <td [attr.title]="data.rowsRan">{{data.rowsRan}}</td>
           <td [attr.title]="data.status">{{data.status}}</td>
-          <td [attr.title]="data.comments">{{data.comments}}</td>
+          <td [attr.title]="data.comments" style="white-space:normal">{{data.comments}}</td>
           <td [attr.title]="data.runStart | date: 'full'">{{data.runStart | date: 'medium'}}</td>
           <td [attr.title]="data.runEnd | date: 'full'">{{data.runEnd | date: 'medium'}}</td>
         </tr> 
     </ng-template>
   </p-table>
+  </div>
 </main>

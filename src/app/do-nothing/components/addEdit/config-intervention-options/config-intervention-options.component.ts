@@ -59,7 +59,7 @@ export class ConfigInterventionOptionsComponent implements OnInit {
       excludeIfCrc: [''],
       forceReplace: [true],
       whenAlc: [0],
-      replaceWithCohortId: [0]
+      replaceWithCohortId: [null]
     })
   }
 

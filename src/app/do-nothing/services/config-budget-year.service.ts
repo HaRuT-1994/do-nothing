@@ -37,7 +37,6 @@ export class ConfigBudgetYearService {
   }
    
   onEditBudgetYear(data: BudgetYearsModel): Observable<any> {
-    data.BudgetId = this.editBudgetYears['BudgetId'];
     return this.http.put(`${AppConfig.baseUrl}api/${AppConfig.endPoints.updateBudgetYear}`, data);
   }
 
