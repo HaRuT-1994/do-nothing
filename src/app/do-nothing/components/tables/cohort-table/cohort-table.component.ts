@@ -8,7 +8,6 @@ import {ConfirmationService} from 'primeng/api';
 import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { CohortComponent } from '../../addEdit/cohort/cohort.component';
 import { Subscription } from 'rxjs';
-import { CheckedDataModel } from 'src/app/do-nothing/models/checkedData.interface';
 
 @Component({
   selector: 'app-cohort-table',
@@ -19,10 +18,9 @@ export class CohortTableComponent implements OnInit, OnDestroy {
   isLoading: boolean;
   msgDetails: MsgDetails;
   allCohorts: CohortModel[] = [];
-  unCheckAll: boolean;
+  isPageChecked: boolean;
   private index = 0;
   private sub$: Subscription;
-  private checkedData: CheckedDataModel[] = [];
 
   constructor( private cohortService: CohortService,
                private commonService: CommonService,
@@ -69,18 +67,17 @@ export class CohortTableComponent implements OnInit, OnDestroy {
   }
 
   copyCohorts(): void {
-    if(!this.checkedData.length) {
+    let configIds = [];
+    this.allCohorts.map(el => el.check && configIds.push(el.cohortId));
+
+    if(!configIds.length) {
       this.msgDetails = {msg: Message.WARNING_COPY, severity: Severity.WARNING};
     } else {
       this.isLoading = true;
-      setTimeout(() => this.unCheckAll = undefined );
-      const configIds = this.checkedData.sort((a, b) => ( a.index - b.index )).map(el => el.checkedId);
-
+      
       this.cohortService.copyCohorts(configIds).subscribe(
         res => {
           this.getAllCohorts();
-          this.unCheckAll = false;
-          this.checkedData = [];
           this.msgDetails = {msg: 'Copy Cohorts ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         },
         err => {
@@ -92,18 +89,17 @@ export class CohortTableComponent implements OnInit, OnDestroy {
   }
 
   deleteCohorts(): void {
-    if(!this.checkedData.length) {
+    let configIds = [];
+    this.allCohorts.map(el => el.check && configIds.push(el.cohortId));
+
+    if(!configIds.length) {
       this.msgDetails = {msg: Message.WARNING_DELETE, severity: Severity.WARNING};
     } else {
       this.isLoading = true;
-      setTimeout(() => this.unCheckAll = undefined );
-      const configIds = this.checkedData.map(el => el.checkedId);
 
       this.cohortService.deleteCohorts(configIds).subscribe(
         res => {
           this.getAllCohorts();
-          this.unCheckAll = false;
-          this.checkedData = [];
           this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
         },
         err => {
@@ -114,12 +110,25 @@ export class CohortTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  onChecked(item: CohortModel, ev, idx: number): void{
+  onChecked(ev, idx: number): void{
     if(ev.target.checked) {
-      this.checkedData.push({checkedId: item.cohortId, index: idx});
+      this.allCohorts[idx].check = true;
     } else {
-      this.checkedData = this.checkedData.filter(el => el.checkedId !== item.cohortId)
+      this.allCohorts[idx].check = false;
     }
+  }
+
+  onCheckPage(ev, dt): void {
+    for(let i = dt._first; i < dt._first + dt._rows; i++ ) {
+      if(i >= this.allCohorts.length) {
+        break;
+      }
+      this.onChecked(ev, i);
+    }
+  }
+
+  paginate(ev): void {
+    this.isPageChecked = this.allCohorts[ev.first].check ? true : false;
   }
 
   private getAllCohorts(): void {
@@ -128,6 +137,7 @@ export class CohortTableComponent implements OnInit, OnDestroy {
       (res: CohortModel[]) => {
         this.allCohorts = res;
         this.isLoading = false;
+        this.isPageChecked = false;
       },
       err => {
         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};

@@ -4,7 +4,7 @@
 <main>
   <app-control-tables (copyTriggered)="copyIntOptions()" (deleteTriggered)="deleteIntOptions()"></app-control-tables>
   <p-table #dt [value]="allInterventionOptions" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,20,30]"
-  [globalFilterFields]="['scenario.value','cohort.value', 'intervention', 'available', 'reset', 'applyWhenMlc', 'excludeIfCrc', 'forceReplace', 'whenAlc', 'replaceWithCohortId']"
+  [globalFilterFields]="['scenario.value','cohort.value', 'intervention', 'available', 'reset', 'applyWhenMlc', 'excludeIfCrc', 'forceReplace', 'whenAlc', 'replaceWithCohortId']" (onPage)="paginate($event)"
     [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
     <ng-template pTemplate="header">
         <tr>
@@ -18,8 +18,11 @@
           <th pSortableColumn="forceReplace">Force Replace<p-sortIcon field="forceReplace"></p-sortIcon></th>
           <th pSortableColumn="whenAlc">WhenAlc<p-sortIcon field="whenAlc"></p-sortIcon></th>
           <th pSortableColumn="replaceWithCohortId">Replace With CohortId<p-sortIcon field="replaceWithCohortId"></p-sortIcon></th>
-          <th colspan="3">
+          <th colspan="2">
             <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search" />
+          </th>
+          <th>
+            <input class="checkbox" type="checkbox" [(ngModel)]="isPageChecked" (change)="onCheckPage($event, dt)">
           </th>
         </tr>
     </ng-template>
@@ -42,7 +45,7 @@
             <span class="delete">Delete</span>
           </td>
           <td>
-            <input class="checkbox" type="checkbox" [checked]="unCheckAll" (change)="onChecked(data, $event, i)">
+            <input class="checkbox" type="checkbox" [checked]="data.check" (change)="onChecked($event, i)">
           </td>
         </tr> 
     </ng-template>

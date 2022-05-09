@@ -10,7 +10,6 @@ import { DoNothingComponent } from '../../addEdit/do-nothing/do-nothing.componen
 import { LookupService } from 'src/app/do-nothing/services/lookup.service';
 import { Subscription } from 'rxjs';
 import {strToArray} from 'src/app/shared/helper';
-import { CheckedDataModel } from 'src/app/do-nothing/models/checkedData.interface';
 
 @Component({
   selector: 'app-do-nothing-table',
@@ -20,13 +19,12 @@ import { CheckedDataModel } from 'src/app/do-nothing/models/checkedData.interfac
 export class DoNothingTableComponent implements OnInit, OnDestroy {
   isLoading: boolean;
   msgDetails: MsgDetails;
-  allModels: ModelConfig[] = [];
   models = [];
-  unCheckAll: boolean;
+  isPageChecked: boolean;
+  allModels: ModelConfig[] = [];
+  private defaultModels: ModelConfig[] = [];
   private index = 0;
   private sub$: Subscription;
-  private checkedData: CheckedDataModel[] = [];
-  private defaultModels: ModelConfig[] = [];
 
   constructor( private doNothingService: DoNothingService,
                private commonService: CommonService,
@@ -71,20 +69,20 @@ export class DoNothingTableComponent implements OnInit, OnDestroy {
       }
     });
   }
-
+  
   runModel(): void {
-    if(!this.checkedData.length) {
+    let configIds = [];
+    this.allModels.map(el => el.check && configIds.push(el.check));
+    
+    if(!configIds.length) {
       this.msgDetails = {msg: 'Nothing has been selected to run', severity: Severity.WARNING};
     } else {
       this.isLoading = true;
-      setTimeout(() => this.unCheckAll = undefined );
-      const configIds = this.checkedData.sort((a, b) => ( a.index - b.index )).map(el => el.checkedId);
 
       this.doNothingService.runModel(configIds).subscribe(
         res => {
           this.isLoading = false;
-          this.unCheckAll = false;
-          this.checkedData = [];
+          this.isPageChecked = false;
           this.msgDetails = {msg: 'Run Model ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         },
         err => {
@@ -96,18 +94,17 @@ export class DoNothingTableComponent implements OnInit, OnDestroy {
   }
 
   copyModel(): void {
-    if(!this.checkedData.length) {
+    let configIds = [];
+    this.allModels.map(el => el.check && configIds.push(el.id));
+    
+    if(!configIds.length) {
       this.msgDetails = {msg: Message.WARNING_COPY, severity: Severity.WARNING};
     } else {
       this.isLoading = true;
-      setTimeout(() => this.unCheckAll = undefined );
-      const configIds = this.checkedData.sort((a, b) => ( a.index - b.index )).map(el => el.checkedId);
       
       this.doNothingService.copyModel(configIds).subscribe(
           res => {
             this.getAllModelConfigs();
-            this.unCheckAll = false;
-            this.checkedData = [];
             this.msgDetails = {msg: 'Copy Model ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
           },
           err => {
@@ -119,18 +116,17 @@ export class DoNothingTableComponent implements OnInit, OnDestroy {
   }
 
   deleteModels(): void {
-    if(!this.checkedData.length) {
+    let configIds = [];
+    this.allModels.map(el => el.check && configIds.push(el.id));
+
+    if(!configIds.length) {
       this.msgDetails = {msg: Message.WARNING_DELETE, severity: Severity.WARNING};
     } else {
       this.isLoading = true;
-      setTimeout(() => this.unCheckAll = undefined );
-      const configIds = this.checkedData.map(el => el.checkedId.configurationId);
 
       this.doNothingService.deleteModels(configIds).subscribe(
         res => {
           this.getAllModelConfigs();
-          this.unCheckAll = false;
-          this.checkedData = [];
           this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
         },
         err => {
@@ -141,16 +137,40 @@ export class DoNothingTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  onChecked(item: ModelConfig, ev, idx: number): void {
-    const data = strToArray(item['scenariosToRun']);
+  // onChecked(item: ModelConfig, ev, idx: number): void {
+  //   const data = strToArray(item['scenariosToRun']);
+  //   if(ev.target.checked) {
+  //     this.checkedData.push({checkedId: {
+  //       configurationId: item.id,
+  //       scenarioIds: data
+  //     }, index: idx})
+  //   } else {
+  //     this.checkedData = this.checkedData.filter(el => el.checkedId.configurationId !== item.id)
+  //   }
+  // }
+
+  onChecked(ev, idx: number): void{
+    const data = strToArray(this.allModels[idx]['scenariosToRun']);
     if(ev.target.checked) {
-      this.checkedData.push({checkedId: {
-        configurationId: item.id,
-        scenarioIds: data
-      }, index: idx})
+      this.allModels[idx].check = { configurationId: this.allModels[idx].id, scenarioIds: data };
     } else {
-      this.checkedData = this.checkedData.filter(el => el.checkedId.configurationId !== item.id)
+      this.allModels[idx].check = null;
     }
+    // console.log(this.allModels);
+    
+  }
+
+  onCheckPage(ev, dt): void {
+    for(let i = dt._first; i < dt._first + dt._rows; i++ ) {
+      if(i >= this.allModels.length) {
+        break;
+      }
+      this.onChecked(ev, i);
+    }
+  }
+
+  paginate(ev): void {
+    this.isPageChecked = this.allModels[ev.first].check ? true : false;
   }
 
   private getAllModelConfigs(): void {
@@ -160,6 +180,7 @@ export class DoNothingTableComponent implements OnInit, OnDestroy {
         this.allModels = res;
         this.defaultModels = res;
         this.isLoading = false;
+        this.isPageChecked = false;
         let setModels = new Set();
         this.allModels.forEach(el => {
           setModels.add(el.modelName)

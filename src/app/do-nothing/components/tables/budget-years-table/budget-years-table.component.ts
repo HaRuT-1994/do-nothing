@@ -8,7 +8,6 @@ import { BudgetYearsComponent } from '../../addEdit/config-budget-year/config-bu
 import { ConfigBudgetYearService } from 'src/app/do-nothing/services/config-budget-year.service';
 import { BudgetPivotDetails } from 'src/app/do-nothing/models/budgetPivotDetails.interface';
 import { BudgetYearsModel } from 'src/app/do-nothing/models/budgetYearsData.interface';
-import { CheckedDataModel } from 'src/app/do-nothing/models/checkedData.interface';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -20,8 +19,7 @@ export class BudgetYearsTableComponent implements OnInit, OnDestroy {
   isLoading: boolean;
   msgDetails: MsgDetails;
   allBudgetYears: BudgetPivotDetails[] = [];
-  unCheckAll: boolean;
-  private checkedData: CheckedDataModel[] = [];
+  isPageChecked: boolean;
   private sub$: Subscription;
 
   constructor( private budgetYearsService: ConfigBudgetYearService,
@@ -62,18 +60,17 @@ export class BudgetYearsTableComponent implements OnInit, OnDestroy {
   }
 
   copyBudgetYears(): void {
-    if(!this.checkedData.length) {
+    let configIds = [];
+    this.allBudgetYears.map(el => el.check && configIds.push(el.BudgetId));
+
+    if(!configIds.length) {
       this.msgDetails = {msg: Message.WARNING_COPY, severity: Severity.WARNING};
     } else {
       this.isLoading = true;
-      setTimeout(() => this.unCheckAll = undefined );
-      const configIds = this.checkedData.sort((a, b) => ( a.index - b.index )).map(el => el.checkedId);
 
       this.budgetYearsService.copyBudgetYears(configIds).subscribe(
         res => {
           this.getAllBudgetPivotYears();
-          this.unCheckAll = false;
-          this.checkedData = [];
           this.msgDetails = {msg: 'Copy Budget Years ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         },
         err => {
@@ -85,18 +82,17 @@ export class BudgetYearsTableComponent implements OnInit, OnDestroy {
   }
 
   deleteBudgetYears(): void {
-    if(!this.checkedData.length) {
+    let configIds = [];
+    this.allBudgetYears.map(el => el.check && configIds.push(el.BudgetId));
+
+    if(!configIds.length) {
       this.msgDetails = {msg: Message.WARNING_DELETE, severity: Severity.WARNING};
     } else {
       this.isLoading = true;
-      setTimeout(() => this.unCheckAll = undefined );
-      const configIds = this.checkedData.map(el => el.checkedId);
 
       this.budgetYearsService.deleteBudgetYears(configIds).subscribe(
         res => {
           this.getAllBudgetPivotYears();
-          this.unCheckAll = false;
-          this.checkedData = [];
           this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
         },
         err => {
@@ -107,12 +103,25 @@ export class BudgetYearsTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  onChecked(item: BudgetYearsModel, ev, idx: number): void {
+  onChecked(ev, idx: number): void{
     if(ev.target.checked) {
-      this.checkedData.push({checkedId: item.BudgetId, index: idx});
+      this.allBudgetYears[idx].check = true;
     } else {
-      this.checkedData = this.checkedData.filter(el => el.checkedId !== item.BudgetId)
+      this.allBudgetYears[idx].check = false;
     }
+  }
+
+  onCheckPage(ev, dt): void {
+    for(let i = dt._first; i < dt._first + dt._rows; i++ ) {
+      if(i >= this.allBudgetYears.length) {
+        break;
+      }
+      this.onChecked(ev, i);
+    }
+  }
+
+  paginate(ev): void {
+    this.isPageChecked = this.allBudgetYears[ev.first].check ? true : false;
   }
 
   private getAllBudgetPivotYears(): void {
@@ -121,6 +130,7 @@ export class BudgetYearsTableComponent implements OnInit, OnDestroy {
       (res: BudgetPivotDetails[]) => {
         this.allBudgetYears = res;
         this.isLoading = false;
+        this.isPageChecked = false;
       },
       err => {
         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};

@@ -1,5 +1,6 @@
 export interface ModelConfig {
   id?: number,
+  check?: RunModelHistory,
   modelName: string,
   baseYear: number,
   yearsToRun: number,
@@ -15,4 +16,9 @@ export interface ModelConfig {
   skipTheseAssetSources: string,
   conditionRange: string,
   allowSurplusBudgetRollover: boolean
+}
+
+export interface RunModelHistory {
+  configurationId?: number,
+  scenarioIds: number[]
 }

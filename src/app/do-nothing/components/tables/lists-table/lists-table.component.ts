@@ -8,7 +8,6 @@ import { ConfirmationService } from 'primeng/api';
 import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { ConfigListsComponent } from '../../addEdit/config-lists/config-lists.component';
 import { Subscription } from 'rxjs';
-import { CheckedDataModel } from 'src/app/do-nothing/models/checkedData.interface';
 
 @Component({
   selector: 'app-lists-table',
@@ -19,10 +18,9 @@ export class ListsTableComponent implements OnInit, OnDestroy {
   isLoading: boolean;
   msgDetails: MsgDetails;
   allLists: ListsModel[] = [];
-  unCheckAll: boolean;
+  isPageChecked: boolean;
   private index = 0;
   private sub$: Subscription;
-  private checkedData: CheckedDataModel[] = [];
 
   constructor( private listsService: ConfigListsService,
                private commonService: CommonService,
@@ -69,18 +67,17 @@ export class ListsTableComponent implements OnInit, OnDestroy {
   }
 
   copyLists(): void {
-    if(!this.checkedData.length) {
+    let configIds = [];
+    this.allLists.map(el => el.check && configIds.push(el.listId));
+
+    if(!configIds.length) {
       this.msgDetails = {msg: Message.WARNING_COPY, severity: Severity.WARNING};
     } else {
       this.isLoading = true;
-      setTimeout(() => this.unCheckAll = undefined );
-      const configIds = this.checkedData.sort((a, b) => ( a.index - b.index )).map(el => el.checkedId);
 
       this.listsService.copyLists(configIds).subscribe(
         res => {
           this.getAllLists();
-          this.unCheckAll = false;
-          this.checkedData = [];
           this.msgDetails = {msg: 'Copy Lists ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         },
         err => {
@@ -92,18 +89,17 @@ export class ListsTableComponent implements OnInit, OnDestroy {
   }
 
   deleteLists(): void {
-    if(!this.checkedData.length) {
+    let configIds = [];
+    this.allLists.map(el => el.check && configIds.push(el.listId));
+
+    if(!configIds.length) {
       this.msgDetails = {msg: Message.WARNING_DELETE, severity: Severity.WARNING};
     } else {
       this.isLoading = true;
-      setTimeout(() => this.unCheckAll = undefined );
-      const configIds = this.checkedData.map(el => el.checkedId);
 
       this.listsService.deleteLists(configIds).subscribe(
         res => {
           this.getAllLists();
-          this.unCheckAll = false;
-          this.checkedData = [];
           this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
         },
         err => {
@@ -114,12 +110,25 @@ export class ListsTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  onChecked(item: ListsModel, ev, idx: number): void{
+  onChecked(ev, idx: number): void{
     if(ev.target.checked) {
-      this.checkedData.push({checkedId: item.listId, index: idx});
+      this.allLists[idx].check = true;
     } else {
-      this.checkedData = this.checkedData.filter(el => el.checkedId !== item.listId)
+      this.allLists[idx].check = false;
     }
+  }
+
+  onCheckPage(ev, dt): void {
+    for(let i = dt._first; i < dt._first + dt._rows; i++ ) {
+      if(i >= this.allLists.length) {
+        break;
+      }
+      this.onChecked(ev, i);
+    }
+  }
+
+  paginate(ev): void {
+    this.isPageChecked = this.allLists[ev.first].check ? true : false;
   }
 
   private getAllLists(): void {
@@ -128,6 +137,7 @@ export class ListsTableComponent implements OnInit, OnDestroy {
       (res: ListsModel[]) => {
         this.allLists = res;
         this.isLoading = false;
+        this.isPageChecked = false;
       },
       err => {
         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};

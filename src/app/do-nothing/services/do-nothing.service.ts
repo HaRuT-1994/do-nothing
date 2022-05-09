@@ -1,11 +1,10 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { Observable, Subject } from 'rxjs';
+import { Observable } from 'rxjs';
 import { ConfigData } from 'src/app/models/configData.interface';
 import { AppConfig } from '../../config/app.config';
-import { ModelConfig } from '../models/modelConfig.interface';
-import { RunModelHistory } from '../models/runModelHistory.interface';
+import { ModelConfig, RunModelHistory } from '../models/modelConfig.interface';
 
 @Injectable()
 export class DoNothingService {
@@ -13,7 +12,6 @@ export class DoNothingService {
   public skipTheseLifecycles: ConfigData[] = [];
   public skipTheseAssetSources: ConfigData[] = [];
   public skipTheseUnitClasses: ConfigData[] = [];
-  // public checkedData: RunModelHistory[] = [];
   
   constructor(private http: HttpClient) { }
  
@@ -21,12 +19,11 @@ export class DoNothingService {
       return this.http.post<RunModelHistory[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.runModels}`, data);
   }
 
-  copyModel(data): Observable<any> {
-    data = data.map(item => item.configurationId)  
+  copyModel(data): Observable<any> {  
     return this.http.post<number[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.copyModels}`, data);
   }
 
-   deleteModels(data: number[]): Observable<any> {
+  deleteModels(data: number[]): Observable<any> {
     const options = {
       headers: new HttpHeaders({'content-type': 'application/json'}),
       body: data

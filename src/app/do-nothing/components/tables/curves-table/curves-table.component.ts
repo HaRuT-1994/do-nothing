@@ -9,7 +9,6 @@ import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { ConfigCurvesComponent } from '../../addEdit/config-curves/config-curves.component';
 import { Subscription } from 'rxjs';
 import { LookupService } from 'src/app/do-nothing/services/lookup.service';
-import { CheckedDataModel } from 'src/app/do-nothing/models/checkedData.interface';
 
 @Component({
   selector: 'app-curves-table',
@@ -20,10 +19,9 @@ export class CurvesTableComponent implements OnInit, OnDestroy {
   isLoading: boolean;
   msgDetails: MsgDetails;
   allCurves: CurveModel[] = [];
-  unCheckAll: boolean;
+  isPageChecked: boolean;
   private index = 0;
   private sub$: Subscription;
-  private checkedData: CheckedDataModel[] = [];
  
   constructor( private curvesService: ConfigCurvesService, 
                private commonService: CommonService,
@@ -71,18 +69,17 @@ export class CurvesTableComponent implements OnInit, OnDestroy {
   }
 
   copyCurves(): void {
-    if(!this.checkedData.length) {
+    let configIds = [];
+    this.allCurves.map(el => el.check && configIds.push(el.id));
+
+    if(!configIds.length) {
       this.msgDetails = {msg: Message.WARNING_COPY, severity: Severity.WARNING};
     } else {
       this.isLoading = true;
-      setTimeout(() => this.unCheckAll = undefined );
-      const configIds = this.checkedData.sort((a, b) => ( a.index - b.index )).map(el => el.checkedId);
 
       this.curvesService.copyCurves(configIds).subscribe(
         res => {
           this.getAllCurves();
-          this.unCheckAll = false;
-          this.checkedData = [];
           this.msgDetails = {msg: 'Copy Curves ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         },
         err => {
@@ -94,18 +91,17 @@ export class CurvesTableComponent implements OnInit, OnDestroy {
   }
 
   deleteCurves(): void {
-    if(!this.checkedData.length) {
+    let configIds = [];
+    this.allCurves.map(el => el.check && configIds.push(el.id));
+
+    if(!configIds.length) {
       this.msgDetails = {msg: Message.WARNING_DELETE, severity: Severity.WARNING};
     } else {
       this.isLoading = true;
-      setTimeout(() => this.unCheckAll = undefined );
-      const configIds = this.checkedData.map(el => el.checkedId);
 
       this.curvesService.deleteCurves(configIds).subscribe(
         res => {
           this.getAllCurves();
-          this.unCheckAll = false;
-          this.checkedData = [];
           this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
         },
         err => {
@@ -116,12 +112,25 @@ export class CurvesTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  onChecked(item: CurveModel, ev, idx: number): void{
+  onChecked(ev, idx: number): void{
     if(ev.target.checked) {
-      this.checkedData.push({checkedId: item.id, index: idx});
+      this.allCurves[idx].check = true;
     } else {
-      this.checkedData = this.checkedData.filter(el => el.checkedId !== item.id)
+      this.allCurves[idx].check = false;
     }
+  }
+
+  onCheckPage(ev, dt): void {
+    for(let i = dt._first; i < dt._first + dt._rows; i++ ) {
+      if(i >= this.allCurves.length) {
+        break;
+      }
+      this.onChecked(ev, i);
+    }
+  }
+
+  paginate(ev): void {
+    this.isPageChecked = this.allCurves[ev.first].check ? true : false;
   }
 
   private getAllCurves(): void {
@@ -130,6 +139,7 @@ export class CurvesTableComponent implements OnInit, OnDestroy {
       (res: CurveModel[]) => {
         this.allCurves = res;
         this.isLoading = false;
+        this.isPageChecked = false;
       },
       err => {
         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};

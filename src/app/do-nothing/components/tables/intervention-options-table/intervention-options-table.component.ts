@@ -9,7 +9,6 @@ import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { ConfigInterventionOptionsComponent } from '../../addEdit/config-intervention-options/config-intervention-options.component';
 import { Subscription } from 'rxjs';
 import { LookupService } from 'src/app/do-nothing/services/lookup.service';
-import { CheckedDataModel } from 'src/app/do-nothing/models/checkedData.interface';
 
 @Component({
   selector: 'app-intervention-options-table',
@@ -20,10 +19,9 @@ export class InterventionOptionsTableComponent implements OnInit {
   isLoading: boolean;
   msgDetails: MsgDetails;
   allInterventionOptions: InterventionOptionsModel[] = [];
-  unCheckAll: boolean;
+  isPageChecked: boolean;
   private index = 0;
   private sub$: Subscription;
-  private checkedData: CheckedDataModel[] = [];
 
   constructor( private interventionOptionsService: ConfigInterventionOptionsService,
                private commonService: CommonService,
@@ -71,18 +69,17 @@ export class InterventionOptionsTableComponent implements OnInit {
   }
 
   copyIntOptions(): void {
-    if(!this.checkedData.length) {
-      this.msgDetails = {msg: 'Please check config', severity: Severity.WARNING};
+    let configIds = [];
+    this.allInterventionOptions.map(el => el.check && configIds.push(el.interventionId));
+
+    if(!configIds.length) {
+      this.msgDetails = {msg: Message.WARNING_COPY, severity: Severity.WARNING};
     } else {
       this.isLoading = true;
-      setTimeout(() => this.unCheckAll = undefined );
-      const configIds = this.checkedData.sort((a, b) => ( a.index - b.index )).map(el => el.checkedId);
 
       this.interventionOptionsService.copyIntOptions(configIds).subscribe(
         res => {
           this.getAllInterventionOptions();
-          this.unCheckAll = false;
-          this.checkedData = [];
           this.msgDetails = {msg: 'Copy Intervention Options ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         },
         err => {
@@ -94,18 +91,17 @@ export class InterventionOptionsTableComponent implements OnInit {
   }
 
   deleteIntOptions(): void {
-    if(!this.checkedData.length) {
+    let configIds = [];
+    this.allInterventionOptions.map(el => el.check && configIds.push(el.interventionId));
+
+    if(!configIds.length) {
       this.msgDetails = {msg: Message.WARNING_DELETE, severity: Severity.WARNING};
     } else {
       this.isLoading = true;
-      setTimeout(() => this.unCheckAll = undefined );
-      const configIds = this.checkedData.map(el => el.checkedId);
 
       this.interventionOptionsService.deleteIntOptions(configIds).subscribe(
         res => {
           this.getAllInterventionOptions();
-          this.unCheckAll = false;
-          this.checkedData = [];
           this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
         },
         err => {
@@ -116,13 +112,25 @@ export class InterventionOptionsTableComponent implements OnInit {
     }
   }
 
-  onChecked(item: InterventionOptionsModel, ev, idx: number): void{
+  onChecked(ev, idx: number): void{
     if(ev.target.checked) {
-      this.checkedData.push({checkedId: item.interventionId, index: idx});
+      this.allInterventionOptions[idx].check = true;
     } else {
-      this.checkedData = this.checkedData
-        .filter(el => el.checkedId !== item.interventionId)
+      this.allInterventionOptions[idx].check = false;
     }
+  }
+
+  onCheckPage(ev, dt): void {
+    for(let i = dt._first; i < dt._first + dt._rows; i++ ) {
+      if(i >= this.allInterventionOptions.length) {
+        break;
+      }
+      this.onChecked(ev, i);
+    }
+  }
+
+  paginate(ev): void {
+    this.isPageChecked = this.allInterventionOptions[ev.first].check ? true : false;
   }
 
   private getAllInterventionOptions(): void {
@@ -131,6 +139,7 @@ export class InterventionOptionsTableComponent implements OnInit {
       (res: InterventionOptionsModel[]) => {
         this.allInterventionOptions = res;
         this.isLoading = false;
+        this.isPageChecked = false;
       },
       err => {
         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};

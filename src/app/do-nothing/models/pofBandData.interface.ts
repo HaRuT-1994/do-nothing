@@ -2,6 +2,7 @@ import { ConfigData } from "src/app/models/configData.interface";
 
 export interface PoFBandsModel {
   id?: number,
+  check?: boolean,
   scenario: ConfigData,
   cohort: ConfigData,
   _1: number,

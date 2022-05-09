@@ -9,7 +9,6 @@ import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { ConfigRatesComponent } from '../../addEdit/config-rates/config-rates.component';
 import { Subscription } from 'rxjs';
 import { LookupService } from 'src/app/do-nothing/services/lookup.service';
-import { CheckedDataModel } from 'src/app/do-nothing/models/checkedData.interface';
 
 @Component({
   selector: 'app-rates-table',
@@ -20,10 +19,9 @@ export class RatesTableComponent implements OnInit, OnDestroy {
   isLoading: boolean;
   msgDetails: MsgDetails;
   allRates: RatesModel[] = [];
-  unCheckAll: boolean;
+  isPageChecked: boolean;
   private index = 0;
   private sub$: Subscription;
-  private checkedData: CheckedDataModel[] = [];
 
   constructor( private rateService: ConfigRatesService,
                private commonService: CommonService,
@@ -72,18 +70,17 @@ export class RatesTableComponent implements OnInit, OnDestroy {
    }
 
    copyRates(): void {
-    if(!this.checkedData.length) {
+    let configIds = [];
+    this.allRates.map(el => el.check && configIds.push(el.ratesId));
+
+    if(!configIds.length) {
       this.msgDetails = {msg: Message.WARNING_COPY, severity: Severity.WARNING};
     } else {
       this.isLoading = true;
-      setTimeout(() => this.unCheckAll = undefined );
-      const configIds = this.checkedData.sort((a, b) => ( a.index - b.index )).map(el => el.checkedId);
       
       this.rateService.copyRates(configIds).subscribe(
         res => {
           this.getAllRates();
-          this.unCheckAll = false;
-          this.checkedData = [];
           this.msgDetails = {msg: 'Copy Rates ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         },
         err => {
@@ -95,18 +92,17 @@ export class RatesTableComponent implements OnInit, OnDestroy {
   }
 
   deleteRates(): void {
-    if(!this.checkedData.length) {
+    let configIds = [];
+    this.allRates.map(el => el.check && configIds.push(el.ratesId));
+
+    if(!configIds.length) {
       this.msgDetails = {msg: Message.WARNING_DELETE, severity: Severity.WARNING};
     } else {
       this.isLoading = true;
-      setTimeout(() => this.unCheckAll = undefined );
-      const configIds = this.checkedData.map(el => el.checkedId);
 
       this.rateService.deleteRates(configIds).subscribe(
         res => {
           this.getAllRates();
-          this.unCheckAll = false;
-          this.checkedData = [];
           this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
         },
         err => {
@@ -117,12 +113,25 @@ export class RatesTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  onChecked(item: RatesModel, ev, idx: number): void{
+  onChecked(ev, idx: number): void{
     if(ev.target.checked) {
-      this.checkedData.push({checkedId: item.ratesId, index: idx});
+      this.allRates[idx].check = true;
     } else {
-      this.checkedData = this.checkedData.filter(el => el.checkedId !== item.ratesId)
+      this.allRates[idx].check = false;
     }
+  }
+
+  onCheckPage(ev, dt): void {
+    for(let i = dt._first; i < dt._first + dt._rows; i++ ) {
+      if(i >= this.allRates.length) {
+        break;
+      }
+      this.onChecked(ev, i);
+    }
+  }
+
+  paginate(ev): void {
+    this.isPageChecked = this.allRates[ev.first].check ? true : false;
   }
 
    private getAllRates(): void{
@@ -131,6 +140,7 @@ export class RatesTableComponent implements OnInit, OnDestroy {
       (res: RatesModel[]) => {
         this.allRates = res;
         this.isLoading = false;
+        this.isPageChecked = false;
       },
       err => {
         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};

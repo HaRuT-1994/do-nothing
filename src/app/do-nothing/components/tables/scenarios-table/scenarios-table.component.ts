@@ -8,7 +8,6 @@ import { ConfirmationService } from 'primeng/api';
 import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { ConfigScenariosComponent } from '../../addEdit/config-scenarios/config-scenarios.component';
 import { Subscription } from 'rxjs';
-import { CheckedDataModel } from 'src/app/do-nothing/models/checkedData.interface';
 
 @Component({
   selector: 'app-scenarios-table',
@@ -19,10 +18,9 @@ export class ScenariosTableComponent implements OnInit, OnDestroy {
   isLoading: boolean;
   msgDetails: MsgDetails;
   allScenarios: ScenarioModel[] = [];
-  unCheckAll: boolean;
+  isPageChecked: boolean;
   private index = 0;
   private sub$: Subscription;
-  private checkedData: CheckedDataModel[] = [];
 
   constructor( private scenarioService: ConfigScenariosService,
                private commonService: CommonService,
@@ -69,18 +67,17 @@ export class ScenariosTableComponent implements OnInit, OnDestroy {
   }
 
   copyScenarios(): void {
-    if(!this.checkedData.length) {
+    let configIds = [];
+    this.allScenarios.map(el => el.check && configIds.push(el.scenarioId));
+
+    if(!configIds.length) {
       this.msgDetails = {msg: Message.WARNING_COPY, severity: Severity.WARNING};
     } else {
       this.isLoading = true;
-      setTimeout(() => this.unCheckAll = undefined );
-      const configIds = this.checkedData.sort((a, b) => ( a.index - b.index )).map(el => el.checkedId);
 
       this.scenarioService.copyScenarios(configIds).subscribe(
         res => {
           this.getAllScenarios();
-          this.unCheckAll = false;
-          this.checkedData = [];
           this.msgDetails = {msg: 'Copy Scenarios ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         },
         err => {
@@ -92,18 +89,17 @@ export class ScenariosTableComponent implements OnInit, OnDestroy {
   }
 
   deleteScenarios(): void {
-    if(!this.checkedData.length) {
+    let configIds = [];
+    this.allScenarios.map(el => el.check && configIds.push(el.scenarioId));
+
+    if(!configIds.length) {
       this.msgDetails = {msg: Message.WARNING_DELETE, severity: Severity.WARNING};
     } else {
       this.isLoading = true;
-      setTimeout(() => this.unCheckAll = undefined );
-      const configIds = this.checkedData.map(el => el.checkedId);
 
       this.scenarioService.deleteScenarios(configIds).subscribe(
         res => {
           this.getAllScenarios();
-          this.unCheckAll = false;
-          this.checkedData = [];
           this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
         },
         err => {
@@ -114,12 +110,25 @@ export class ScenariosTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  onChecked(item: ScenarioModel, ev, idx: number): void{
+   onChecked(ev, idx: number): void{
     if(ev.target.checked) {
-      this.checkedData.push({checkedId: item.scenarioId, index: idx});
+      this.allScenarios[idx].check = true;
     } else {
-      this.checkedData = this.checkedData.filter(el => el.checkedId !== item.scenarioId);
+      this.allScenarios[idx].check = false;
     }
+  }
+
+  onCheckPage(ev, dt): void {
+    for(let i = dt._first; i < dt._first + dt._rows; i++ ) {
+      if(i >= this.allScenarios.length) {
+        break;
+      }
+      this.onChecked(ev, i);
+    }
+  }
+
+  paginate(ev): void {
+    this.isPageChecked = this.allScenarios[ev.first].check ? true : false;
   }
 
   private getAllScenarios(): void {

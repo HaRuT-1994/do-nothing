@@ -9,7 +9,6 @@ import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { PofBandsComponent } from '../../addEdit/pof-bands/pof-bands.component';
 import { Subscription } from 'rxjs';
 import { LookupService } from 'src/app/do-nothing/services/lookup.service';
-import { CheckedDataModel } from 'src/app/do-nothing/models/checkedData.interface';
 
 @Component({
   selector: 'app-pof-bands-table',
@@ -20,10 +19,9 @@ export class PoFBandsTableComponent implements OnInit, OnDestroy {
   isLoading: boolean;
   msgDetails: MsgDetails;
   allPoFBands: PoFBandsModel[] = [];
-  unCheckAll: boolean;
+  isPageChecked: boolean;
   private index = 0;
   private sub$: Subscription;
-  private checkedData: CheckedDataModel[] = [];
 
   constructor( private pofBandService: PofBandsService,
                private commonService: CommonService,
@@ -72,18 +70,17 @@ export class PoFBandsTableComponent implements OnInit, OnDestroy {
   }
 
   copyPoFBands(): void {
-    if(!this.checkedData.length) {
+    let configIds = [];
+    this.allPoFBands.map(el => el.check && configIds.push(el.id));
+
+    if(!configIds.length) {
       this.msgDetails = {msg: Message.WARNING_COPY, severity: Severity.WARNING};
     } else {
       this.isLoading = true;
-      setTimeout(() => this.unCheckAll = undefined );
-      const configIds = this.checkedData.sort((a, b) => ( a.index - b.index )).map(el => el.checkedId);
 
       this.pofBandService.copyPoFBands(configIds).subscribe(
         res => {
           this.getAllPoFBands();
-          this.unCheckAll = false;
-          this.checkedData = [];
           this.msgDetails = {msg: 'Copy PoFBands ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         },
         err => {
@@ -95,18 +92,17 @@ export class PoFBandsTableComponent implements OnInit, OnDestroy {
   }
 
   deletePoFBands(): void {
-    if(!this.checkedData.length) {
+    let configIds = [];
+    this.allPoFBands.map(el => el.check && configIds.push(el.id));
+
+    if(!configIds.length) {
       this.msgDetails = {msg: Message.WARNING_DELETE, severity: Severity.WARNING};
     } else {
       this.isLoading = true;
-      setTimeout(() => this.unCheckAll = undefined );
-      const configIds = this.checkedData.map(el => el.checkedId);
 
       this.pofBandService.deletePoFBands(configIds).subscribe(
         res => {
           this.getAllPoFBands();
-          this.unCheckAll = false;
-          this.checkedData = [];
           this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
         },
         err => {
@@ -117,12 +113,25 @@ export class PoFBandsTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  onChecked(item: PoFBandsModel, ev, idx: number): void{
+  onChecked(ev, idx: number): void{
     if(ev.target.checked) {
-      this.checkedData.push({checkedId: item.id, index: idx});
+      this.allPoFBands[idx].check = true;
     } else {
-      this.checkedData = this.checkedData.filter(el => el.checkedId !== item.id)
+      this.allPoFBands[idx].check = false;
     }
+  }
+
+  onCheckPage(ev, dt): void {
+    for(let i = dt._first; i < dt._first + dt._rows; i++ ) {
+      if(i >= this.allPoFBands.length) {
+        break;
+      }
+      this.onChecked(ev, i);
+    }
+  }
+
+  paginate(ev): void {
+    this.isPageChecked = this.allPoFBands[ev.first].check ? true : false;
   }
 
   private getAllPoFBands(): void {
@@ -131,6 +140,7 @@ export class PoFBandsTableComponent implements OnInit, OnDestroy {
       (res: PoFBandsModel[]) => {
         this.allPoFBands = res;
         this.isLoading = false;
+        this.isPageChecked = false;
       },
       err => {
         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};

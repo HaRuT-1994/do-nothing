@@ -1,5 +1,6 @@
 export interface BudgetPivotDetails {
   BudgetId?: number,
+  check?: boolean,
   BudgetName: string,
   ScenarioId: number,
   ScenarioName: string,

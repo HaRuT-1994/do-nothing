@@ -2,6 +2,7 @@ import { ConfigData } from "src/app/models/configData.interface";
 
 export interface CurveModel {
     id?: number,
+    check?: boolean,
     scenario: ConfigData,
     cohort: ConfigData,
     calculation: string,

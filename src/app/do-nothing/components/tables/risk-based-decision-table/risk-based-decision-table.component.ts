@@ -9,8 +9,6 @@ import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { ConfigRiskBasedDecisionsComponent } from '../../addEdit/config-risk-based-decisions/config-risk-based-decisions.component';
 import { Subscription } from 'rxjs';
 import { LookupService } from 'src/app/do-nothing/services/lookup.service';
-import { CheckedDataModel } from 'src/app/do-nothing/models/checkedData.interface';
-import { ThrowStmt } from '@angular/compiler';
 
 @Component({
   selector: 'app-risk-based-decision-table',
@@ -21,10 +19,9 @@ export class RiskBasedDecisionTableComponent implements OnInit, OnDestroy {
   isLoading: boolean;
   msgDetails: MsgDetails;
   allRiskBasedDecisions: RiskBasedDecisionModel[];
-  unCheckAll: boolean;
+  isPageChecked: boolean;
   private index = 0;
   private sub$: Subscription;
-  private checkedData: CheckedDataModel[] = [];
 
   constructor( private riskBasedDecisionService: ConfigRiskBasedDecisionsService,
                private commonService: CommonService,
@@ -73,18 +70,16 @@ export class RiskBasedDecisionTableComponent implements OnInit, OnDestroy {
   }
 
   copyRiskBasedDecisions(): void {
-    if(!this.checkedData.length) {
+    let configIds = [];
+    this.allRiskBasedDecisions.map(el => el.check && configIds.push(el.decisionId));
+
+    if(!configIds.length) {
       this.msgDetails = {msg: Message.WARNING_COPY, severity: Severity.WARNING};
     } else {
       this.isLoading = true;
-      setTimeout(() => this.unCheckAll = undefined );
-      const configIds = this.checkedData.sort((a, b) => ( a.index - b.index )).map(el => el.checkedId);
-
       this.riskBasedDecisionService.copyRiskBasedDecisions(configIds).subscribe(
         res => {
           this.getAllRiskBasedDecisions();
-          this.unCheckAll = false;
-          this.checkedData = [];
           this.msgDetails = {msg: 'Copy Risk Based Decisions ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         },
         err => {
@@ -96,18 +91,17 @@ export class RiskBasedDecisionTableComponent implements OnInit, OnDestroy {
   }
 
   deleteRiskBasedDecisions(): void {
-    if(!this.checkedData.length) {
+    let configIds = [];
+    this.allRiskBasedDecisions.map(el => el.check && configIds.push(el.decisionId));
+
+    if(!configIds.length) {
       this.msgDetails = {msg: Message.WARNING_DELETE, severity: Severity.WARNING};
     } else {
       this.isLoading = true;
-      setTimeout(() => this.unCheckAll = undefined );
-      const configIds = this.checkedData.map(el => el.checkedId);
 
       this.riskBasedDecisionService.deleteRiskBasedDecisions(configIds).subscribe(
         res => {
           this.getAllRiskBasedDecisions();
-          this.unCheckAll = false;
-          this.checkedData = [];
           this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
         },
         err => {
@@ -118,12 +112,25 @@ export class RiskBasedDecisionTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  onChecked(item: RiskBasedDecisionModel, ev, idx: number): void{
+  onChecked(ev, idx: number): void{
     if(ev.target.checked) {
-      this.checkedData.push({checkedId: item.decisionId, index: idx});
+      this.allRiskBasedDecisions[idx].check = true;
     } else {
-      this.checkedData = this.checkedData.filter(el => el.checkedId !== item.decisionId)
+      this.allRiskBasedDecisions[idx].check = false;
     }
+  }
+
+  onCheckPage(ev, dt): void {
+    for(let i = dt._first; i < dt._first + dt._rows; i++ ) {
+      if(i >= this.allRiskBasedDecisions.length) {
+        break;
+      }
+      this.onChecked(ev, i);
+    }
+  }
+
+  paginate(ev): void {
+    this.isPageChecked = this.allRiskBasedDecisions[ev.first].check ? true : false;
   }
 
   private getAllRiskBasedDecisions(): void {
@@ -131,6 +138,7 @@ export class RiskBasedDecisionTableComponent implements OnInit, OnDestroy {
       (res: RiskBasedDecisionModel[]) => {
         this.allRiskBasedDecisions = res;
         this.isLoading = false;
+        this.isPageChecked = false;
       },
       err => {
         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};

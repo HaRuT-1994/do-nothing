@@ -5,7 +5,7 @@
   <app-control-tables (copyTriggered)="copyRiskBasedDecisions()" (deleteTriggered)="deleteRiskBasedDecisions()"></app-control-tables>
   <p-table #dt [value]="allRiskBasedDecisions" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,20,30]"
   [globalFilterFields]="['scenario.value','cohort.value', 'poF', 'coF', 'risk', 'band', 'intervention', 'frequency']"
-    [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
+  (onPage)="paginate($event)" [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
     <ng-template pTemplate="header">
         <tr>
           <th pSortableColumn="scenario.value">Scenario<p-sortIcon field="scenario.value"></p-sortIcon></th>
@@ -16,8 +16,11 @@
           <th pSortableColumn="band">Band<p-sortIcon field="band"></p-sortIcon></th>
           <th pSortableColumn="intervention">Rate Type<p-sortIcon field="intervention"></p-sortIcon></th>
           <th pSortableColumn="frequency">Frequency<p-sortIcon field="frequency"></p-sortIcon></th>
-          <th colspan="3">
+          <th colspan="2">
             <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search" />
+          </th>
+          <th>
+            <input class="checkbox" type="checkbox" [(ngModel)]="isPageChecked" (change)="onCheckPage($event, dt)">
           </th>
         </tr>
     </ng-template>
@@ -38,9 +41,9 @@
             <span class="delete">Delete</span>
           </td>
           <td>
-            <input class="checkbox" type="checkbox" [checked]="unCheckAll" (change)="onChecked(data, $event, i)">
+            <input class="checkbox" type="checkbox" [checked]="data.check" (change)="onChecked($event, i)">
           </td>
-        </tr> 
+        </tr>
     </ng-template>
   </p-table>
 </main>

@@ -2,6 +2,7 @@ import { ConfigData } from "src/app/models/configData.interface";
 
 export interface RatesModel {
   ratesId?: number,
+  check?: boolean,
   scenario: ConfigData,
   cohort: ConfigData,
   intervention: string,

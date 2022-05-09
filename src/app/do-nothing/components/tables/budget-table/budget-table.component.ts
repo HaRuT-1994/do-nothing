@@ -9,7 +9,6 @@ import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { ConfigBudgetComponent } from '../../addEdit/config-budget/config-budget.component';
 import { Subscription } from 'rxjs';
 import { LookupService } from 'src/app/do-nothing/services/lookup.service';
-import { CheckedDataModel } from 'src/app/do-nothing/models/checkedData.interface';
 
 @Component({
   selector: 'app-budget-table',
@@ -20,10 +19,10 @@ export class BudgetTableComponent implements OnInit, OnDestroy {
   isLoading: boolean;
   msgDetails: MsgDetails;
   allBudgets: BudgetModel[];
-  unCheckAll: boolean;
+  isPageChecked: boolean;
   private index = 0;
   private sub$: Subscription;
-  private checkedData: CheckedDataModel[] = [];
+
 
   constructor( private budgetService: ConfigBudgetService,
                private commonService: CommonService,
@@ -71,18 +70,17 @@ export class BudgetTableComponent implements OnInit, OnDestroy {
   }
 
   copyBudgets(): void {
-    if(!this.checkedData.length) {
+    let configIds = [];
+    this.allBudgets.map(el => el.check && configIds.push(el.budgetId));
+
+    if(!configIds.length) {
       this.msgDetails = {msg: Message.WARNING_COPY, severity: Severity.WARNING};
     } else {
       this.isLoading = true;
-      setTimeout(() => this.unCheckAll = undefined );
-      const configIds = this.checkedData.sort((a, b) => ( a.index - b.index )).map(el => el.checkedId);
       
       this.budgetService.copyBudgets(configIds).subscribe(
         res => {
           this.getAllBudgets();
-          this.unCheckAll = false;
-          this.checkedData = [];
           this.msgDetails = {msg: 'Copy Budgets ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         },
         err => {
@@ -94,18 +92,17 @@ export class BudgetTableComponent implements OnInit, OnDestroy {
   }
 
   deleteBudgets(): void {
-    if(!this.checkedData.length) {
+    let configIds = [];
+    this.allBudgets.map(el => el.check && configIds.push(el.budgetId));
+
+    if(!configIds.length) {
       this.msgDetails = {msg: Message.WARNING_DELETE, severity: Severity.WARNING};
     } else {
       this.isLoading = true;
-      setTimeout(() => this.unCheckAll = undefined );
-      const configIds = this.checkedData.map(el => el.checkedId);
 
       this.budgetService.deleteBudgets(configIds).subscribe(
         res => {
           this.getAllBudgets();
-          this.unCheckAll = false;
-          this.checkedData = [];
           this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
         },
         err => {
@@ -116,12 +113,25 @@ export class BudgetTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  onChecked(item: BudgetModel, ev, idx: number): void{
+  onChecked(ev, idx: number): void{
     if(ev.target.checked) {
-      this.checkedData.push({checkedId: item.budgetId, index: idx});
+      this.allBudgets[idx].check = true;
     } else {
-      this.checkedData = this.checkedData.filter(el => el.checkedId !== item.budgetId)
+      this.allBudgets[idx].check = false;
     }
+  }
+
+  onCheckPage(ev, dt): void {
+    for(let i = dt._first; i < dt._first + dt._rows; i++ ) {
+      if(i >= this.allBudgets.length) {
+        break;
+      }
+      this.onChecked(ev, i);
+    }
+  }
+
+  paginate(ev): void {
+    this.isPageChecked = this.allBudgets[ev.first].check ? true : false;
   }
 
   private getAllBudgets(): void {
@@ -130,6 +140,7 @@ export class BudgetTableComponent implements OnInit, OnDestroy {
       (res: BudgetModel[]) => {
         this.allBudgets = res;
         this.isLoading = false;
+        this.isPageChecked = false;
       },
       err => {
         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
