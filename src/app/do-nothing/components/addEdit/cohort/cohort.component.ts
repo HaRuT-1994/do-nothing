@@ -14,10 +14,10 @@ import { CohortModel } from 'src/app/do-nothing/models/cohortData.interface';
   styleUrls: ['./cohort.component.scss']
 })
 export class CohortComponent implements OnInit {
-  public formGroup: FormGroup;
-  public msgDetails: MsgDetails;
-  public isOnEdit: boolean;
-  public isLoading: boolean;
+  formGroup: FormGroup;
+  msgDetails: MsgDetails;
+  isLoading: boolean;
+  isOnEdit: boolean;
   private editCohort: CohortModel[];
   
   constructor( private cohortService: CohortService,

@@ -61,6 +61,7 @@ import { ConfigBudgetYearService } from './services/config-budget-year.service';
 import { LookupService } from './services/lookup.service';
 import { BudgetYearsComponent } from './components/addEdit/config-budget-year/config-budget-year.component';
 import { BudgetYearsTableComponent } from './components/tables/budget-years-table/budget-years-table.component';
+import { ExportModelComponent } from './components/tables/do-nothing-table/export-model/export-model.component';
 
 @NgModule({
   declarations: [
@@ -94,7 +95,8 @@ import { BudgetYearsTableComponent } from './components/tables/budget-years-tabl
     ControlTablesComponent,
     DataModelComponent,
     BudgetYearsComponent,
-    BudgetYearsTableComponent
+    BudgetYearsTableComponent,
+    ExportModelComponent
   ],
   imports: [
     CommonModule,

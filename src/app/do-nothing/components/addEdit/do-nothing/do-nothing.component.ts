@@ -39,7 +39,6 @@ export class DoNothingComponent implements OnInit {
     this.skipTheseLifecycles = this.lookupService.skipTheseLifecycles;
     this.skipTheseAssetSources = this.lookupService.skipTheseAssetSources;
     this.skipTheseUnitClasses = this.lookupService.skipTheseUnitClasses;
-    
     this.scenarioData = this.lookupService.configScenariosData;
     this.isOnEdit = !this.dialogConfig.data?.add;
 

@@ -69,6 +69,7 @@ export const AppConfig: AppConfig = {
         deleteBudgetYear: 'ConfigBudgetYear/DeleteConfigBudgetYear',
         copyBudgetYears: 'ConfigBudgetYear/CopyConfigBudgetYear',
         deleteMultiBudgetYears: 'ConfigBudgetYear/DeleteMultipleConfigBudgetYears',
+        deleteBudgetYearByBudgetId: 'ConfigBudgetYear/DeleteAllConfigBudgetYearsByBudgetId',
 
         addConfigInterventionOptions: 'ConfigInterventionOptions/AddConfigInterventionOptions',
         getAllInterventionOptions: 'ConfigInterventionOptions/GetAllConfigInterventionOptions',
@@ -169,8 +170,8 @@ export const AppConfig: AppConfig = {
             interventionOptionsTable: "intervention-options-table",
             riskBasedDecisionTable: "risk-based-decision-table",
             runHistory: "run-history-table",
-        }
-        
+        },
+        // exportModel: "export-models"
     },
     baseUrl: 'https://localhost:44360/'
 };

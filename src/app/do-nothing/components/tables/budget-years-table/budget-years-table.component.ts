@@ -20,7 +20,9 @@ export class BudgetYearsTableComponent implements OnInit, OnDestroy {
   msgDetails: MsgDetails;
   allBudgetYears: BudgetPivotDetails[] = [];
   isPageChecked: boolean;
+  index: number = -1;
   private sub$: Subscription;
+  years = ['_2022', '_2023', '_2024', '_2025', '_2026', '_2027', '_2028', '_2029', '_2030', '_2031', '_2032', '_2033', '_2034', '_2035', '_2036', '_2037', '_2038', '_2039', '_2040', '_2041', '_2042', '_2043', '_2044', '_2045', '_2046', '_2047', '_2048', '_2049', '_2050', '_2051', '_2052', '_2053', '_2054', '_2055', '_2056', '_2057', '_2058', '_2059', '_2060', '_2061', '_2062', '_2063', '_2064', '_2065', '_2066', '_2067', '_2068', '_2069', '_2070', '_2071'];
 
   constructor( private budgetYearsService: ConfigBudgetYearService,
                private commonService: CommonService,
@@ -32,9 +34,16 @@ export class BudgetYearsTableComponent implements OnInit, OnDestroy {
     this.sub$ = this.commonService.getData().subscribe(res => { this.getAllBudgetPivotYears() })
    }
 
-  onEditRow(data: BudgetYearsModel): void {
-    this.budgetYearsService.onEditRow(data);
-    this.commonService.show(BudgetYearsComponent);
+  onEditRow(index: number): void {
+    // console.log(index);
+    // this.budgetYearsService.onEditRow(data);
+    // this.commonService.show(BudgetYearsComponent);
+    if(index === this.index) {
+      console.log(index);
+      this.index = -1;
+    } else {
+      this.index = index;
+    }
   }
 
   onDeleteRow(id: number): void {
@@ -44,7 +53,7 @@ export class BudgetYearsTableComponent implements OnInit, OnDestroy {
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.isLoading = true;
-        this.budgetYearsService.deleteBudgetYear(id).subscribe(
+        this.budgetYearsService.deleteBudgetYearByBudgetId(id).subscribe(
           () => {
             this.isLoading = false;
             this.allBudgetYears = this.allBudgetYears.filter( (val) => val['BudgetId'] !== id);

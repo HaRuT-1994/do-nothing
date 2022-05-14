@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AppConfig } from '../../config/app.config';
@@ -32,8 +32,15 @@ export class ConfigBudgetYearService {
     return this.http.get<BudgetPivotDetails[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.budgetPivotDetails}`);
   }
   
-  deleteBudgetYear(id: number): Observable<any> {
-    return this.http.delete(`${AppConfig.baseUrl}api/${AppConfig.endPoints.deleteBudgetYear}/${id}`);
+  // deleteBudgetYear(id: number): Observable<any> {
+  //   return this.http.delete(`${AppConfig.baseUrl}api/${AppConfig.endPoints.deleteBudgetYear}/${id}`);
+  // }
+
+  deleteBudgetYearByBudgetId(id: number): Observable<any> {
+    const params = new HttpParams()
+      .set('id', String(id));
+
+    return this.http.delete(`${AppConfig.baseUrl}api/${AppConfig.endPoints.deleteBudgetYearByBudgetId}`, {params});
   }
    
   onEditBudgetYear(data: BudgetYearsModel): Observable<any> {

@@ -1,0 +1,23 @@
+<alert-message [msgDetails]="msgDetails"></alert-message>
+<app-loading *ngIf="isLoading"></app-loading>
+<main [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
+  <h1>Export Reports</h1>
+  <form [formGroup]="formGroup">
+    <div class="G-flex-justify-around">
+      <div class="G-column gap">
+        <div class="G-flex-center-between">
+          <label for="model">Model</label>
+          <p-dropdown [options]="modelData" optionValue="id" optionLabel="value" formControlName="model"
+            placeholder="Configuration Name"></p-dropdown>
+        </div>
+        <div class="G-flex-center-between">
+          <label for="scenario">Scenario</label>
+          <p-dropdown [options]="scenarioData" optionValue="id" optionLabel="value" formControlName="scenario"
+            placeholder="Scenario Name"></p-dropdown>
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" (click)="export()">Export Report</button>
+  </form>
+</main>

@@ -18,6 +18,9 @@
     <div *ngIf="needCopy">
       <button (click)="copyConfigs()">Copy</button>
     </div>
+    <div *ngIf="needExport">
+      <button (click)="exportTriggered.emit()">Export</button>
+    </div>
     <div *ngIf="needDelete">
       <button (click)="deleteConfigs()">Delete</button>
     </div>

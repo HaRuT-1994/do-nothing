@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { DialogService } from 'primeng/dynamicdialog';
 import { Observable, Subject } from 'rxjs';
 import { ConfigData } from '../models/configData.interface';
 
@@ -8,7 +8,6 @@ import { ConfigData } from '../models/configData.interface';
   providedIn: 'root'
 })
 export class CommonService {
-  private ref: DynamicDialogRef;
   private siblingData = new Subject<any>();
 
   constructor(private dialogService: DialogService) { }
@@ -32,8 +31,9 @@ export class CommonService {
     })
   }
 
-  public show(component): void {
-    this.ref = this.dialogService.open( component, {
+  public show(component, data?): void {
+    this.dialogService.open( component, {
+        data: data,
         width: '80%',
         contentStyle: {"max-height": "800px", "overflow": "auto"},
         baseZIndex: 10000

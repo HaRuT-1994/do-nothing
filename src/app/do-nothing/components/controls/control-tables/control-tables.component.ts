@@ -29,14 +29,19 @@ import { Router } from '@angular/router';
   providers: [ConfirmationService, DialogService]
 })
 export class ControlTablesComponent implements OnInit, OnDestroy {
-  @Input() path: string;
   @Input() needRun: boolean;
+  @Input() needExport: boolean;
   @Input() needCopy = true;
   @Input() needDelete = true;
   @Input() needNew = true;
+  @Output() runTriggered = new EventEmitter<void>();
+  @Output() copyTriggered = new EventEmitter<void>();
+  @Output() exportTriggered = new EventEmitter<void>();
+  @Output() deleteTriggered = new EventEmitter<void>();
+
   private ref: DynamicDialogRef;
   private component: any;
-  public controlTables = [
+  controlTables = [
     { label: 'Model Configuration', routerLink: AppConfig.routes.view.doNothingTable, component: DoNothingComponent },
     { label: 'Cohort', routerLink: AppConfig.routes.view.cohortTable, component: CohortComponent },
     { label: 'Fields', routerLink: AppConfig.routes.view.fieldsTable, component: ConfigFieldsComponent },
@@ -53,10 +58,7 @@ export class ControlTablesComponent implements OnInit, OnDestroy {
     { label: 'List Values', routerLink: AppConfig.routes.view.listValuesTable, component: ConfigListValuesComponent },
     { label: 'Run History', routerLink: AppConfig.routes.view.runHistory },
   ];
-  public selectedItem = {};
-  @Output() runTriggered = new EventEmitter<void>();
-  @Output() copyTriggered = new EventEmitter<void>();
-  @Output() deleteTriggered = new EventEmitter<void>();
+  selectedItem = {};
 
   constructor( private confirmationService: ConfirmationService,
                private dialogService: DialogService,
@@ -73,15 +75,11 @@ export class ControlTablesComponent implements OnInit, OnDestroy {
   }
 
   onAddConfig(): void {
-    this.show();
-  }
-
-  private show(): void {
     this.ref = this.dialogService.open( this.component, {
-        data: {add: true},
-        width: '80%',
-        contentStyle: {"max-height": "800px", "overflow": "auto"},
-        baseZIndex: 10001,
+      data: {add: true},
+      width: '80%',
+      contentStyle: {"max-height": "800px", "overflow": "auto"},
+      baseZIndex: 10000,
     });
   }
 
@@ -119,7 +117,7 @@ export class ControlTablesComponent implements OnInit, OnDestroy {
   }
 
   private getSelectedTable(): void {
-    const route =  this.location.path().split('/')[1];
+    const route = this.location.path().split('/')[1];
     const selectedTable = this.controlTables.filter( item => item.routerLink === route);
     this.component = selectedTable[0].component;
     this.selectedItem = selectedTable[0];
@@ -127,7 +125,7 @@ export class ControlTablesComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     if (this.ref) {
-        this.ref.close();
+      this.ref.close();
     }
   }
 }

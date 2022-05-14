@@ -10,6 +10,9 @@ import { DoNothingComponent } from '../../addEdit/do-nothing/do-nothing.componen
 import { LookupService } from 'src/app/do-nothing/services/lookup.service';
 import { Subscription } from 'rxjs';
 import {strToArray} from 'src/app/shared/helper';
+import { ExportModelComponent } from './export-model/export-model.component';
+import { config } from 'process';
+import { ConfigData } from 'src/app/models/configData.interface';
 
 @Component({
   selector: 'app-do-nothing-table',
@@ -137,18 +140,6 @@ export class DoNothingTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  // onChecked(item: ModelConfig, ev, idx: number): void {
-  //   const data = strToArray(item['scenariosToRun']);
-  //   if(ev.target.checked) {
-  //     this.checkedData.push({checkedId: {
-  //       configurationId: item.id,
-  //       scenarioIds: data
-  //     }, index: idx})
-  //   } else {
-  //     this.checkedData = this.checkedData.filter(el => el.checkedId.configurationId !== item.id)
-  //   }
-  // }
-
   onChecked(ev, idx: number): void{
     const data = strToArray(this.allModels[idx]['scenariosToRun']);
     if(ev.target.checked) {
@@ -156,8 +147,6 @@ export class DoNothingTableComponent implements OnInit, OnDestroy {
     } else {
       this.allModels[idx].check = null;
     }
-    // console.log(this.allModels);
-    
   }
 
   onCheckPage(ev, dt): void {
@@ -171,6 +160,23 @@ export class DoNothingTableComponent implements OnInit, OnDestroy {
 
   paginate(ev): void {
     this.isPageChecked = this.allModels[ev.first].check ? true : false;
+  }
+
+  exportModel(): void {
+    const models: ConfigData[] = [];
+    const scenarios: ConfigData[] = [];
+    this.allModels.forEach(config => {
+      models.push({
+        id: config.id,
+        value: config.modelName
+      });
+      scenarios.push({
+        id: +config.scenariosToRun,
+        value: config.scenarioName
+      });
+    });
+     
+    this.commonService.show(ExportModelComponent, {models, scenarios});
   }
 
   private getAllModelConfigs(): void {
@@ -197,7 +203,7 @@ export class DoNothingTableComponent implements OnInit, OnDestroy {
 
   filterModel(model: string) {
     if (model !== 'All') {
-      this.allModels = this.defaultModels.filter(item => item.modelName === model)
+      this.allModels = this.defaultModels.filter(item => item.modelName === model);
     } else {
       this.allModels = this.defaultModels;
     }

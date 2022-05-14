@@ -47,6 +47,7 @@ export class BudgetYearsComponent implements OnInit {
         ScenarioName: this.editBudgetYear['Scenario'].id,
         BudgetSource: this.editBudgetYear['BudgetSource']
       })
+      this.onChangeYear();
     }
   }
 
@@ -71,7 +72,7 @@ export class BudgetYearsComponent implements OnInit {
       (res) => {
         console.log(res);
         this.isLoading = false;
-        this.msgDetails = {msg: 'Config Budget Year Form ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
+        this.msgDetails = {msg: 'Config Budget Year Form ' + Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         this.commonService.updateData(true);
         this.formInit();
       },
