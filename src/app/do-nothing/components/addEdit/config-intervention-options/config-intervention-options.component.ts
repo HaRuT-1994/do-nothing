@@ -18,13 +18,13 @@ import { ListId } from 'src/app/do-nothing/enums/listId.enum';
   styleUrls: ['./config-intervention-options.component.scss']
 })
 export class ConfigInterventionOptionsComponent implements OnInit {
-  public formGroup: FormGroup;
-  public msgDetails: MsgDetails;
-  public isOnEdit: boolean;
-  public isLoading: boolean;
-  public scenarioData: ConfigData[];
-  public cohortData: ConfigData[];
-  public listValues: string[];
+  formGroup: FormGroup;
+  msgDetails: MsgDetails;
+  isOnEdit: boolean;
+  isLoading: boolean;
+  scenarioData: ConfigData[];
+  cohortData: ConfigData[];
+  listValues: string[];
   private editInterventionOptions: InterventionOptionsModel[];
   
   constructor( 
@@ -70,7 +70,7 @@ export class ConfigInterventionOptionsComponent implements OnInit {
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: 'Config Intervention Options Form ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
-        this.commonService.updateData(true)
+        this.commonService.updateData()
         this.formInit();
       },
       () => {
@@ -87,7 +87,7 @@ export class ConfigInterventionOptionsComponent implements OnInit {
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: 'Intervention Options Form ' +  Message.EDIT_SUCCESS_MSG, severity: Severity.SUCCESS};
-        this.commonService.updateData(this.formGroup);
+        this.commonService.updateData();
         this.editInterventionOptions = this.formGroup.value;
         this.commonService.updateForm(this.formGroup, this.editInterventionOptions);
       },

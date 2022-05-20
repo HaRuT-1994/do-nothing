@@ -14,10 +14,10 @@ import { ScenarioModel } from 'src/app/do-nothing/models/scenarioData.interface'
   styleUrls: ['./config-scenarios.component.scss']
 })
 export class ConfigScenariosComponent implements OnInit {
-  public formGroup: FormGroup;
-  public msgDetails: MsgDetails;
-  public isOnEdit: boolean;
-  public isLoading: boolean;
+  formGroup: FormGroup;
+  msgDetails: MsgDetails;
+  isOnEdit: boolean;
+  isLoading: boolean;
   private editScenario: ScenarioModel[];
 
   constructor( private sccenariosService: ConfigScenariosService,
@@ -50,7 +50,7 @@ export class ConfigScenariosComponent implements OnInit {
         this.isLoading = false;
         this.msgDetails = {msg: 'Scenarios Form ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         this.formInit();
-        this.commonService.updateData(true);
+        this.commonService.updateData();
       },
       err => {
         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
@@ -65,7 +65,7 @@ export class ConfigScenariosComponent implements OnInit {
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: 'Scenario Form ' +  Message.EDIT_SUCCESS_MSG, severity: Severity.SUCCESS};
-        this.commonService.updateData(this.formGroup);
+        this.commonService.updateData();
         this.editScenario = this.formGroup.value;
         this.updateForm(this.formGroup, this.editScenario);
       },

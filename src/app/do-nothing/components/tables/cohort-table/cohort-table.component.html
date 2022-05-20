@@ -20,7 +20,7 @@
         <tr>
           <td [attr.title]="data.cohorts">{{data.cohorts}}</td>
           <td [attr.title]="data.description">{{data.description}}</td>
-          <td class="buttonEffect" (click)="onEditRow(data, i)">
+          <td class="buttonEffect" (click)="onEditRow(data)">
             <span class="edit">Edit</span>
           </td>
           <td class="buttonEffect" (click)="onDeleteRow(data.cohortId)">

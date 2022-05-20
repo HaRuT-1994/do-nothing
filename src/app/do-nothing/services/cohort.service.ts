@@ -8,7 +8,7 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class CohortService {
   public editCohort: CohortModel[] = [];
-  
+
   constructor(private http: HttpClient) { }
 
   copyCohorts(data: number[]): Observable<any> {
@@ -27,7 +27,7 @@ export class CohortService {
   addCohort(data: any): Observable<ConfigData[]> {
     return this.http.post<ConfigData[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.addConfigCohort}`, data);
   }
-  
+
   getAllCohorts(): Observable<any> {
     return this.http.get<CohortModel[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.getAllCohorts}`);
   }

@@ -19,7 +19,6 @@ export class CohortTableComponent implements OnInit, OnDestroy {
   msgDetails: MsgDetails;
   allCohorts: CohortModel[] = [];
   isPageChecked: boolean;
-  private index = 0;
   private sub$: Subscription;
 
   constructor( private cohortService: CohortService,
@@ -29,17 +28,10 @@ export class CohortTableComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getAllCohorts();
 
-    this.sub$ = this.commonService.getData().subscribe(res => {
-      if(typeof res === 'boolean') {
-        this.getAllCohorts();
-      } else {
-        this.allCohorts[this.index] = res.value;
-      }
-    })
+    this.sub$ = this.commonService.getData().subscribe(() => this.getAllCohorts() );
   }
 
-  onEditRow(data: CohortModel, idx: number): void {
-    this.index = idx;
+  onEditRow(data: CohortModel): void {
     this.cohortService.onEditRow(data);
     this.commonService.show(CohortComponent);
   }

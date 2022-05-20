@@ -11,18 +11,18 @@ export class ConfigBudgetYearService {
 
   constructor(private http: HttpClient) { }
 
-  copyBudgetYears(data: number[]): Observable<any> {
-    return this.http.post<number[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.copyBudgetYears}`, data);
-  }
+  // copyBudgetYears(data: number[]): Observable<any> {
+  //   return this.http.post<number[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.copyBudgetYears}`, data);
+  // }
 
-  deleteBudgetYears(data: number[]): Observable<any> {
-    const options = {
-      headers: new HttpHeaders({'content-type': 'application/json'}),
-      body: data
-    }
+  // deleteBudgetYears(data: number[]): Observable<any> {
+  //   const options = {
+  //     headers: new HttpHeaders({'content-type': 'application/json'}),
+  //     body: data
+  //   }
   
-    return this.http.delete<any>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.deleteMultiBudgetYears}`, options);
-  }
+  //   return this.http.delete<any>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.deleteMultiBudgetYears}`, options);
+  // }
 
   addConfigBudgetYear(data: any): Observable<BudgetYearsModel[]> {
     return this.http.post<BudgetYearsModel[]>(`${AppConfig.baseUrl}api/${AppConfig.endPoints.addConfigBudgetYear}`, data);

@@ -7,3 +7,18 @@
 .editableBudget {
   width: 100px;
 }
+
+.fixedColumn {
+  position: sticky;
+  right: 0;
+}
+
+.fixedColumnEdit {
+  position: sticky;
+  right: 91px;
+}
+
+.fixedColumnDelete {
+  position: sticky;
+  right: 0;
+}

@@ -18,15 +18,14 @@ import { ListId } from 'src/app/do-nothing/enums/listId.enum';
   styleUrls: ['./config-risk-based-decisions.component.scss']
 })
 export class ConfigRiskBasedDecisionsComponent implements OnInit {
-  public formGroup: FormGroup;
-  public scenarioData: ConfigData[] = [];
-  public cohortData: ConfigData[] = [];
-  public msgDetails: MsgDetails;
-  public isOnEdit: boolean;
-  public isLoading: boolean;
-  public pofValues = [1,2,3,4,5];
-  public listValues: string[] = [];
-
+  formGroup: FormGroup;
+  scenarioData: ConfigData[] = [];
+  cohortData: ConfigData[] = [];
+  msgDetails: MsgDetails;
+  isOnEdit: boolean;
+  isLoading: boolean;
+  pofValues = [1,2,3,4,5];
+  listValues: string[] = [];
   private editRiskBasedDecision: RiskBasedDecisionModel[];
   
   constructor(
@@ -69,7 +68,7 @@ export class ConfigRiskBasedDecisionsComponent implements OnInit {
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: 'Config Risk Based Decisions Form ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
-        this.commonService.updateData(true);
+        this.commonService.updateData();
         this.formInit();
       },
       () => {
@@ -86,7 +85,7 @@ export class ConfigRiskBasedDecisionsComponent implements OnInit {
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: 'Risk Based Decision Form ' +  Message.EDIT_SUCCESS_MSG, severity: Severity.SUCCESS};
-        this.commonService.updateData(this.formGroup);
+        this.commonService.updateData();
         this.editRiskBasedDecision = this.formGroup.value;
         this.commonService.updateForm(this.formGroup, this.editRiskBasedDecision);
       },

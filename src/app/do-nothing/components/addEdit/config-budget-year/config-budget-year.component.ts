@@ -19,15 +19,15 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./config-budget-year.component.scss']
 })
 export class BudgetYearsComponent implements OnInit {
-  public formGroup: FormGroup;
-  public msgDetails: MsgDetails;
-  public isOnEdit: boolean;
-  public isLoading: boolean;
-  public years = [];
+  formGroup: FormGroup;
+  msgDetails: MsgDetails;
+  isOnEdit: boolean;
+  isLoading: boolean;
+  years = [2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035, 2036, 2037, 2038, 2039, 2040, 2041, 2042, 2043, 2044, 2045, 2046, 2047, 2048, 2049, 2050, 2051, 2052, 2053, 2054, 2055, 2056, 2057, 2058, 2059, 2060, 2061, 2062, 2063, 2064, 2065, 2066, 2067, 2068, 2069, 2070, 2071];
+  scenarioData: ConfigData[];
+  configBudgets: BudgetModel[] = [];
+  budgets = [];
   private editBudgetYear: BudgetYearsModel[];
-  public scenarioData: ConfigData[];
-  public configBudgets: BudgetModel[] = [];
-  public budgets = [];
   
   constructor(private fb: FormBuilder, private budgetYearService: ConfigBudgetYearService, private commonService: CommonService, private dialogConfig: DynamicDialogConfig, private lookupService: LookupService, private budgetService: ConfigBudgetService) {}
 
@@ -38,9 +38,6 @@ export class BudgetYearsComponent implements OnInit {
     this.getConfigBudgets();
      
     if (this.isOnEdit) {
-      for(let i = 2022; i <= 2071; i++) {
-        this.years.push(i);
-      }
       this.editBudgetYear = this.budgetYearService.editBudgetYears;
       this.formGroup.patchValue({
         BudgetName: this.editBudgetYear['BudgetId'],
@@ -73,7 +70,7 @@ export class BudgetYearsComponent implements OnInit {
         console.log(res);
         this.isLoading = false;
         this.msgDetails = {msg: 'Config Budget Year Form ' + Message.SUCCESS_MSG, severity: Severity.SUCCESS};
-        this.commonService.updateData(true);
+        this.commonService.updateData();
         this.formInit();
       },
       (err) => {
@@ -93,9 +90,8 @@ export class BudgetYearsComponent implements OnInit {
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: 'Config Budget Form ' +  Message.EDIT_SUCCESS_MSG, severity: Severity.SUCCESS};
-        this.commonService.updateData(this.formGroup);
+        this.commonService.updateData();
         this.editBudgetYear = this.formGroup.value;
-        this.commonService.updateData(true)
       },
       () => {
         this.isLoading = false;

@@ -20,7 +20,6 @@ export class PoFBandsTableComponent implements OnInit, OnDestroy {
   msgDetails: MsgDetails;
   allPoFBands: PoFBandsModel[] = [];
   isPageChecked: boolean;
-  private index = 0;
   private sub$: Subscription;
 
   constructor( private pofBandService: PofBandsService,
@@ -32,17 +31,10 @@ export class PoFBandsTableComponent implements OnInit, OnDestroy {
     this.isLoading = true
     this.getAllPoFBands();
 
-    this.sub$ = this.commonService.getData().subscribe(res => {
-      if(typeof res === 'boolean') {
-        this.getAllPoFBands();
-      } else {
-        this.allPoFBands[this.index] = res.value;
-      }
-    })
+    this.sub$ = this.commonService.getData().subscribe(() => this.getAllPoFBands() );
   }
 
-  onEditRow(data: PoFBandsModel, idx: number): void {
-    this.index = idx;
+  onEditRow(data: PoFBandsModel): void {
     this.pofBandService.onEditRow(data);
     this.commonService.show(PofBandsComponent);
   }

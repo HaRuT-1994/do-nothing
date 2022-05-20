@@ -20,7 +20,6 @@ export class BudgetTableComponent implements OnInit, OnDestroy {
   msgDetails: MsgDetails;
   allBudgets: BudgetModel[];
   isPageChecked: boolean;
-  private index = 0;
   private sub$: Subscription;
 
 
@@ -32,17 +31,10 @@ export class BudgetTableComponent implements OnInit, OnDestroy {
    ngOnInit(): void {
     this.getAllBudgets();
 
-    this.sub$ = this.commonService.getData().subscribe(res => {
-      if(typeof res === 'boolean') {
-        this.getAllBudgets();
-      } else {
-        this.allBudgets[this.index] = res.value;
-      }
-    })
+    this.sub$ = this.commonService.getData().subscribe(() => this.getAllBudgets())
    }
 
-  onEditRow(data: BudgetModel, idx: number): void {
-    this.index = idx;
+  onEditRow(data: BudgetModel): void {
     this.budgetService.onEditRow(data);
     this.commonService.show(ConfigBudgetComponent);
   }

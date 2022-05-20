@@ -19,7 +19,6 @@ export class FieldsTableComponent implements OnInit, OnDestroy {
   msgDetails: MsgDetails;
   allFields: FieldModel[] = [];
   isPageChecked: boolean;
-  private index = 0;
   private sub$: Subscription;
 
   constructor( private fieldService: ConfigFieldsService,
@@ -29,17 +28,10 @@ export class FieldsTableComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getAllFields();
 
-    this.sub$ = this.commonService.getData().subscribe(res => {
-      if(typeof res === 'boolean') {
-        this.getAllFields();
-      } else {
-        this.allFields[this.index] = res.value;
-      }
-    })
+    this.sub$ = this.commonService.getData().subscribe(() => this.getAllFields() )
   }
 
-  onEditRow(data: FieldModel, idx: number): void {
-    this.index = idx;
+  onEditRow(data: FieldModel): void {
     this.fieldService.onEditRow(data);
     this.commonService.show(ConfigFieldsComponent);
   }

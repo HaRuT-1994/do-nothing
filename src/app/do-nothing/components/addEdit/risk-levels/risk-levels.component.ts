@@ -14,10 +14,10 @@ import { RiskLevelsModel } from 'src/app/do-nothing/models/riskLevelData.interfa
   styleUrls: ['./risk-levels.component.scss']
 })
 export class RiskLevelsComponent implements OnInit {
-  public formGroup: FormGroup;
-  public msgDetails: MsgDetails;
-  public isOnEdit: boolean;
-  public isLoading: boolean;
+  formGroup: FormGroup;
+  msgDetails: MsgDetails;
+  isOnEdit: boolean;
+  isLoading: boolean;
   private editRiskLvl: RiskLevelsModel[];
 
   constructor( private riskLvlService: RiskLevelsService,
@@ -50,7 +50,7 @@ export class RiskLevelsComponent implements OnInit {
         this.isLoading = false;
         this.msgDetails = {msg: 'Risk Levels Form ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         this.formInit();
-        this.commonService.updateData(true);
+        this.commonService.updateData();
       },
       err => {
         this.isLoading = false;
@@ -65,7 +65,7 @@ export class RiskLevelsComponent implements OnInit {
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: 'Risk Level Form ' +  Message.EDIT_SUCCESS_MSG, severity: Severity.SUCCESS};
-        this.commonService.updateData(this.formGroup);
+        this.commonService.updateData();
         this.editRiskLvl = this.formGroup.value;
         this.commonService.updateForm(this.formGroup, this.editRiskLvl);
       },

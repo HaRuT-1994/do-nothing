@@ -34,7 +34,7 @@
           <td [attr.title]="data.band">{{data.band}}</td>
           <td [attr.title]="data.intervention">{{data.intervention}}</td>
           <td [attr.title]="data.frequency">{{data.frequency}}</td>
-          <td class="buttonEffect" (click)="onEditRow(data, i)">
+          <td class="buttonEffect" (click)="onEditRow(data)">
             <span class="edit">Edit</span>
           </td>
           <td class="buttonEffect" (click)="onDeleteRow(data.decisionId)">

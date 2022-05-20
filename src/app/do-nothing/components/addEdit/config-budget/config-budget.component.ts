@@ -16,11 +16,11 @@ import { BudgetModel } from 'src/app/do-nothing/models/budgetData.interface';
   styleUrls: ['./config-budget.component.scss']
 })
 export class ConfigBudgetComponent implements OnInit {
-  public formGroup: FormGroup;
-  public scenarioData: ConfigData[];
-  public msgDetails: MsgDetails;
-  public isOnEdit: boolean;
-  public isLoading: boolean;
+  formGroup: FormGroup;
+  scenarioData: ConfigData[];
+  msgDetails: MsgDetails;
+  isOnEdit: boolean;
+  isLoading: boolean;
   private editBudget: BudgetModel[];
   
   constructor( 
@@ -56,7 +56,7 @@ export class ConfigBudgetComponent implements OnInit {
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: 'Config Budget Form ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
-        this.commonService.updateData(true)
+        this.commonService.updateData()
         this.formInit();
       },
       () => {
@@ -73,7 +73,7 @@ export class ConfigBudgetComponent implements OnInit {
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: 'Config Budget Form ' +  Message.EDIT_SUCCESS_MSG, severity: Severity.SUCCESS};
-        this.commonService.updateData(this.formGroup);
+        this.commonService.updateData();
         this.editBudget = this.formGroup.value;
         this.commonService.updateForm(this.formGroup, this.editBudget);
       },

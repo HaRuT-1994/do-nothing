@@ -26,7 +26,7 @@
           <td [attr.title]="data.cof">{{data.cof}}</td>
           <td [attr.title]="data.riskScore">{{data.riskScore}}</td>
           <td [attr.title]="data.riskRating">{{data.riskRating}}</td>
-          <td class="buttonEffect" (click)="onEditRow(data, i)">
+          <td class="buttonEffect" (click)="onEditRow(data)">
             <span class="edit">Edit</span>
           </td>
           <td class="buttonEffect" (click)="onDeleteRow(data.id)">

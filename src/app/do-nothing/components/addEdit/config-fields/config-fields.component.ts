@@ -14,10 +14,10 @@ import { FieldModel } from 'src/app/do-nothing/models/fieldData.interface';
   styleUrls: ['./config-fields.component.scss']
 })
 export class ConfigFieldsComponent implements OnInit {
-  public formGroup: FormGroup;
-  public msgDetails: MsgDetails;
-  public isOnEdit: boolean;
-  public isLoading: boolean;
+  formGroup: FormGroup;
+  msgDetails: MsgDetails;
+  isOnEdit: boolean;
+  isLoading: boolean;
   private editFields: FieldModel[];
 
   constructor( private fieldsService: ConfigFieldsService,
@@ -51,7 +51,7 @@ formInit(): void {
         this.isLoading = false;
         this.msgDetails = {msg: 'Fields Form ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         this.formInit();
-        this.commonService.updateData(true);
+        this.commonService.updateData();
       },
       err => {
         this.isLoading = false;
@@ -66,7 +66,7 @@ formInit(): void {
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: 'Fields Form ' +  Message.EDIT_SUCCESS_MSG, severity: Severity.SUCCESS};
-        this.commonService.updateData(this.formGroup);
+        this.commonService.updateData();
         this.editFields = this.formGroup.value;
         this.commonService.updateForm(this.formGroup, this.editFields);
       },

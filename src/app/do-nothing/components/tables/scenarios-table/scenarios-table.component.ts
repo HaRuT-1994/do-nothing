@@ -19,7 +19,6 @@ export class ScenariosTableComponent implements OnInit, OnDestroy {
   msgDetails: MsgDetails;
   allScenarios: ScenarioModel[] = [];
   isPageChecked: boolean;
-  private index = 0;
   private sub$: Subscription;
 
   constructor( private scenarioService: ConfigScenariosService,
@@ -29,17 +28,10 @@ export class ScenariosTableComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getAllScenarios();
 
-    this.sub$ = this.commonService.getData().subscribe(res => {
-      if(typeof res === 'boolean') {
-        this.getAllScenarios();
-      } else {
-        this.allScenarios[this.index] = res.value;
-      }
-    })
+    this.sub$ = this.commonService.getData().subscribe(() => this.getAllScenarios() );
   }
 
-  onEditRow(data: ScenarioModel, idx: number): void {
-    this.index = idx;
+  onEditRow(data: ScenarioModel): void {
     this.scenarioService.onEditRow(data);
     this.commonService.show(ConfigScenariosComponent);
   }

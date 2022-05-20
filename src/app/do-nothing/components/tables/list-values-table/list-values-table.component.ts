@@ -19,7 +19,6 @@ export class ListValuesTableComponent implements OnInit, OnDestroy {
   msgDetails: MsgDetails;
   allListValues: ListValuesModel[] = [];
   isPageChecked: boolean;
-  private index = 0;
   private sub$: Subscription;
 
   constructor( private listValluesService: ConfigListValuesService,
@@ -29,17 +28,10 @@ export class ListValuesTableComponent implements OnInit, OnDestroy {
    ngOnInit(): void {
     this.getAllListValues();
 
-    this.sub$ = this.commonService.getData().subscribe(res => {
-      if(typeof res === 'boolean') {
-        this.getAllListValues();
-      } else {
-        this.allListValues[this.index] = res.value;
-      }
-    })
+    this.sub$ = this.commonService.getData().subscribe(res => this.getAllListValues() )
    }
 
-  onEditRow(data: ListValuesModel, idx: number): void {
-    this.index = idx;
+  onEditRow(data: ListValuesModel): void {
     this.listValluesService.onEditRow(data);
     this.commonService.show(ConfigListValuesComponent);
   }

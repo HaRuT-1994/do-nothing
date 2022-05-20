@@ -16,8 +16,8 @@ export class CommonService {
     return this.siblingData.asObservable();
   }
  
-  public updateData(data?: any, isAdd?: boolean): void {
-    data ? this.siblingData.next(data): this.siblingData.next(isAdd);
+  public updateData(): void {
+    this.siblingData.next();
   }
 
   public updateForm(formGroup, newData): void {

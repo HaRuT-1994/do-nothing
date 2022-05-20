@@ -4,10 +4,8 @@ import { Severity } from 'src/app/enums/severity.enum';
 import { CommonService } from 'src/app/services/common.service';
 import { ConfirmationService } from 'primeng/api';
 import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
-import { BudgetYearsComponent } from '../../addEdit/config-budget-year/config-budget-year.component';
 import { ConfigBudgetYearService } from 'src/app/do-nothing/services/config-budget-year.service';
 import { BudgetPivotDetails } from 'src/app/do-nothing/models/budgetPivotDetails.interface';
-import { BudgetYearsModel } from 'src/app/do-nothing/models/budgetYearsData.interface';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -20,7 +18,7 @@ export class BudgetYearsTableComponent implements OnInit, OnDestroy {
   msgDetails: MsgDetails;
   allBudgetYears: BudgetPivotDetails[] = [];
   isPageChecked: boolean;
-  index: number = -1;
+  editableRowIndex: number = -1;
   private sub$: Subscription;
   years = ['_2022', '_2023', '_2024', '_2025', '_2026', '_2027', '_2028', '_2029', '_2030', '_2031', '_2032', '_2033', '_2034', '_2035', '_2036', '_2037', '_2038', '_2039', '_2040', '_2041', '_2042', '_2043', '_2044', '_2045', '_2046', '_2047', '_2048', '_2049', '_2050', '_2051', '_2052', '_2053', '_2054', '_2055', '_2056', '_2057', '_2058', '_2059', '_2060', '_2061', '_2062', '_2063', '_2064', '_2065', '_2066', '_2067', '_2068', '_2069', '_2070', '_2071'];
 
@@ -31,18 +29,17 @@ export class BudgetYearsTableComponent implements OnInit, OnDestroy {
    ngOnInit(): void {
     this.getAllBudgetPivotYears();
 
-    this.sub$ = this.commonService.getData().subscribe(res => { this.getAllBudgetPivotYears() })
+    this.sub$ = this.commonService.getData().subscribe(res => this.getAllBudgetPivotYears() )
    }
 
   onEditRow(index: number): void {
-    // console.log(index);
     // this.budgetYearsService.onEditRow(data);
     // this.commonService.show(BudgetYearsComponent);
-    if(index === this.index) {
-      console.log(index);
-      this.index = -1;
+    if(index === this.editableRowIndex) {
+      //save functionality
+      this.editableRowIndex = -1;
     } else {
-      this.index = index;
+      this.editableRowIndex = index;
     }
   }
 
@@ -68,49 +65,49 @@ export class BudgetYearsTableComponent implements OnInit, OnDestroy {
     });
   }
 
-  copyBudgetYears(): void {
-    let configIds = [];
-    this.allBudgetYears.map(el => el.check && configIds.push(el.BudgetId));
+  // copyBudgetYears(): void {
+  //   let configIds = [];
+  //   this.allBudgetYears.map(el => el.check && configIds.push(el.BudgetId));
 
-    if(!configIds.length) {
-      this.msgDetails = {msg: Message.WARNING_COPY, severity: Severity.WARNING};
-    } else {
-      this.isLoading = true;
+  //   if(!configIds.length) {
+  //     this.msgDetails = {msg: Message.WARNING_COPY, severity: Severity.WARNING};
+  //   } else {
+  //     this.isLoading = true;
 
-      this.budgetYearsService.copyBudgetYears(configIds).subscribe(
-        res => {
-          this.getAllBudgetPivotYears();
-          this.msgDetails = {msg: 'Copy Budget Years ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
-        },
-        err => {
-          this.isLoading = false;
-          this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
-        }
-      )
-    }
-  }
+  //     this.budgetYearsService.copyBudgetYears(configIds).subscribe(
+  //       res => {
+  //         this.getAllBudgetPivotYears();
+  //         this.msgDetails = {msg: 'Copy Budget Years ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
+  //       },
+  //       err => {
+  //         this.isLoading = false;
+  //         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
+  //       }
+  //     )
+  //   }
+  // }
 
-  deleteBudgetYears(): void {
-    let configIds = [];
-    this.allBudgetYears.map(el => el.check && configIds.push(el.BudgetId));
+  // deleteBudgetYears(): void {
+  //   let configIds = [];
+  //   this.allBudgetYears.map(el => el.check && configIds.push(el.BudgetId));
 
-    if(!configIds.length) {
-      this.msgDetails = {msg: Message.WARNING_DELETE, severity: Severity.WARNING};
-    } else {
-      this.isLoading = true;
+  //   if(!configIds.length) {
+  //     this.msgDetails = {msg: Message.WARNING_DELETE, severity: Severity.WARNING};
+  //   } else {
+  //     this.isLoading = true;
 
-      this.budgetYearsService.deleteBudgetYears(configIds).subscribe(
-        res => {
-          this.getAllBudgetPivotYears();
-          this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
-        },
-        err => {
-          this.isLoading = false;
-          this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
-        }
-      )
-    }
-  }
+  //     this.budgetYearsService.deleteBudgetYears(configIds).subscribe(
+  //       res => {
+  //         this.getAllBudgetPivotYears();
+  //         this.msgDetails = {msg:  Message.DELETE_SUCCESS_MSG, severity: Severity.SUCCESS};
+  //       },
+  //       err => {
+  //         this.isLoading = false;
+  //         this.msgDetails = {msg: Message.ERROR_MSG, severity: Severity.ERROR};
+  //       }
+  //     )
+  //   }
+  // }
 
   onChecked(ev, idx: number): void{
     if(ev.target.checked) {

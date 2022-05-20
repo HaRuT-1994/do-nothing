@@ -20,7 +20,6 @@ export class RatesTableComponent implements OnInit, OnDestroy {
   msgDetails: MsgDetails;
   allRates: RatesModel[] = [];
   isPageChecked: boolean;
-  private index = 0;
   private sub$: Subscription;
 
   constructor( private rateService: ConfigRatesService,
@@ -32,17 +31,10 @@ export class RatesTableComponent implements OnInit, OnDestroy {
     this.isLoading = true
     this.getAllRates();
 
-    this.sub$ = this.commonService.getData().subscribe(res => {
-      if(typeof res === 'boolean') {
-        this.getAllRates();
-      } else {
-        this.allRates[this.index] = res.value;
-      }
-    })
+    this.sub$ = this.commonService.getData().subscribe(() => this.getAllRates() );
    }
 
-  onEditRow(data: RatesModel, idx: number): void {
-    this.index = idx;
+  onEditRow(data: RatesModel): void {
     this.rateService.onEditRow(data);
     this.commonService.show(ConfigRatesComponent);
   }

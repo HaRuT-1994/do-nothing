@@ -9,6 +9,7 @@ import { ModelConfig } from 'src/app/do-nothing/models/modelConfig.interface';
 import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
 import { DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { LookupService } from 'src/app/do-nothing/services/lookup.service';
+import { strToArray } from 'src/app/shared/helper';
 
 @Component({
   selector: 'app-do-nothing',
@@ -16,16 +17,16 @@ import { LookupService } from 'src/app/do-nothing/services/lookup.service';
   styleUrls: ['./do-nothing.component.scss']
 })
 export class DoNothingComponent implements OnInit {
-  public formGroup: FormGroup;
-  public msgDetails: MsgDetails;
-  public isOnEdit: boolean;
-  public isLoading: boolean;
-  public submitted: boolean;
-  public skipTheseLifecycles: ConfigData[];
-  public skipTheseAssetSources: ConfigData[] = [];
-  public skipTheseUnitClasses: ConfigData[] = [];
-  public scenarioData: ConfigData[] = [];
-  public conditionRange = ['1 to 5', '1 to 10'];
+  formGroup: FormGroup;
+  msgDetails: MsgDetails;
+  isOnEdit: boolean;
+  isLoading: boolean;
+  submitted: boolean;
+  skipTheseLifecycles: ConfigData[];
+  skipTheseAssetSources: ConfigData[] = [];
+  skipTheseUnitClasses: ConfigData[] = [];
+  scenarioData: ConfigData[] = [];
+  conditionRange = ['1 to 5', '1 to 10'];
   private editModel: ModelConfig[] = [];
 
   constructor( private doNothingService: DoNothingService,
@@ -45,7 +46,7 @@ export class DoNothingComponent implements OnInit {
     if (this.isOnEdit) {
       this.editModel = this.doNothingService.editModel;
       this.commonService.updateForm(this.formGroup, this.editModel);
-      const scenarios = this.doNothingService.strToArray(this.editModel['scenariosToRun']);
+      const scenarios = strToArray(this.editModel['scenariosToRun']);
       
       this.formGroup.patchValue({
         scenariosToRun: scenarios,
@@ -83,8 +84,8 @@ export class DoNothingComponent implements OnInit {
       this.doNothingService.addDoNothing(this.formGroup.value).subscribe(
         () => {
           this.isLoading = false;
-          this.msgDetails = {msg: 'Model Configuration Form ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
-          this.commonService.updateData(true);
+          this.msgDetails = {msg: 'Model Configuration Form ' + Message.SUCCESS_MSG, severity: Severity.SUCCESS};
+          this.commonService.updateData();
           this.formInit();
         },
         err => {
@@ -105,7 +106,7 @@ export class DoNothingComponent implements OnInit {
         () => {
           this.isLoading = false;
           this.msgDetails = {msg: 'Model Configurarion Form ' +  Message.EDIT_SUCCESS_MSG, severity: Severity.SUCCESS};
-          this.commonService.updateData(this.formGroup);
+          this.commonService.updateData();
           this.editConfig = this.formGroup.value;
           this.commonService.updateForm(this.formGroup, this.editConfig);
         },

@@ -26,7 +26,7 @@
           <td [attr.title]="data.BudgetName">{{data.budgetName}}</td>
           <td [attr.title]="data.BudgetSource">{{data.budgetSource}}</td>
           <td [attr.title]="data.ExceedanceAllowance">{{data.exceedanceAllowance}}</td>
-          <td class="buttonEffect" (click)="onEditRow(data, i)">
+          <td class="buttonEffect" (click)="onEditRow(data)">
             <span class="edit">Edit</span>
           </td>
           <td class="buttonEffect" (click)="onDeleteRow(data.budgetId)">

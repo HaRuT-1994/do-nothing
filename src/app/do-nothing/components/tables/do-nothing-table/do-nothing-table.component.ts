@@ -11,7 +11,6 @@ import { LookupService } from 'src/app/do-nothing/services/lookup.service';
 import { Subscription } from 'rxjs';
 import {strToArray} from 'src/app/shared/helper';
 import { ExportModelComponent } from './export-model/export-model.component';
-import { config } from 'process';
 import { ConfigData } from 'src/app/models/configData.interface';
 
 @Component({
@@ -26,7 +25,6 @@ export class DoNothingTableComponent implements OnInit, OnDestroy {
   isPageChecked: boolean;
   allModels: ModelConfig[] = [];
   private defaultModels: ModelConfig[] = [];
-  private index = 0;
   private sub$: Subscription;
 
   constructor( private doNothingService: DoNothingService,
@@ -36,17 +34,10 @@ export class DoNothingTableComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.getAllModelConfigs();
-    this.sub$ = this.commonService.getData().subscribe(res => {
-      if(typeof res === 'boolean') {
-        this.getAllModelConfigs();
-      } else {
-        this.allModels[this.index] = res.value;
-      }
-    })
+    this.sub$ = this.commonService.getData().subscribe(() => this.getAllModelConfigs() )
   }
 
-  onEditRow(data: ModelConfig, idx: number): void {
-    this.index = idx;
+  onEditRow(data: ModelConfig): void {
     this.doNothingService.onEditRow(data);
     this.commonService.show(DoNothingComponent);
   }
@@ -164,14 +155,14 @@ export class DoNothingTableComponent implements OnInit, OnDestroy {
 
   exportModel(): void {
     const models: ConfigData[] = [];
-    const scenarios: ConfigData[] = [];
+    const scenarios = [];
     this.allModels.forEach(config => {
       models.push({
         id: config.id,
         value: config.modelName
       });
       scenarios.push({
-        id: +config.scenariosToRun,
+        id: config.scenariosToRun,
         value: config.scenarioName
       });
     });

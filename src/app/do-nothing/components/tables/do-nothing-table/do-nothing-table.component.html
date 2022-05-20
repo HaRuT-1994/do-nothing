@@ -50,7 +50,7 @@
             <td [attr.title]="data.allowOverwriteToExceedBudget">{{data.allowOverwriteToExceedBudget}}</td>
             <td [attr.title]="data.skipTheseAssetSources">{{data.skipTheseAssetSources}}</td>
             <td [attr.title]="data.conditionRange">{{data.conditionRange}}</td>
-            <td class="buttonEffect" (click)="onEditRow(data, i)">
+            <td class="buttonEffect" (click)="onEditRow(data)">
               <span class="edit">Edit</span>
             </td>
             <td class="buttonEffect" (click)="onDeleteRow(data.id)">

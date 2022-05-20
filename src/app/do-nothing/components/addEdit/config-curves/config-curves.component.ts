@@ -18,12 +18,12 @@ import { ListId } from 'src/app/do-nothing/enums/listId.enum';
   styleUrls: ['./config-curves.component.scss']
 })
 export class ConfigCurvesComponent implements OnInit {
-  public formGroup: FormGroup;
-  public isOnEdit: boolean;
-  public isLoading: boolean;
-  public msgDetails: MsgDetails;
-  public cohortData: ConfigData[];
-  public scenarioData: ConfigData[];
+  formGroup: FormGroup;
+  isOnEdit: boolean;
+  isLoading: boolean;
+  msgDetails: MsgDetails;
+  cohortData: ConfigData[];
+  scenarioData: ConfigData[];
   private editCurves: CurveModel[];
   public listValues: string[];
 
@@ -65,7 +65,7 @@ export class ConfigCurvesComponent implements OnInit {
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: 'Curve Form ' + Message.SUCCESS_MSG, severity: Severity.SUCCESS};
-        this.commonService.updateData(true);
+        this.commonService.updateData();
         this.formInit();
       },
       () => {
@@ -82,7 +82,7 @@ export class ConfigCurvesComponent implements OnInit {
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: 'Curves Form ' +  Message.EDIT_SUCCESS_MSG, severity: Severity.SUCCESS};
-        this.commonService.updateData(this.formGroup);
+        this.commonService.updateData();
         this.editCurves = this.formGroup.value;
         this.commonService.updateForm(this.formGroup, this.editCurves);
       },

@@ -20,7 +20,6 @@ export class CurvesTableComponent implements OnInit, OnDestroy {
   msgDetails: MsgDetails;
   allCurves: CurveModel[] = [];
   isPageChecked: boolean;
-  private index = 0;
   private sub$: Subscription;
  
   constructor( private curvesService: ConfigCurvesService, 
@@ -31,17 +30,10 @@ export class CurvesTableComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getAllCurves();
 
-    this.sub$ = this.commonService.getData().subscribe(res => {
-      if(typeof res === 'boolean') {
-        this.getAllCurves();
-      } else {
-        this.allCurves[this.index] = res.value;
-      }
-    })
+    this.sub$ = this.commonService.getData().subscribe(() => this.getAllCurves() )
   }
 
-  onEditRow(data: CurveModel, idx: number): void {
-    this.index = idx;
+  onEditRow(data: CurveModel): void {
     this.curvesService.onEditRow(data);
     this.commonService.show(ConfigCurvesComponent);
   }

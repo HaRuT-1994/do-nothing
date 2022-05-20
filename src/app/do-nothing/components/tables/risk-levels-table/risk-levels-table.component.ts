@@ -19,7 +19,6 @@ export class RiskLevelsTableComponent implements OnInit, OnDestroy {
   msgDetails: MsgDetails;
   allRiskLevels: RiskLevelsModel[] = [];
   isPageChecked: boolean;
-  private index = 0;
   private sub$: Subscription;
 
   constructor(private riskLvlService: RiskLevelsService,
@@ -29,17 +28,10 @@ export class RiskLevelsTableComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getAllRiskLevels();
 
-    this.sub$ = this.commonService.getData().subscribe(res => {
-      if(typeof res === 'boolean') {
-        this.getAllRiskLevels();
-      } else {
-        this.allRiskLevels[this.index] = res.value;
-      }
-    })
+    this.sub$ = this.commonService.getData().subscribe(() => this.getAllRiskLevels() );
   }
 
-  onEditRow(data: RiskLevelsModel, idx: number): void {
-    this.index = idx;
+  onEditRow(data: RiskLevelsModel): void {
     this.riskLvlService.onEditRow(data);
     this.commonService.show(RiskLevelsComponent);
   }

@@ -26,7 +26,7 @@
           <td [attr.title]="data.validatedOption">{{data.validatedOption}}</td>
           <td [attr.title]="data.restrictToBudget">{{data.restrictToBudget}}</td>
           <td [attr.title]="data.run">{{data.run}}</td>
-          <td class="buttonEffect" (click)="onEditRow(data, i)">
+          <td class="buttonEffect" (click)="onEditRow(data)">
             <span class="edit">Edit</span>
           </td>
           <td class="buttonEffect" (click)="onDeleteRow(data.scenarioId)">

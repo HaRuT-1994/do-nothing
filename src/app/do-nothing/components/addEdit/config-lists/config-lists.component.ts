@@ -14,10 +14,10 @@ import { CommonService } from 'src/app/services/common.service';
   styleUrls: ['./config-lists.component.scss']
 })
 export class ConfigListsComponent implements OnInit {
-  public formGroup: FormGroup;
-  public msgDetails: MsgDetails;
-  public isOnEdit: boolean;
-  public isLoading: boolean;
+  formGroup: FormGroup;
+  msgDetails: MsgDetails;
+  isOnEdit: boolean;
+  isLoading: boolean;
   private editLists: ListsModel[];
   
   constructor( 
@@ -48,7 +48,7 @@ export class ConfigListsComponent implements OnInit {
         this.isLoading = false;
         this.msgDetails = {msg: 'Config List Form ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         this.formInit();
-        this.commonService.updateData(true);
+        this.commonService.updateData();
       },
       () => {
         this.isLoading = false;
@@ -63,7 +63,7 @@ export class ConfigListsComponent implements OnInit {
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: 'List Form ' +  Message.EDIT_SUCCESS_MSG, severity: Severity.SUCCESS};
-        this.commonService.updateData(this.formGroup);
+        this.commonService.updateData();
         this.editLists = this.formGroup.value;
         this.commonService.updateForm(this.formGroup, this.editLists);
       },

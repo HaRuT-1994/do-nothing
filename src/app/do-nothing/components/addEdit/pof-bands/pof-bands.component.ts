@@ -16,12 +16,12 @@ import { PoFBandsModel } from 'src/app/do-nothing/models/pofBandData.interface';
   styleUrls: ['./pof-bands.component.scss']
 })
 export class PofBandsComponent {
-  public formGroup: FormGroup;
-  public msgDetails: MsgDetails;
-  public isOnEdit: boolean;
-  public isLoading: boolean;
-  public cohortData: ConfigData[];
-  public scenarioData: ConfigData[];
+  formGroup: FormGroup;
+  msgDetails: MsgDetails;
+  isOnEdit: boolean;
+  isLoading: boolean;
+  cohortData: ConfigData[];
+  scenarioData: ConfigData[];
   private editPofBand: PoFBandsModel[];
 
   constructor(private pofBandsService: PofBandsService,
@@ -61,7 +61,7 @@ export class PofBandsComponent {
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: 'PoF Bands Form ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
-        this.commonService.updateData(true)
+        this.commonService.updateData()
         this.formInit();
       },
       err => {
@@ -78,7 +78,7 @@ export class PofBandsComponent {
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: 'PoF Bands Form ' +  Message.EDIT_SUCCESS_MSG, severity: Severity.SUCCESS};
-        this.commonService.updateData(this.formGroup);
+        this.commonService.updateData();
         this.editPofBand = this.formGroup.value;
         this.commonService.updateForm(this.formGroup, this.editPofBand);
       },

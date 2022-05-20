@@ -48,7 +48,7 @@ export class CohortComponent implements OnInit {
         this.isLoading = false;
         this.msgDetails = {msg: 'Cohort Form ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
         this.formInit();
-        this.commonService.updateData(true);
+        this.commonService.updateData();
       },
       () => {
         this.isLoading = false;
@@ -63,7 +63,7 @@ export class CohortComponent implements OnInit {
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: 'Cohort Form ' +  Message.EDIT_SUCCESS_MSG, severity: Severity.SUCCESS};
-        this.commonService.updateData(this.formGroup);
+        this.commonService.updateData();
         this.editCohort = this.formGroup.value;
         this.commonService.updateForm(this.formGroup, this.editCohort);
       },

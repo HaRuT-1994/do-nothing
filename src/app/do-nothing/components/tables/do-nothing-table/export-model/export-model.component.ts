@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { MsgDetails } from 'src/app/do-nothing/models/msgDetails.interface';
-import { LookupService } from 'src/app/do-nothing/services/lookup.service';
 import { ConfigData } from 'src/app/models/configData.interface';
 
 @Component({
@@ -20,8 +19,7 @@ export class ExportModelComponent implements OnInit {
   scenarioData: ConfigData[] = [];
   modelData: ConfigData[] = [];
 
-  constructor( private lookupService: LookupService,
-               private dialogConfig: DynamicDialogConfig) { }
+  constructor( private dialogConfig: DynamicDialogConfig ) { }
 
   ngOnInit(): void {
     this.scenarioData = this.dialogConfig.data.scenarios;
@@ -29,8 +27,6 @@ export class ExportModelComponent implements OnInit {
   }
 
   export(): void {
-    console.log(this.formGroup.value);
-     
+    console.log(this.formGroup.value, this.scenarioData);
   }
-
 }

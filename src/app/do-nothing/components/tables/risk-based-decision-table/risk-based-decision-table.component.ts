@@ -20,7 +20,6 @@ export class RiskBasedDecisionTableComponent implements OnInit, OnDestroy {
   msgDetails: MsgDetails;
   allRiskBasedDecisions: RiskBasedDecisionModel[];
   isPageChecked: boolean;
-  private index = 0;
   private sub$: Subscription;
 
   constructor( private riskBasedDecisionService: ConfigRiskBasedDecisionsService,
@@ -32,17 +31,10 @@ export class RiskBasedDecisionTableComponent implements OnInit, OnDestroy {
      this.isLoading = true
      this.getAllRiskBasedDecisions();
 
-     this.sub$ = this.commonService.getData().subscribe(res => {
-      if(typeof res === 'boolean') {
-        this.getAllRiskBasedDecisions();
-      } else {
-        this.allRiskBasedDecisions[this.index] = res.value;
-      }
-    })
+     this.sub$ = this.commonService.getData().subscribe(() => this.getAllRiskBasedDecisions() );
    }
 
-  onEditRow(data: RiskBasedDecisionModel, idx: number): void {
-    this.index = idx;
+  onEditRow(data: RiskBasedDecisionModel): void {
     this.riskBasedDecisionService.onEditRow(data);
     this.commonService.show(ConfigRiskBasedDecisionsComponent);
   }

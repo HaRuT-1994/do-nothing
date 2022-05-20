@@ -18,16 +18,16 @@ import { ListId } from 'src/app/do-nothing/enums/listId.enum';
   styleUrls: ['./config-rates.component.scss']
 })
 export class ConfigRatesComponent implements OnInit {
-  public formGroup: FormGroup;
-  public scenarioData: ConfigData[];
-  public cohortData: ConfigData[];
-  public msgDetails: MsgDetails;
-  public isOnEdit: boolean;
-  public isLoading: boolean;
-  public listValues: string[];
-  public rangeTypes: string[];
-  public rateTypes: string[];
-  public geographies: string[];
+  formGroup: FormGroup;
+  scenarioData: ConfigData[];
+  cohortData: ConfigData[];
+  msgDetails: MsgDetails;
+  isOnEdit: boolean;
+  isLoading: boolean;
+  listValues: string[];
+  rangeTypes: string[];
+  rateTypes: string[];
+  geographies: string[];
   private editRates: RatesModel[];
   
   constructor( 
@@ -78,7 +78,7 @@ export class ConfigRatesComponent implements OnInit {
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: 'Config Rates Form ' +  Message.SUCCESS_MSG, severity: Severity.SUCCESS};
-        this.commonService.updateData(true)
+        this.commonService.updateData()
         this.formInit();
       },
       () => {
@@ -95,7 +95,7 @@ export class ConfigRatesComponent implements OnInit {
       () => {
         this.isLoading = false;
         this.msgDetails = {msg: 'Rate Form ' +  Message.EDIT_SUCCESS_MSG, severity: Severity.SUCCESS};
-        this.commonService.updateData(this.formGroup);
+        this.commonService.updateData();
         this.editRates = this.formGroup.value;
         this.commonService.updateForm(this.formGroup, this.editRates);
       },

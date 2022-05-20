@@ -19,7 +19,7 @@
     <ng-template pTemplate="body" let-data let-i="rowIndex">
         <tr>
           <td [attr.title]="data.listName">{{data.listName}}</td>
-          <td class="buttonEffect" (click)="onEditRow(data, i)">
+          <td class="buttonEffect" (click)="onEditRow(data)">
             <span class="edit">Edit</span>
           </td>
           <td class="buttonEffect" (click)="onDeleteRow(data.listId)">

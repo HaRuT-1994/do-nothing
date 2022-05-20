@@ -53,12 +53,6 @@ export class DoNothingService {
     this.editModel = data;
   }
 
-  strToArray(data: string): number[] {
-    let arr = [];
-    data.split(',').forEach(i => !isNaN(+i) && arr.push(+i));
-    return arr;
-  }
-
   arrToString(data: string[], form: FormGroup) {
     data.forEach(i => {
      form.value[i] = form.value[i] && form.value[i].filter(i => i).toString();

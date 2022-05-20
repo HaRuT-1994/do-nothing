@@ -2,7 +2,7 @@
 <p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000"></p-confirmDialog>
 <app-loading *ngIf="isLoading"></app-loading>
 <main>
-  <app-control-tables (copyTriggered)="copyBudgetYears()" (deleteTriggered)="deleteBudgetYears()"></app-control-tables>
+  <app-control-tables [needDelete]="false" [needCopy]="false"></app-control-tables>
   <div class="budget-year">
     <p-table #dt [value]="allBudgetYears" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,20,30]" [globalFilterFields]="['Scenario','BudgetSource', 'ExceedanceAllowance', 'BudgetName']"  (onPage)="paginate($event)"
       [ngStyle]="isLoading && {'filter': 'blur(4px)'}">
@@ -62,12 +62,12 @@
             <th>2069</th>
             <th>2070</th>
             <th>2071</th>
-              <th colspan="2" class="fixedColumn">
+              <th colspan="3" class="fixedColumn">
                 <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search" />
               </th>
-              <th class="fixedColumn">
+              <!-- <th class="fixedColumn">
                 <input class="checkbox" type="checkbox" [(ngModel)]="isPageChecked" (change)="onCheckPage($event, dt)">
-              </th>
+              </th> -->
           </tr>
       </ng-template>
       <ng-template pTemplate="body" let-data let-i="rowIndex">
@@ -78,7 +78,7 @@
             <td [attr.title]="data.BudgetName">{{data.BudgetName}}</td>
 
             <td *ngFor="let year of years">
-              <ng-template [ngIf]="index === i" [ngIfElse]="showValue">
+              <ng-template [ngIf]="editableRowIndex === i" [ngIfElse]="showValue">
                 <input type="text" class="editableBudget" [value]="data[year] ? data[year] : ''">
               </ng-template>
               <ng-template #showValue>
@@ -87,14 +87,14 @@
             </td>
 
             <td class="buttonEffect fixedColumnEdit" (click)=onEditRow(i)>
-              <span class="edit">{{index === i ? 'Save': 'Edit'}}</span>
+              <span class="edit">{{editableRowIndex === i ? 'Save': 'Edit'}}</span>
             </td>
             <td class="buttonEffect fixedColumnDelete" (click)="onDeleteRow(data.BudgetId)">
               <span class="delete">Delete</span>
             </td>
-            <td class="fixedColumn">
+            <!-- <td class="fixedColumn">
               <input class="checkbox" type="checkbox" [checked]="data.check" (change)="onChecked($event, i)">
-            </td>
+            </td> -->
           </tr> 
       </ng-template>
     </p-table>

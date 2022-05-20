@@ -20,7 +20,6 @@ export class InterventionOptionsTableComponent implements OnInit {
   msgDetails: MsgDetails;
   allInterventionOptions: InterventionOptionsModel[] = [];
   isPageChecked: boolean;
-  private index = 0;
   private sub$: Subscription;
 
   constructor( private interventionOptionsService: ConfigInterventionOptionsService,
@@ -31,17 +30,10 @@ export class InterventionOptionsTableComponent implements OnInit {
    ngOnInit(): void {
     this.getAllInterventionOptions();
 
-    this.sub$ = this.commonService.getData().subscribe(res => {
-      if(typeof res === 'boolean') {
-        this.getAllInterventionOptions();
-      } else {
-        this.allInterventionOptions[this.index] = res.value;
-      }
-    })
+    this.sub$ = this.commonService.getData().subscribe(() => this.getAllInterventionOptions() )
    }
 
-  onEditRow(data: InterventionOptionsModel, idx: number): void {
-    this.index = idx;
+  onEditRow(data: InterventionOptionsModel): void {
     this.interventionOptionsService.onEditRow(data);
     this.commonService.show(ConfigInterventionOptionsComponent);
   }

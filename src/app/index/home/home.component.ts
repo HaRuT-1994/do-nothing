@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
   projects = [
-    { label: 'Project1', imgSrc: '/assets/img/app.png', date: '21 Mar 2022' },
+    { label: 'Project1', imgSrc: '/assets/img/app.png', date: '21 Mar 2026' },
     { label: 'Project2', imgSrc: 'assets/img/app.png', date: '21 Mar 2022' },
     { label: 'Project3', imgSrc: 'assets/img/app.png', date: '01 Sep 2021'  },
     { label: 'Project4', imgSrc: 'assets/img/app.png', date: '25 Mar 2022'  },
